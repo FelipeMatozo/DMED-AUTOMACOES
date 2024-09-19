@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_4137623fe4b59b5b00f7db1af83d2f4b {
+                    position: relative;
+                    width: 100.0%;
+                    height: 95.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_4137623fe4b59b5b00f7db1af83d2f4b" ></div>
+        
+    
+<div class="container-fluid" style="position: fixed; top: 0; width: 100%; height: 5em; background-color: #f06428; color: white; border-bottom: 2px solid grey; z-index: 9999; display: flex; align-items: center; justify-content: center;">
+    <div>
+        <div class="text-center" style="font-size: 24px;">
+            <strong>Departamento de Medição</strong>
+        </div>
+    </div>
+</div>
+    
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <span>UC</span> <i class="fa fa-map-marker" style="color:green;"></i>
+        </div>
+        <div class="col text-center">
+            <span>TIM</span> <i class="fa fa-map-marker" style="color:DodgerBlue;"></i>
+        </div>
+        <div class="col text-center">
+            <span>CLARO</span> <i class="fa fa-map-marker" style="color:red;"></i>
+        </div>
+        <div class="col text-center">
+            <span>VIVO</span> <i class="fa fa-map-marker" style="color:purple;"></i>
+        </div>
+        <div class="col text-center">
+            <span>SERCOMTEL</span> <i class="fa fa-map-marker" style="color:orange;"></i>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    
+    
+            var map_4137623fe4b59b5b00f7db1af83d2f4b = L.map(
+                "map_4137623fe4b59b5b00f7db1af83d2f4b",
+                {
+                    center: [-25.4073, -49.26102],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 16,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_f3a00642f275418edef8e6507fd47083 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_f3a00642f275418edef8e6507fd47083.addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var marker_2aca2f94cc116765a1406521cfa6fbdc = L.marker(
+                [-25.40577, -49.26188],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_c0b45807b1bfed453647dfa99d95b2cb = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_2aca2f94cc116765a1406521cfa6fbdc.setIcon(icon_c0b45807b1bfed453647dfa99d95b2cb);
+        
+    
+        var popup_9fbdb13a38c74f768086cf35fabe3e1c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_e5262b0c2ae62ceef407f17798d0d83c = $(`<div id="html_e5262b0c2ae62ceef407f17798d0d83c" style="width: 100.0%; height: 100.0%;">Operadora: Claro Distância até a UC: 0.19 km</div>`)[0];
+                popup_9fbdb13a38c74f768086cf35fabe3e1c.setContent(html_e5262b0c2ae62ceef407f17798d0d83c);
+            
+        
+
+        marker_2aca2f94cc116765a1406521cfa6fbdc.bindPopup(popup_9fbdb13a38c74f768086cf35fabe3e1c)
+        ;
+
+        
+    
+    
+            var marker_1d987398ea29773eb2e6c7e526f015d9 = L.marker(
+                [-25.405761000000002, -49.261899],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_e442ff7382e4b49ae3fe65dc5cba4212 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_1d987398ea29773eb2e6c7e526f015d9.setIcon(icon_e442ff7382e4b49ae3fe65dc5cba4212);
+        
+    
+        var popup_18889d9c6d4f297e3ffef2d24ff6f80c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_07652a8d37456d08474e5098dd3cecb9 = $(`<div id="html_07652a8d37456d08474e5098dd3cecb9" style="width: 100.0%; height: 100.0%;">Operadora: Vivo Distância até a UC: 0.19 km</div>`)[0];
+                popup_18889d9c6d4f297e3ffef2d24ff6f80c.setContent(html_07652a8d37456d08474e5098dd3cecb9);
+            
+        
+
+        marker_1d987398ea29773eb2e6c7e526f015d9.bindPopup(popup_18889d9c6d4f297e3ffef2d24ff6f80c)
+        ;
+
+        
+    
+    
+            var marker_d909797ebce709daf3227b8ed8944adf = L.marker(
+                [-25.405738000000003, -49.261877],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_008b924bc7b57b105e84359fcc5aa0ac = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_d909797ebce709daf3227b8ed8944adf.setIcon(icon_008b924bc7b57b105e84359fcc5aa0ac);
+        
+    
+        var popup_01c25d302fff8a5e7bd1eaa4b9735bcd = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_d0dc8401136fe6d7e586a49850d74146 = $(`<div id="html_d0dc8401136fe6d7e586a49850d74146" style="width: 100.0%; height: 100.0%;">Operadora: Tim Distância até a UC: 0.19 km</div>`)[0];
+                popup_01c25d302fff8a5e7bd1eaa4b9735bcd.setContent(html_d0dc8401136fe6d7e586a49850d74146);
+            
+        
+
+        marker_d909797ebce709daf3227b8ed8944adf.bindPopup(popup_01c25d302fff8a5e7bd1eaa4b9735bcd)
+        ;
+
+        
+    
+    
+            var marker_3fd9fd6bf577fa2a9456f2fdc953f735 = L.marker(
+                [-25.40611, -49.26278],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_641a03ca516588a99ccb77d783a8ed06 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_3fd9fd6bf577fa2a9456f2fdc953f735.setIcon(icon_641a03ca516588a99ccb77d783a8ed06);
+        
+    
+        var popup_7dc97e10878edcefcf241aeab4b1e7e2 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_a353d98a7abc0cd40fbea45f5ab08d17 = $(`<div id="html_a353d98a7abc0cd40fbea45f5ab08d17" style="width: 100.0%; height: 100.0%;">Operadora: Vivo Distância até a UC: 0.22 km</div>`)[0];
+                popup_7dc97e10878edcefcf241aeab4b1e7e2.setContent(html_a353d98a7abc0cd40fbea45f5ab08d17);
+            
+        
+
+        marker_3fd9fd6bf577fa2a9456f2fdc953f735.bindPopup(popup_7dc97e10878edcefcf241aeab4b1e7e2)
+        ;
+
+        
+    
+    
+            var marker_66caebba76187d3574571449f1d66059 = L.marker(
+                [-25.40528, -49.25889],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_6dd7e37582f66b1eee0bce8b523efb2c = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_66caebba76187d3574571449f1d66059.setIcon(icon_6dd7e37582f66b1eee0bce8b523efb2c);
+        
+    
+        var popup_37afbc611ce925ba59aac7cdc49aa308 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_83c3967f388b56522388bc48caf6b17f = $(`<div id="html_83c3967f388b56522388bc48caf6b17f" style="width: 100.0%; height: 100.0%;">Operadora: Vivo Distância até a UC: 0.31 km</div>`)[0];
+                popup_37afbc611ce925ba59aac7cdc49aa308.setContent(html_83c3967f388b56522388bc48caf6b17f);
+            
+        
+
+        marker_66caebba76187d3574571449f1d66059.bindPopup(popup_37afbc611ce925ba59aac7cdc49aa308)
+        ;
+
+        
+    
+    
+            var marker_98c1a702018fb6fed9658914bd462df4 = L.marker(
+                [-25.4073, -49.26102],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_935d503c9b23d63e67f740accdba638f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "green", "prefix": "glyphicon"}
+            );
+            marker_98c1a702018fb6fed9658914bd462df4.setIcon(icon_935d503c9b23d63e67f740accdba638f);
+        
+    
+        var popup_cae51e6fcc200339db6d7bad82d6170f = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_77bb3cf30da8c580230e2d2e327b37c1 = $(`<div id="html_77bb3cf30da8c580230e2d2e327b37c1" style="width: 100.0%; height: 100.0%;">UC: 1937340</div>`)[0];
+                popup_cae51e6fcc200339db6d7bad82d6170f.setContent(html_77bb3cf30da8c580230e2d2e327b37c1);
+            
+        
+
+        marker_98c1a702018fb6fed9658914bd462df4.bindPopup(popup_cae51e6fcc200339db6d7bad82d6170f)
+        ;
+
+        
+    
+    
+            var marker_997ef55b42fd2cf58cb03142dc8b7a2b = L.marker(
+                [-25.40577, -49.26188],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_15eec180bae4c7f618327bcbb2923dd4 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "red", "prefix": "glyphicon"}
+            );
+            marker_997ef55b42fd2cf58cb03142dc8b7a2b.setIcon(icon_15eec180bae4c7f618327bcbb2923dd4);
+        
+    
+        var popup_1d29169cc1a76342edf8e4f153d7da68 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_dfc3296009e2460f389801538f8896fe = $(`<div id="html_dfc3296009e2460f389801538f8896fe" style="width: 100.0%; height: 100.0%;">Operadora: Claro Distância até a UC: 0.19 km Latitude: -25.405770 Longitude: -49.261880</div>`)[0];
+                popup_1d29169cc1a76342edf8e4f153d7da68.setContent(html_dfc3296009e2460f389801538f8896fe);
+            
+        
+
+        marker_997ef55b42fd2cf58cb03142dc8b7a2b.bindPopup(popup_1d29169cc1a76342edf8e4f153d7da68)
+        ;
+
+        
+    
+    
+            var marker_38e61ff282153b46535ddf55943c2b3d = L.marker(
+                [-25.405761000000002, -49.261899],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_9c4b12b0278787f30f5e0e3e22a5514b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "purple", "prefix": "glyphicon"}
+            );
+            marker_38e61ff282153b46535ddf55943c2b3d.setIcon(icon_9c4b12b0278787f30f5e0e3e22a5514b);
+        
+    
+        var popup_2ed967f2c4928cecf1a5fbba27db4312 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_86ca78e035768ad38c976c2a12b13f08 = $(`<div id="html_86ca78e035768ad38c976c2a12b13f08" style="width: 100.0%; height: 100.0%;">Operadora: Vivo Distância até a UC: 0.19 km Latitude: -25.405761 Longitude: -49.261899</div>`)[0];
+                popup_2ed967f2c4928cecf1a5fbba27db4312.setContent(html_86ca78e035768ad38c976c2a12b13f08);
+            
+        
+
+        marker_38e61ff282153b46535ddf55943c2b3d.bindPopup(popup_2ed967f2c4928cecf1a5fbba27db4312)
+        ;
+
+        
+    
+    
+            var marker_cf339a3fab1f980b5a6ee0fc4bbadf99 = L.marker(
+                [-25.405738000000003, -49.261877],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_6bbb145405834403015f559eaeb348f4 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
+            );
+            marker_cf339a3fab1f980b5a6ee0fc4bbadf99.setIcon(icon_6bbb145405834403015f559eaeb348f4);
+        
+    
+        var popup_2564e14f8d0349c46e251ec87939d6c2 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_2992c11d0be18d0301bdb297de150dac = $(`<div id="html_2992c11d0be18d0301bdb297de150dac" style="width: 100.0%; height: 100.0%;">Operadora: Tim Distância até a UC: 0.19 km Latitude: -25.405738 Longitude: -49.261877</div>`)[0];
+                popup_2564e14f8d0349c46e251ec87939d6c2.setContent(html_2992c11d0be18d0301bdb297de150dac);
+            
+        
+
+        marker_cf339a3fab1f980b5a6ee0fc4bbadf99.bindPopup(popup_2564e14f8d0349c46e251ec87939d6c2)
+        ;
+
+        
+    
+    
+            var marker_9a5374617098d9d122aeb330ebba4e19 = L.marker(
+                [-25.40611, -49.26278],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_3301aa1b70c1d6abd57587fc7684bf7d = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "purple", "prefix": "glyphicon"}
+            );
+            marker_9a5374617098d9d122aeb330ebba4e19.setIcon(icon_3301aa1b70c1d6abd57587fc7684bf7d);
+        
+    
+        var popup_91c4566d1fc49c37c822b7eb70e4744c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ed047a797c8e80760b628ebcf323aa14 = $(`<div id="html_ed047a797c8e80760b628ebcf323aa14" style="width: 100.0%; height: 100.0%;">Operadora: Vivo Distância até a UC: 0.22 km Latitude: -25.406110 Longitude: -49.262780</div>`)[0];
+                popup_91c4566d1fc49c37c822b7eb70e4744c.setContent(html_ed047a797c8e80760b628ebcf323aa14);
+            
+        
+
+        marker_9a5374617098d9d122aeb330ebba4e19.bindPopup(popup_91c4566d1fc49c37c822b7eb70e4744c)
+        ;
+
+        
+    
+    
+            var marker_55405ff98549c9a11dead82424861e26 = L.marker(
+                [-25.40528, -49.25889],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var icon_0fd0c6e04598d1cdb810fe0420df0884 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "purple", "prefix": "glyphicon"}
+            );
+            marker_55405ff98549c9a11dead82424861e26.setIcon(icon_0fd0c6e04598d1cdb810fe0420df0884);
+        
+    
+        var popup_49efa1bc086553b946d3ba125fcdde7b = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_f594c405104609e2f908188839b2cd61 = $(`<div id="html_f594c405104609e2f908188839b2cd61" style="width: 100.0%; height: 100.0%;">Operadora: Vivo Distância até a UC: 0.31 km Latitude: -25.405280 Longitude: -49.258890</div>`)[0];
+                popup_49efa1bc086553b946d3ba125fcdde7b.setContent(html_f594c405104609e2f908188839b2cd61);
+            
+        
+
+        marker_55405ff98549c9a11dead82424861e26.bindPopup(popup_49efa1bc086553b946d3ba125fcdde7b)
+        ;
+
+        
+    
+    
+            var poly_line_c199ea5b68ef61cc823019c041fceba0 = L.polyline(
+                [[-25.4073, -49.26102], [-25.40577, -49.26188]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var marker_1f248bf9d03de7476f75459afd14129d = L.marker(
+                [-25.406534999999998, -49.261449999999996],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var div_icon_427caa6bb6884e70a2e13be591b49e79 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"font-size: 24px; font-weight: bold\"\u003e0.19 km\u003c/div\u003e", "iconAnchor": [0, 0], "iconSize": [150, 36]});
+            marker_1f248bf9d03de7476f75459afd14129d.setIcon(div_icon_427caa6bb6884e70a2e13be591b49e79);
+        
+    
+            var poly_line_b02d27b439a813e1b8cdf8f51d0cfaf1 = L.polyline(
+                [[-25.4073, -49.26102], [-25.405761000000002, -49.261899]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var marker_a0bc3cc4dde6b18dd7c6b1a407fdd510 = L.marker(
+                [-25.406530500000002, -49.2614595],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var div_icon_3bdd1126f8f767015ede0cf52343fa30 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"font-size: 24px; font-weight: bold\"\u003e0.19 km\u003c/div\u003e", "iconAnchor": [0, 0], "iconSize": [150, 36]});
+            marker_a0bc3cc4dde6b18dd7c6b1a407fdd510.setIcon(div_icon_3bdd1126f8f767015ede0cf52343fa30);
+        
+    
+            var poly_line_f7b26e6d7d674d8b4bfbe5628ed9d004 = L.polyline(
+                [[-25.4073, -49.26102], [-25.405738000000003, -49.261877]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var marker_bd8c66f233e82ba4bb081ce639d94c97 = L.marker(
+                [-25.406519000000003, -49.2614485],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var div_icon_18205d5bf858a11072e4505b9cf70dbd = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"font-size: 24px; font-weight: bold\"\u003e0.19 km\u003c/div\u003e", "iconAnchor": [0, 0], "iconSize": [150, 36]});
+            marker_bd8c66f233e82ba4bb081ce639d94c97.setIcon(div_icon_18205d5bf858a11072e4505b9cf70dbd);
+        
+    
+            var poly_line_65d9441ae4d7dead7faf4934e09fc1e8 = L.polyline(
+                [[-25.4073, -49.26102], [-25.40611, -49.26278]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var marker_8b5cbb4373cb9e603f86432a7e07ebce = L.marker(
+                [-25.406705000000002, -49.2619],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var div_icon_ae073f0506d4cc5806a19bd8fea09b2a = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"font-size: 24px; font-weight: bold\"\u003e0.22 km\u003c/div\u003e", "iconAnchor": [0, 0], "iconSize": [150, 36]});
+            marker_8b5cbb4373cb9e603f86432a7e07ebce.setIcon(div_icon_ae073f0506d4cc5806a19bd8fea09b2a);
+        
+    
+            var poly_line_4a2f1634736715b0e3ec7a841cb83f41 = L.polyline(
+                [[-25.4073, -49.26102], [-25.40528, -49.25889]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var marker_c833eb2b6b83c0844beaf98f91ef99e2 = L.marker(
+                [-25.40629, -49.259955000000005],
+                {}
+            ).addTo(map_4137623fe4b59b5b00f7db1af83d2f4b);
+        
+    
+            var div_icon_02d679418f96d51f7ccae3dac0037038 = L.divIcon({"className": "empty", "html": "\u003cdiv style=\"font-size: 24px; font-weight: bold\"\u003e0.31 km\u003c/div\u003e", "iconAnchor": [0, 0], "iconSize": [150, 36]});
+            marker_c833eb2b6b83c0844beaf98f91ef99e2.setIcon(div_icon_02d679418f96d51f7ccae3dac0037038);
+        
+</script>
+</html>
