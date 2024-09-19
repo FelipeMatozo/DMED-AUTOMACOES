@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>versões</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/728/728139.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+  <header class="container-fluid py-3 d-flex justify-content-center align-items-center position-relative">
+    <a href="/" class="back-arrow">
+      <i class="bi bi-arrow-left-circle" style="font-size: 2rem; color: white;"></i>
+    </a>
+    <span class="emoji">⚡️</span> <h1 class="text-white ms-3">Histórico de versões<span class="emoji"></span></h1>
+    <button class="btn menu btn-primary position-absolute end-0 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+      Links Rápidos
+    </button>
+  </header>
+
+  <div class="container mt-4">
+    <div class="history-container">
+      <div class= "col">
+        <div class="files-list">
+        <h2>Arquivos modificados</h2>
+        <h6>Os seguintes arquivos modificados na ultima versão estão listados abaixo, com destaque para a nova interface do sistema
+        
+
+        </h6>
+        <ul>
+          <li>
+            <i class="bi bi-file-earmark-code-fill"></i>
+            <span>geraçao de mapa retirados</span>
+          </li>
+          <li>
+            <i class="bi bi-file-earmark-code-fill"></i>
+            <span>conclusao.html e geracao.html e demais adicionados</span>
+          </li>
+          <li>
+            <i class="bi bi-file-earmark-code-fill"></i>
+            <span>app.py</span>
+          </li>
+          <li>
+            <i class="bi bi-folder"></i>
+            <span>apps</span>
+          </li>
+          <li>
+            <i class="bi bi-folder"></i>
+            <span>assets/html</span>
+          </li>
+          <li>
+            <i class="bi bi-file-earmark-code"></i>
+            <span>localiza_antenas.html</span>
+          </li>
+          <li>
+            <i class="bi bi-file-earmark-code"></i>
+            <span>versions.html</span>
+          </li>
+          <li>
+            <i class="bi bi-file-earmark-code-fill"></i>
+            <span>gerador_ucs_antenas.py</span>
+          </li>
+        </ul>
+      </div>
+      <p>Local do projeto: <a href="https://github.com/DMED-COPEL/Pycis" target="_blank">https://github.com/DMED-COPEL/Pycis E       </a></p>
+      </div>
+      
+      <div class="version-info">
+        <h2>Versão Alpha</h2>
+        <p><strong>Últimas atualizações dia 29/07/2024</strong></p>
+        <p>Ramon Mariano</p>
+        <p>Última alteração:</p>
+        <ul>
+          <li>Adicionado Dashboards de Logs</li>
+          <h6> Adicionado o dashboard logs na geração de Solicitações de serviços, por data e por tipo</h6>
+          <li>Exportar logs</li>
+          <h6> Adicionado a funçao para exportar logs na geração de Solicitações de serviços</h6>
+          <li>apps.py</li>
+          <h6> Adicionado o roteamento das paginas Solicitações de Serviço, Localização de antenas e versionamento do sistema
+            <strong>localiza_antenas.html</strong> e <strong>versions.html</strong> adicionado, pasta de styles e repositorios de mapas adicionados
+          </h6>
+          <li>Links úteis foram adicionados</li>
+          <h6>
+            Agora as paginas contam com um menu a direita com acesso a links uteis para o departamento, como o Portal da Medição, com diversos outros
+            links uteis, e tambem aos B.I utilizados pelos funcionarios+
+          </h6>
+          <li>
+            localiza_antenas.html</li>
+            <h6>Página para funcionalidade de localização 
+              de unidades consumidoras e suas distâncias até as antenas mais próximas e suas operados de telefonia</h6>
+          <li>Macro de geração de T11, T12 foram modificados</li>
+          <h6>Foram trocados o reconhecimento de botões que antes funcionavam com reconhecimento de imagem por atalhos do sistema do CIS, com "alt" + 
+            "tecla sublinhada", aumentendo a taxa de acertividade, e a velocidade, também deixando o sistema mais leve, proporcionando uma melhor experiencia ao usuario
+          </h6>
+    
+        </ul>
+      </div>
+    </div>
+    </div>
+  </div>
+  </div>
+
+
+    <footer class="container-fluid bg-dark text-white text-center py-3">
+      <div class="pagination-container">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">«</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">»</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col" style="color: whitesmoke;">
+        Departamento de Medição.
+        <div class="row" style="color: #f06428; justify-content: center;">
+          COPEL DISTRIBUIÇÂO
+        </div>
+      </div>
+    </footer>
+
+  <div class="offcanvas offcanvas-end custom-offcanvas" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasRightLabel">Links úteis</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <p style="text-align: center;">Bem-vindo à nossa seção de recursos! Aqui você encontrará uma seleção de links úteis 
+        que foram cuidadosamente escolhidos para ajudá-lo a encontrar 
+        informações relevantes e resolver suas dúvidas de forma eficiente. 
+      
+      </p>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <a href="https://copel0.sharepoint.com/sites/Medicao" class="btn btn-primary w-100 mb-2 bottonmenu" target="_blank" rel="noopener noreferrer">Portal da Medição</a>
+
+        </li>
+        <li class="list-group-item">
+          <a href="https://app.powerbi.com/groups/me/reports/39dac36a-5024-4827-a8cf-063d9a484172/ReportSectiona1923d3e0b7053c959a7?experience=power-bi" 
+          class="btn btn-primary w-100 mb-2 bottonmenu" target="_blank" rel="noopener noreferrer">B.I's: Power B.I</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Scripts JavaScript do Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const versionBlocks = document.querySelectorAll('.version-block');
+    const prevPage = document.getElementById('prevPage');
+    const nextPage = document.getElementById('nextPage');
+    let currentPage = 1;
+    const itemsPerPage = 1;
+    const totalPages = Math.ceil(versionBlocks.length / itemsPerPage);
+
+    function showPage(page) {
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+
+      versionBlocks.forEach((block, index) => {
+        block.classList.remove('active');
+        if (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) {
+          block.classList.add('active');
+        }
+      });
+
+      updatePagination();
+    }
+
+    function updatePagination() {
+      if (currentPage === 1) {
+        prevPage.classList.add('disabled');
+      } else {
+        prevPage.classList.remove('disabled');
+      }
+
+      if (currentPage === totalPages) {
+        nextPage.classList.add('disabled');
+      } else {
+        nextPage.classList.remove('disabled');
+      }
+
+      document.querySelectorAll('.pagination .page-item').forEach((item, index) => {
+        if (index === currentPage) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    document.querySelector('.page-link[aria-label="Previous"]').addEventListener('click', () => showPage(currentPage - 1));
+    document.querySelector('.page-link[aria-label="Next"]').addEventListener('click', () => showPage(currentPage + 1));
+
+    showPage(currentPage);
+  </script>
+</body>
+</html>
