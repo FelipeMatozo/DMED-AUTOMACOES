@@ -1,2 +1,2 @@
-# DMED---AUTOMA-ES
+# DMED---AUTOMAÇOES
 Repositório dedicado a automações
