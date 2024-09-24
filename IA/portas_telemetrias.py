@@ -60,7 +60,8 @@ class consultaIris():
 class programasExecutaveis():
 
     def __init__(self):
-        self.caminho_iris = r"C:\Program Files (x86)\CAS\Iris Manager\iris-manager.exe"
+        self.caminho_iris = r"C:\Users\e805958\Downloads\Iris Manager\iris-manager.exe"
+        # self.caminho_iris = r"C:\Program Files (x86)\CAS\Iris Manager\iris-manager.exe"
         self.processo = None  # Armazena a referência ao processo
         self.pid = ""
         
@@ -111,7 +112,8 @@ class Telemetria:
         """
         for info in self.informacoes:
             colunas = ["codigo_tm", "numero_chip", "codigo_ponto", "operadora", "porta_tm"]
-            valores = (info['codigo_tm'], info['numero_chip'], info['codigo_ponto'], info['operadora'], info['porta_tm'])
+            codigo_tm_com_prefixo = info['codigo_tm']
+            valores = (codigo_tm_com_prefixo, info['numero_chip'], info['codigo_ponto'], info['operadora'], info['porta_tm'])
             add_banco("IRIS", colunas, valores)
 
 def find_tm(telemetrias):

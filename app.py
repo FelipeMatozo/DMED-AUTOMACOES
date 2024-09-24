@@ -195,7 +195,7 @@ def portas_telemetrias():
 
         telemetrias_lista = find_tm(telemetrias)
 
-
+        
         # Exibir mensagem de sucesso
         return render_template('portas_telemetrias.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!", telemetrias_valor="\n".join(telemetrias_lista))
     
@@ -208,16 +208,21 @@ def download_excel():
         if not telemetrias:
             return render_template('portas_telemetrias.html', mensagem_erro="Campo 'telemetrias' não pode estar vazio.")
         
-         # Criar o diretório, caso não exista
+        # Dividir a string de telemetrias em uma lista, se necessário
+        # Dividir a string de telemetrias em uma lista
+        valores = telemetrias.splitlines()  # Dividir por quebras de linha # Supondo que os valores sejam separados por vírgulas
+        # Adicionar "00" à esquerda de cada valor
+        print(valores)
+        # Criar o diretório, caso não exista
         criar_pasta_excel()
-        
+        valores_tratados = [f'00{valor.strip()}' for valor in valores]
         # Gerar o arquivo Excel usando a função exportar_para_excel
         caminho_arquivo_excel = os.path.join(CAMINHO_EXCEL, 'dados_tms.xlsx')
-        exportar_para_excel(tms_lista=telemetrias, caminho_arquivo_excel=caminho_arquivo_excel)
+        exportar_para_excel('IRIS', 'codigo_tm', valores=valores_tratados, caminho_arquivo_excel=caminho_arquivo_excel)
+
         # return render_template('portas_telemetrias.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!", telemetrias_valor=telemetrias)
 
     return send_from_directory(directory=CAMINHO_EXCEL, path='dados_tms.xlsx', as_attachment=True)
-
 
 @app.route('/mapa', methods=['GET', 'POST'])
 def mapa():
@@ -296,4 +301,5 @@ def dashboard_uc_data():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
