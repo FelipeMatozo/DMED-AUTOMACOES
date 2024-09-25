@@ -98,14 +98,14 @@ def ver_exist(TABELA, COLUNA, DADO):
     # Fechar a conexão com o banco de dados
     conexao.close()
 
+    # Se o dado não for encontrado, adicionar ao arquivo de texto
+    if resultado == 0:
+        caminho_txt = os.path.join('assets\\txt\\ucs_nao_encontradas.txt')
+        with open(caminho_txt, 'a') as arquivo:
+            arquivo.write(f"{DADO}\n")
+    
     # Retornar True se o dado existir, False caso contrário
     return resultado > 0
-
-    ############ COMO USAR ##############
-
-    # ver_exist("NOME_TABELA","COLUNA", "DADO")
-
-    #####################################
 
 def buscar_dados(nome_tabela, coluna_filtro, valor_filtro, colunas_retorno):
     """
