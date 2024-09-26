@@ -53,7 +53,7 @@ class TratarPlanilha:
             self.claro_df,
             left_on='Numero do RG',
             right_on='Numero de serie do medidor',
-            how='inner'  # Pode mudar para 'left', 'right' ou 'outer' conforme a necessidade
+            how='in ner'  # Pode mudar para 'left', 'right' ou 'outer' conforme a necessidade
         )
         print("Merge realizado com sucesso.")
         print(self.merged_df)
@@ -73,7 +73,6 @@ class TratarPlanilha:
         # Verificar se o merge foi realizado
         if self.merged_df is None:
             raise ValueError("Nenhum merge realizado. Execute o método 'merge_planilhas' primeiro.")
-
         # Remover as colunas indesejadas
         colunas_para_remover = [
             "Obs.", "Ordem de Comun.", "NIO TM Hemera", "GD com beneficiaria BT", 
@@ -135,7 +134,7 @@ class TratarPlanilha:
     def processar_antenas(self, output_path):
         resultados = []
 
-        for index, row in self.merged_df.iterrows():
+        for index, row in self.data_df.iterrows():
             numero_uc = row["UC"]
             if ver_exist("UC_LAT_LONG", "UC", numero_uc):
                 print(f'A UC: {numero_uc} está presente no banco de dados!')
@@ -197,7 +196,7 @@ class TratarPlanilha:
 
 
 if __name__ == "__main__":
-    tratar = TratarPlanilha("assets/excel/LES_CATIVOS.xlsx", "assets/excel/TIM.xlsx")
+    tratar = TratarPlanilha("assets/excel/Unidades_desconectadas.xlss", "assets/excel/TIM.xlsx")
     tratar.carregar_planilhas()
     tratar.merge_planilhas()
     tratar.salvar_planilha()
