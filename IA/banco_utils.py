@@ -76,6 +76,37 @@ def add_banco(nome_tabela, colunas, valores):
 
     ########################################
 
+def add_subs_banco(nome_tabela, colunas, valores):
+    """
+    Adiciona ou substitui dados em uma tabela no banco de dados. 
+    Cria a tabela se ela não existir, com a primeira coluna fornecida como chave primária.
+    
+    Parâmetros:
+    nome_tabela (str): Nome da tabela onde os dados serão inseridos.
+    colunas (list): Lista com os nomes das colunas onde os dados serão inseridos.
+    valores (tuple): Tupla com os valores correspondentes às colunas.
+    """
+    con = sqlite3.connect(CAMINHO_BANCO)
+    cursor = con.cursor()
+
+    # Formatar as colunas e placeholders para o SQL
+    colunas_str = ", ".join(colunas)
+    placeholders = ", ".join("?" for _ in colunas)
+
+    # Criar a tabela se ela não existir, com a primeira coluna como chave primária
+    colunas_definicao = f"{colunas[0]} TEXT PRIMARY KEY, " + ", ".join([f"{coluna} TEXT" for coluna in colunas[1:]])
+    consulta_criacao = f"CREATE TABLE IF NOT EXISTS {nome_tabela} ({colunas_definicao})"
+    cursor.execute(consulta_criacao)
+
+    # Usar `INSERT OR REPLACE` para inserir ou substituir os dados existentes
+    consulta_insercao = f"INSERT OR REPLACE INTO {nome_tabela} ({colunas_str}) VALUES ({placeholders})"
+    cursor.execute(consulta_insercao, valores)
+    con.commit()
+
+    print(f"Dados inseridos/substituídos com sucesso na tabela {nome_tabela}: {valores}.")
+
+    con.close()
+
 def ver_exist(TABELA, COLUNA, DADO):
     """
     Verifica a existência do dado na tabela.

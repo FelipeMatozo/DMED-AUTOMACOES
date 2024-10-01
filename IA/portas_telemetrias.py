@@ -5,7 +5,7 @@ import pyautogui as py
 import pyperclip
 import os
 import sys
-from IA.banco_utils import add_banco  # Atualizado para importar banco_utils
+from IA.banco_utils import add_subs_banco  # Atualizado para importar banco_utils
 import sqlite3
 
 class consultaIris():
@@ -26,7 +26,7 @@ class consultaIris():
         py.hotkey('down')
         self.ia.localiza('bt_confirmar.PNG', 0.7)
         py.hotkey('enter')
-        self.ia.localiza('tl_listagem_telemetrias.png', 0.65)
+        self.ia.localiza('tl_listagem_telemetrias.png', 0.5)
         py.click(py.moveRel(372,-174))
         self.ia.localiza('barra.png', 0.6)
         py.click(py.moveRel(30,15))
@@ -93,8 +93,8 @@ class Telemetria:
                 codigo_tm = valores[0]
                 numero_chip = valores[1]
                 codigo_ponto = valores[2]
-                operadora = valores[3]
-                porta_tm = valores[4]
+                operadora = valores[4]
+                porta_tm = valores[3]
                 self.informacoes.append({
                     'codigo_tm': codigo_tm,
                     'numero_chip': numero_chip,
@@ -106,7 +106,7 @@ class Telemetria:
                 print(f"Erro: linha com número insuficiente de colunas - {valores}")
 
 
-    def add_banco(self):
+    def add_subs_banco(self):
         """
         Adiciona as informações de telemetria processadas ao banco de dados utilizando banco_utils.
         """
@@ -114,7 +114,7 @@ class Telemetria:
             colunas = ["codigo_tm", "numero_chip", "codigo_ponto", "operadora", "porta_tm"]
             codigo_tm_com_prefixo = info['codigo_tm']
             valores = (codigo_tm_com_prefixo, info['numero_chip'], info['codigo_ponto'], info['operadora'], info['porta_tm'])
-            add_banco("IRIS", colunas, valores)
+            add_subs_banco("IRIS", colunas, valores)
 
 def find_tm(telemetrias):
 
@@ -133,5 +133,5 @@ def find_tm(telemetrias):
     # Inicializa a classe e insere os dados no banco
     telemetria = Telemetria(dados, caminho_banco)
     telemetria.processar_dados()
-    telemetria.add_banco()
+    telemetria.add_subs_banco()
     return telemetrias_lista

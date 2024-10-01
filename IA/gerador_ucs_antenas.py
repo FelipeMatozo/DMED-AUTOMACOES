@@ -1,6 +1,6 @@
 '''
 Este programa permite ao usuário buscar as 5 antenas mais próximas de uma (UC) específica no estado do Paraná.
-Ele utiliza dados de localização das UCs e das antenas, sendo esses dados lidos de arquivos CSV e Excel, respectivamente.
+Ele utiliza dados de localização das UCs e das antenas, sendo esses dados lidos de um banco.
 Ao inserir o número de uma UC e clicar no botão "Buscar", o programa calcula as distâncias entre essa UC e todas as antenas listadas, encontrando as 5 antenas mais próximas.
 Em seguida, ele exibe um mapa interativo usando a biblioteca Folium, mostrando a localização da UC, das antenas próximas e as linhas que as conectam.
 Além disso, o mapa também apresenta uma legenda colorida indicando as operadoras das antenas (TIM, Claro, Vivo, Sercomtel) e a distância até a UC em quilômetros.
