@@ -2,12 +2,16 @@ from flask import Flask, render_template, request, jsonify,send_from_directory, 
 import sys
 import os
 import pandas as pd
+import re
+import logging
 import plotly.express as px
 from IA import macro
 from IA import concluir_T11
 from IA.portas_telemetrias import find_tm
 from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
+import plotly.graph_objs as go
+import numpy as np
 
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
@@ -43,45 +47,52 @@ sys.path.append(macro_dir)
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
 
-
-
 def read_log():
-    log_path = os.path.join(app.static_folder, 'log', 'log.log')
-    with open(log_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
+    log_file_path = 'assets\\log\\log.log'  # Coloque o caminho absoluto se necessário
+    logging.info(f"Tentando ler o arquivo de log em: {os.path.abspath(log_file_path)}")
 
-    data = []
-    ucs_data = []
-    current_config = None
-    for line in lines:
-        if "Configuracao" in line:
-            parts = line.split(': ')
-            current_config = parts[1].split(',')[0]  # Pega apenas a primeira parte antes da vírgula
-        if "Rodando UC's" in line:
-            datetime_str = ' '.join(line.split(' ')[:2])  # A data e hora estão no início da linha
-            ucs_str = line.split(': ')[-1].strip().strip("[]")
-            ucs = ucs_str.replace("'", "").split(", ")
-            data.append({"Date": datetime_str, "UCs": len(ucs), "Config": current_config})
-        if "finalizada" in line:
-            parts = line.split(' ')
-            datetime_str = ' '.join(parts[:2])  # A data e hora estão no início da linha
-            uc_number = parts[3]
-            ucs_data.append({"Date": datetime_str, "UC": uc_number, "Config": current_config})
+    # Tente abrir o arquivo de log
+    if not os.path.exists(log_file_path):
+        logging.error("Arquivo de log não encontrado.")
+        return pd.DataFrame(), False  # Retorna DataFrame vazio se o arquivo não existir
 
-    # Verificação se data não está vazia
-    if not data:
-        data.append({"Date": None, "UCs": 0, "Config": None})
-    
-    df = pd.DataFrame(data)
-    if not df.empty:
-        df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y %H:%M:%S', errors='coerce')  # Converter a coluna DateTime para o formato datetime
-        df = df.groupby(['Date', 'Config']).sum().reset_index()
+    data_list = []
 
-    ucs_df = pd.DataFrame(ucs_data)
-    if not ucs_df.empty:
-        ucs_df['Date'] = pd.to_datetime(ucs_df['Date'], format='%d-%m-%Y %H:%M:%S', errors='coerce')
+    try:
+        with open(log_file_path, 'r') as file:
+            log_lines = file.readlines()
+            print(log_lines)  # Para depuração, remova ou comente em produção
+    except Exception as e:
+        logging.error(f"Erro ao abrir o arquivo de log: {str(e)}")
+        return pd.DataFrame(), False  # Retorna DataFrame vazio se houver um erro
 
-    return df, ucs_df
+    # Processa as linhas do log
+    for line in log_lines:
+        # Captura a data, UC e tipo de serviço com regex
+        date_match = re.search(r'(\d{2}-\d{2}-\d{4}) \d{2}:\d{2}:\d{2} - UC: \d+ finalizada! (?:Serviço|Servico): (T\d+)', line)
+
+        if date_match:
+            current_date = date_match.group(1)  # Captura a data
+            current_service = date_match.group(2)  # Captura o tipo de serviço
+            
+            # Adiciona uma entrada ao data_list
+            data_list.append({
+                'Data': current_date,
+                'UCs': 1,  # Contabiliza cada UC
+                'Tipo de serviço': current_service
+            })
+
+    # Cria um DataFrame a partir da lista
+    df = pd.DataFrame(data_list)
+    print(df)  # Para depuração, remova ou comente em produção
+    if df.empty:
+        logging.warning("Nenhum dado encontrado no log.")
+        return df, False  # Retorna DataFrame vazio e indicador de dados não encontrados
+
+    # Agrupa por Data e Tipo de serviço, somando as UCs
+    df = df.groupby(['Data', 'Tipo de serviço']).agg({'UCs': 'sum'}).reset_index()
+    print(df)  # Para depuração, remova ou comente em produção
+    return df, True  # Retorna o DataFrame e indicador de dados encontrados
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
@@ -280,24 +291,75 @@ def versions():
 def dashboards():       
     return render_template('dashboard.html')
 
+@app.route('/dashboards/table_data', methods=['GET'])
+def table_data():
+    df, _ = read_log()  # Aqui, garantimos que estamos desempacotando corretamente
+    
+    # Verifique se a coluna 'Data' está presente no DataFrame
+    if 'Data' not in df.columns:
+        print("Coluna 'Data' não encontrada no DataFrame.")
+        print(df.head())  
+        return {"error": "Coluna 'Data' não encontrada no DataFrame."}, 500
+    
+    # Formatar a data
+    df['Data'] = pd.to_datetime(df['Data'], format='%d-%m-%Y').dt.strftime('%d-%m-%Y')  
+    
+    # Converte o DataFrame para dicionário para enviar como resposta JSON
+    table_data = df.to_dict(orient='records')
+    
+    return jsonify(table_data)
+
+@app.route('/dashboards/uc_data')
+def uc_data():
+    df, success = read_log()  # Certifique-se de que o DataFrame correto está sendo retornado
+    if success:
+        return render_template('dashboard.html', table_data=df.to_dict(orient='records'))
+    else:
+        return render_template('dashboard.html', table_data=None)
+
+
+@app.route('/dashboards/uc_data', methods=['GET'])
+def dashboard_uc_data():
+    try:
+        # Suponha que 'fig' é o objeto que você deseja converter
+        # Primeiro, converta fig para um dicionário e verifique seu conteúdo
+        fig_dict = fig.to_dict()
+
+        # Aqui você deve converter os arrays NumPy para listas, se houver
+        for key, value in fig_dict.items():
+            if isinstance(value, np.ndarray):  # Se o valor for um ndarray
+                fig_dict[key] = value.tolist()  # Converta para lista
+
+        return jsonify(fig_dict)
+
+    except Exception as e:
+        logging.error(f"Erro ao gerar dados do dashboard: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/dashboards/data')
 def dashboard_data():
-    df, _ = read_log()
-    fig = px.bar(df, x="Date", y="UCs", color="Config", title="Histograma de UCs por Configuração e Dia")
+    df, _ = read_log()  # Certificando-se de que estamos desempacotando corretamente
+    
+    if df.empty:
+        return {"error": "Não há dados disponíveis."}, 404
+    
+    fig = px.bar(df, x="Data", y="UCs", color="Tipo de serviço", title="Histograma de UCs por Serviço e Dia")
+    
+    # Aumentar o tamanho do gráfico
+    fig.update_layout(height=300)
+    
     graphJSON = fig.to_json()
     return jsonify(graphJSON)
 
 @app.route('/dashboards/table_data')
 def dashboard_table_data():
     df, _ = read_log()
+    
+    if df.empty:
+        return {"error": "Não há dados disponíveis."}, 404
+    
     table_data = df.to_dict(orient='records')
     return jsonify(table_data)
-
-@app.route('/dashboards/uc_data')
-def dashboard_uc_data():
-    _, ucs_df = read_log()
-    uc_data = ucs_df.to_dict(orient='records')
-    return jsonify(uc_data)
 
 
 if __name__ == '__main__':

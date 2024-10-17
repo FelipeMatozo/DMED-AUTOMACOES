@@ -1,0 +1,230 @@
+body {
+    background-color: #f5f5f5; 
+    font-family: Arial, sans-serif; 
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+} /* Light background and Arial Bold font */
+
+header {
+    background-color: #f06428;
+    margin-bottom: 1%;
+} /* Pink header */
+
+.emoji {
+    font-size: 2rem;
+    margin-right: 5px;
+} /* Emoji styling */
+
+.container-macro {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    flex: 1;
+}
+
+.macro-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.macro-item img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.macro-item a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #f06428;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+}
+
+.back-arrow {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    color: white;
+}
+
+/* Custom offcanvas styling */
+.custom-offcanvas {
+    background-color: #ffffff; /* Gray background */
+    color: #000000; /* White text */
+}
+
+/* Estilo padrão dos botões */
+.bottonmenu {
+    color: #ffffff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+/* Estilo dos botões ao passar o mouse */
+.bottonmenu:hover {
+    background-color: #f06428; /* Laranja ao passar o mouse */
+    border-color: #f06428; /* Laranja ao passar o mouse */
+}
+
+/* Estilo dos botões quando estão ativos ou selecionados */
+.bottonmenu:active{
+  background-color: #0d6efd;
+}
+.bottonmenu:focus{
+  background-color: #0d6efd;
+}
+.bottonmenu.active {
+    background-color: #5328f0 !important; /* Laranja quando ativo ou selecionado */
+    border-color: #282bf0 !important; /* Laranja quando ativo ou selecionado */
+    box-shadow: #2b28f0 !important; /* Remove a sombra padrão */
+}
+
+/* Estilo dos botões ao receber foco */
+.bottonmenu:focus {
+    outline: none; /* Remove o outline padrão */
+    box-shadow: 0 0 0 0.25rem rgba(240, 100, 40, 0.5); /* Adiciona um box-shadow personalizado */
+}
+.menu {
+    color: #ffffff;
+    background-color: #343a40;
+    border-color: #ddd;
+} /* Menu styling */
+
+.menu:hover {
+    background-color: #f06428; /* Laranja ao passar o mouse */
+    border-color: #f06428; /* Laranja ao passar o mouse */
+    color: #ffffff;
+}
+
+.menu:active,
+.menu:focus,
+.menu.active {
+    background-color: #ffffff !important; /* Laranja quando ativo ou selecionado */
+    border-color: #f06428 !important; /* Laranja quando ativo ou selecionado */
+    box-shadow: none !important; /* Remove a sombra padrão */
+    color: #343a40;
+}
+
+.menu:focus {
+    outline: none; /* Remove o outline padrão */
+    box-shadow: 0 0 0 0.25rem rgba(240, 100, 40, 0.5); /* Adiciona um box-shadow personalizado */
+}
+
+.history-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .files-list, .version-info {
+    width: 45%;
+  }
+  .files-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .files-list ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .files-list ul li i {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  .pagination-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: transparent;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+  }
+  .page-link {
+    color: #000000;
+    text-decoration: none;
+    background-color: white;
+    border: 1px solid #e6dee163;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.version-block {
+    display: none;
+  }
+  .version-block.active {
+    display: block;
+  }
+  .file-directory {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  .file-directory li {
+    margin-bottom: 5px;
+  }
+
+  .btn-primary{
+    background-color: #f06428;
+    font-weight: bold;
+  }
+
+
+  .export{
+    background-color: #343a40 ;
+    color: white;
+    font-weight: bold;
+    border-color: #343a40;
+  }
+
+  .send{
+    background-color: #f06428;
+    color: white;
+    font-weight: bold;
+    border-color: #343a40;
+  }
+
+  #container {
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+#plotly-chart {
+    flex: 1 1 60%;
+    min-width: 300px;
+}
+#data-table, #uc-table {
+    flex: 1 1 35%;
+    min-width: 300px;
+    margin-left: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+}

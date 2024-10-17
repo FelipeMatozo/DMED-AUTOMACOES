@@ -21,17 +21,24 @@
         <div id="plotly-chart"></div>
         <div id="data-table">
             <h3>Histograma de UCs por Dia</h3>
-            <table class="table table-striped" id="table">
-                <thead class="table-dark">
+            <table>
+                <thead>
                     <tr>
                         <th>Data</th>
-                        <th>UCs</th>
                         <th>Tipo de serviço</th>
+                        <th>UCs</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for row in table_data %}
+                    <tr>
+                        <td>{{ row.Data }}</td>
+                        <td>{{ row['Tipo de serviço'] }}</td>
+                        <td>{{ row.UCs }}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
-            </table>
+            </table>            
         </div>
         <div id="uc-table">
             <h3>UCs Finalizadas</h3>
@@ -73,14 +80,17 @@
                 const tdDate = document.createElement('td');
                 const tdUCs = document.createElement('td');
                 const tdConfig = document.createElement('td');
-                tdDate.textContent = row.Date.split('T')[0]; // formatar a data
+
+                tdDate.textContent = row.Date; // data já formatada no Python
                 tdUCs.textContent = row.UCs;
                 tdConfig.textContent = row.Config;
+
                 tr.appendChild(tdDate);
                 tr.appendChild(tdUCs);
                 tr.appendChild(tdConfig);
                 tableBody.appendChild(tr);
             });
+
         });
 
         fetch('/dashboards/uc_data')

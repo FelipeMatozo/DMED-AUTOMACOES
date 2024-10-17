@@ -10,7 +10,7 @@ from datetime import datetime
 
 class CriarT:
     def __init__(self,SS, motivo, obs):
-        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.5)
+        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=1.5)
         self.arquivo = ''
         self.SS = SS
         self.motivo = motivo
@@ -35,7 +35,9 @@ class CriarT:
         self.ia.verifica('sonda_t11.png',0.7)
         py.hotkey('alt','o')
         self.ia.localiza('portinha.png',0.7)
-
+        sleep(2)
+        if self.ia.localiza('telaInicial.PNG', 0.6):
+            pass
 
     def popupservico(self):
         print('Procurando popup')
@@ -62,6 +64,7 @@ class CriarT:
         
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
+            sleep(0.3)
             py.hotkey('tab')
 
 class conclusao_ss:

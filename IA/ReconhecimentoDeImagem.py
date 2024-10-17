@@ -1,10 +1,11 @@
 import pyautogui as py
-import os
+import os, sys
 import time
 from time import sleep
+
 class Reconhecimento:
     
-    def __init__(self, numeroDeTentativasMax=5, delay=0.7):
+    def __init__(self, numeroDeTentativasMax, delay):
         """
         A ideia dessa def do codigo é onde as variaveis das outras 
         defs sao definidas, sao variaveis de uso da classe.
@@ -53,7 +54,43 @@ class Reconhecimento:
                 if self.tentativasRealizadas >= self.numeroDeTentativasMax:
                     self.online = False
                     return False
-                      
+
+    def localiza_pausa(self, image_path, precisao):
+        """
+        Função localiza a imagem na tela, ela tenta localizar com um "numeroDeTentativasMax"
+        se não for possível ela informa o usuário que a imagem não está na tela
+        e pausa o programa se não for encontrada após o número máximo de tentativas.
+        """
+        self.tentativasRealizadas = 0
+        nome_imagem = os.path.basename(image_path)
+        diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images', image_path)
+
+        while self.online:
+
+            time.sleep(self.delay)
+
+            try:
+                tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=precisao)
+                if tela_encontrada is not None:
+                    py.moveTo(tela_encontrada)
+                    py.click()
+                    print(f"A tela {nome_imagem} foi encontrada.")
+                    return True
+                else:
+                    print(f"Tela {nome_imagem} não foi encontrada, Tentativa {self.tentativasRealizadas + 1}")
+                    time.sleep(1)
+                    self.tentativasRealizadas += 1
+                    if self.tentativasRealizadas >= self.numeroDeTentativasMax:
+                        print(f"Tela {nome_imagem} não foi encontrada após {self.numeroDeTentativasMax} tentativas. Pausando o programa.")
+                        sys.exit()  # Encerra o programa
+            except Exception as e:
+                print(f"Erro ao localizar a tela {nome_imagem}, Tentativa {self.tentativasRealizadas + 1}: {e}")
+                time.sleep(1)
+                self.tentativasRealizadas += 1
+                if self.tentativasRealizadas >= self.numeroDeTentativasMax:
+                    print(f"Tela {nome_imagem} não foi encontrada após {self.numeroDeTentativasMax} tentativas. Pausando o programa.")
+                    sys.exit()  # Encerra o programa
+
     def cliqueDuplo(self, image_path, precisao):
 
         """
@@ -87,7 +124,7 @@ class Reconhecimento:
                     self.online = False
                     break
                 
-    def inf(self, image_path, precisao ):
+    def inf(self, image_path, precisao):
 
         """
         Funçao localiza a imagem na tela, ela tenta localizar com um "numeroDeTentativasMax"
@@ -133,7 +170,9 @@ class Reconhecimento:
                     print('há pop up')
                     self.localiza(lida_check,0.7)
                     self.localiza('check_box.png',0.7)
+                    sleep(0.8)
                     py.click(py.moveRel(0,+59))
+                    sleep(0.8)
                     py.moveTo(tela_encontrada)
                     sleep(1)
                     py.click(py.moveRel(+229,+178))

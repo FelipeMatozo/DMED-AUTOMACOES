@@ -9,7 +9,7 @@ import logging
 
 class CriarT:
     def __init__(self):
-        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.5)
+        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=1.5)
         self.arquivo = ''
 
     def abrir_tela_servicos(self, unidade_consumidora):
@@ -27,6 +27,7 @@ class CriarT:
         self.ia.online = True
         self.ia.localiza("popup2.png", 0.8)
         py.hotkey('alt','i')
+        sleep(0.8)
 
     def inserir_reclama(self):
         self.ia.online = True
@@ -75,7 +76,9 @@ class CadastroSolicitacao:
 
     def bloqueio_fatura(self):
         if self.ia.inf('bloqueio_de_faturas.png',0.7):
+            sleep(0.8)
             py.hotkey('alt','n')
+            sleep(0.3)
     
     def operacao_med(self):
         if self.ia.inf('oper_med.png', 0.65):
@@ -90,9 +93,12 @@ class CadastroSolicitacao:
 
         self.ia.localiza('sonda.png',0.6)
         py.hotkey('alt','o')
+        if self.ia.localiza('telaInicial.PNG', 0.6):
+            pass
         
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
+            sleep(0.3)
             py.hotkey('tab')
     
     def inserir_email_T11(self):
@@ -104,16 +110,15 @@ class CadastroSolicitacao:
         print("alt f")
         sleep(1.5)
         py.hotkey('alt','f')
-        self.bloqueio_fatura()
-        py.hotkey('alt','f')
-        print("alt f")
-        sleep(1.5)
+            
+        
         if self.ia.inf('gerar_os.png', 0.7):
             py.hotkey('alt','s')
 
     def inserir_obs(self):
         py.write(self.obs)
         py.hotkey('alt','f')
+        sleep(1.5)
         self.bloqueio_fatura()
     
     def Interno(self): #INT
@@ -170,9 +175,7 @@ def main(ucs, subtipo, motivo, resp, obs):
     
     # Inicia a instância de CadastroSolicitacao
     cadastro = CadastroSolicitacao(ucs, subtipo, motivo, resp, obs)
-    logging.info(f"Rodando UC's: {ucs}")
-    logging.info(f"Configuracao: {subtipo}, {motivo}, {resp}")
-    logging.info(f"Observacao: {obs}")
+
 
     programa = ProgramasExecutaveis()
     cis = CriarT()
@@ -192,4 +195,5 @@ def main(ucs, subtipo, motivo, resp, obs):
         if cadastro.motivo == 'SOL' or cadastro.motivo == 'sol':
             cadastro.Solicita()
     
-        logging.info(f"UC: {unidade_consumidora} finalizada!")
+        logging.info(f"UC: {unidade_consumidora} finalizada! Serviço: {subtipo}")
+       

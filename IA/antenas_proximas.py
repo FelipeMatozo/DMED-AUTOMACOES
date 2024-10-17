@@ -9,10 +9,9 @@ from openpyxl.styles import Font, PatternFill, Alignment
 
 class TratarPlanilha:
 
-    def __init__(self, data_path, planilha_path):
+    def __init__(self, data_path):
         self.data_path = data_path
         self.data_df = None
-       
         self.merged_df = None
 
     def carregar_planilhas(self):
@@ -132,8 +131,7 @@ class TratarPlanilha:
 
         # Reorganizar as colunas na ordem desejada
         colunas_desejadas = [
-            "UC", "Cliente", "Número do RG", "Município", "MED", 
-            "Operadora", "Marca TM", "TM CIS", "TM Hemera", "Data da ultima mensagem", 
+            "UC","Cliente","RG","Município","MED","Operadora","Marca TM", "TM Hemera","Regional 1",
             "Melhor antena", "Distância 1", "Segunda antena", "Distância 2","Terceira antena", 
             "Distância 3"
            
@@ -150,7 +148,7 @@ class TratarPlanilha:
 
 
 if __name__ == "__main__":
-    tratar = TratarPlanilha("assets/excel/Unidades_desconectadas.xlsx", "assets/excel/TIM.xlsx")
+    tratar = TratarPlanilha("assets/excel/SEM COMUNICACAO - OUTUBRO.xlsx")
     tratar.carregar_planilhas()
     tratar.salvar_planilha()
     # Caminho para a planilha de resultados de antenas
