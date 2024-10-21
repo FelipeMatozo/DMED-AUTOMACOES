@@ -9,11 +9,11 @@ import logging
 
 class CriarT:
     def __init__(self):
-        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=1.5)
+        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=0.8)
         self.arquivo = ''
 
     def abrir_tela_servicos(self, unidade_consumidora):
-        self.ia.localiza('telaInicial.PNG', 0.7)
+        self.ia.localiza('telaInicial.PNG', 0.5)
         py.hotkey('alt','l')
         self.ia.localiza('uc.PNG', 0.7)   
         py.write(f'{unidade_consumidora}')
@@ -25,7 +25,7 @@ class CriarT:
         
     def popupservico2(self):
         self.ia.online = True
-        self.ia.localiza("popup2.png", 0.8)
+        self.ia.localiza("popup2.png", 0.7)
         py.hotkey('alt','i')
         sleep(0.8)
 
@@ -33,6 +33,9 @@ class CriarT:
         self.ia.online = True
         print('insirindo parametro')
         self.ia.localiza('reclama.PNG', 0.8)
+        py.move(0,+30)
+        py.tripleClick()
+        py.hotkey("backspace")
         py.write('SR/Reclama')
         py.hotkey("enter")
         py.hotkey("enter")
@@ -98,18 +101,32 @@ class CadastroSolicitacao:
         
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
-            sleep(0.3)
             py.hotkey('tab')
     
+    def voltar_inicio(self):
+        while self.ia.localiza_1x('telainicial.png', 0.5)== False:
+            sleep(1.5)
+            self.ia.localiza_1x('portinha.png', 0.7)
+            sleep(1.5)
+            if self.ia.localiza_1x('cancela_op.png', 0.7) == True:
+                print("Cancelando operacao")
+                py.hotkey('alt','s')
+            sleep(1.5)
+            if self.ia.localiza_1x('sonda_cancelada.png', 0.7) == True:
+                print("Cancelando sonda")
+                py.hotkey('alt','o')
+
     def inserir_email_T11(self):
-        self.ia.verifica('email.png',0.6)
+        self.ia.verifica('email.png',0.7)
         print("alt f")
         sleep(1.5)
         py.hotkey('alt','f')
         self.bloqueio_fatura()
         print("alt f")
-        sleep(1.5)
         py.hotkey('alt','f')
+        self.bloqueio_fatura()
+        py.hotkey('alt','f')
+        sleep(1.5)
             
         
         if self.ia.inf('gerar_os.png', 0.7):
@@ -149,6 +166,7 @@ class CadastroSolicitacao:
         self.inserir_obs()
         self.inserir_email_T11()
         self.operacao_med()
+        
 
 def main(ucs, subtipo, motivo, resp, obs):
     # Filtrar a lista de ucs para remover '\r', '\n' e espaços em branco
@@ -176,24 +194,48 @@ def main(ucs, subtipo, motivo, resp, obs):
     # Inicia a instância de CadastroSolicitacao
     cadastro = CadastroSolicitacao(ucs, subtipo, motivo, resp, obs)
 
-
     programa = ProgramasExecutaveis()
     cis = CriarT()
-    ia = Reconhecimento()
+    ia = Reconhecimento(numeroDeTentativasMax=7, delay=1)
 
     for unidade_consumidora in ucs:
-        print(unidade_consumidora + '\n')
-        cis.abrir_tela_servicos(unidade_consumidora)
-        sleep(2)
-        cis.popupservico()
-        cis.inserir_reclama()
-        cis.popupservico2()
-        sleep(1)
-        cis.popupservico()
-        print(cadastro.motivo)
+        sucesso = False
+        while not sucesso:
+            try:
+                print(unidade_consumidora + '\n')
+                cis.abrir_tela_servicos(unidade_consumidora)
+                sleep(2)
+                cis.popupservico()
+                cis.inserir_reclama()
+                cis.popupservico2()
+                sleep(1)
+                cis.popupservico()
+                print(cadastro.motivo)
 
-        if cadastro.motivo == 'SOL' or cadastro.motivo == 'sol':
-            cadastro.Solicita()
-    
-        logging.info(f"UC: {unidade_consumidora} finalizada! Serviço: {subtipo}")
-       
+                # Verifica se a imagem 'cadas_reclam.png' foi localizada
+                if ia.verifica('cadas_reclam.png', 0.5):
+                    print("Tela de Cadastro de Reclamação encontrada")
+                    # Verifica se o motivo é "SOL" e executa o procedimento correspondente
+                    if cadastro.motivo == 'SOL' or cadastro.motivo == 'sol':
+                        print('Iniciando solicitação')
+                        cadastro.Solicita()
+                
+                else:
+                    # Se 'cadas_reclam.png' não for localizada, reinicia o loop
+                    logging.warning(f"'cadas_reclam.png' não encontrada para UC: {unidade_consumidora}. Retentando...")
+                    cadastro.voltar_inicio()
+                    continue
+
+                # Verifica se a tela inicial foi localizada
+                if ia.localiza('telaInicial.PNG', 0.5):
+                    sucesso = True
+                    logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo}")
+                else:
+                    # Se 'telaInicial.png' não for localizada, reinicia o loop
+                    logging.warning(f"Tela inicial não encontrada para UC: {unidade_consumidora}. Retentando...")
+                    cadastro.voltar_inicio()
+                    continue
+
+            except Exception as e:
+                logging.error(f"Erro ao processar UC: {unidade_consumidora}. Detalhes: {e}")
+                print(f"Erro ao processar UC: {unidade_consumidora}. Retentando...")

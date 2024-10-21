@@ -7,23 +7,25 @@ import sys
 import os
 import logging
 from datetime import datetime
+import keyboard
 
 class CriarT:
     def __init__(self,SS, motivo, obs):
-        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=1.5)
+        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=1.3)
         self.arquivo = ''
         self.SS = SS
         self.motivo = motivo
         self.obs = obs
 
     def abrir_tela_servicos(self, Solicitacao):
-        self.ia.localiza('telaInicial.PNG', 0.6)
+        self.ia.localiza('telaInicial.PNG', 0.5)
         py.hotkey('alt','l')
         self.ia.localiza('SS.PNG', 0.85)
         py.write('01')
         py.hotkey('tab')
         py.write(f'{Solicitacao}')
         py.press('enter')
+        sleep(2)
 
     def finalizacao(self):
         py.hotkey('alt','a')
@@ -34,18 +36,31 @@ class CriarT:
         py.hotkey('alt','o')
         self.ia.verifica('sonda_t11.png',0.7)
         py.hotkey('alt','o')
+        sleep(1.5)
         self.ia.localiza('portinha.png',0.7)
         sleep(2)
-        if self.ia.localiza('telaInicial.PNG', 0.6):
+        if self.ia.localiza('telaInicial.PNG', 0.5):
             pass
+    
+    def voltar_inicio(self):
+        while self.ia.localiza_1x('telainicial.png', 0.5)== False:
+            sleep(1.5)
+            self.ia.localiza_1x('portinha.png', 0.7)
 
     def popupservico(self):
+
         print('Procurando popup')
         self.ia.popup()
+        self.ia.online = True
+            
     
     def consulta_ss(self):
-        self.ia.localiza('Consulta_SS.PNG', 0.7)
+        print("tentando localizar Consulta SS")
+        self.ia.localiza('Consulta_SS.PNG', 0.6)
+        py.click()
+        sleep(2)
         self.ia.localiza('Acompanhamento_SS.png', 0.7)
+        sleep(0.3)
         py.hotkey('alt','b')
         sleep(2)
         self.ia.localiza('Visto_verde.png', 0.7)
@@ -74,11 +89,23 @@ class conclusao_ss:
         for tabs in range(numerodetabs):
             py.hotkey('tab')
 
+# Variável global para controlar a pausa
+paused = False
+
+def pause_program():
+    global paused
+    while True:
+        if keyboard.is_pressed('p'):  # Altere 'p' para a tecla que você deseja usar
+            paused = not paused  # Alterna entre pausar e retomar
+            print("Programa pausado!" if paused else "Programa retomado!")
+            sleep(1)  # Para evitar múltiplas ativações rápidas
+
 def main(SS, motivo, obs):
 
     SS = [servico.replace('\r', '').replace('\n', '').strip() for servico in SS if servico.replace('\r', '').replace('\n', '').strip()]
     print(SS, motivo, obs)
-     # Verifica se estamos em um ambiente PyInstaller
+    
+    # Verifica se estamos em um ambiente PyInstaller
     if hasattr(sys, '_MEIPASS'):
         base_path = sys._MEIPASS
     else:
@@ -98,21 +125,42 @@ def main(SS, motivo, obs):
     logging.info(f"Observacao: {obs}")
 
     cis = CriarT(SS, motivo, obs)
-    ia = Reconhecimento()
+    ia = Reconhecimento(numeroDeTentativasMax=7, delay=1)
 
     for Solicitacao in SS:
-        print(Solicitacao + '\n')
-        cis.abrir_tela_servicos(Solicitacao)
-        cis.popupservico()
-        cis.consulta_ss()
-        cis.tabzon(2)
-        py.write(motivo)
-        cis.tabzon(4)
-        cis.data_e_hora()
-        cis.finalizacao()
-        
-        
+        sucesso = False
+        while not sucesso:
+            try:
+                print(Solicitacao + '\n')
 
+                # Verifica se o programa está pausado
+                while paused:
+                    sleep(0.5)  # Espera enquanto o programa está pausado
 
+                # Executa suas funções aqui
+                cis.abrir_tela_servicos(Solicitacao)
+                try:
+                    cis.popupservico()
+                except Exception as e:
+                    logging.warning(f"Popup não encontrado para UC: {Solicitacao}. Detalhes: {e}")
+
+                cis.consulta_ss()
+                cis.tabzon(2)
+                py.write(motivo)
+                cis.tabzon(4)
+                cis.data_e_hora()
+                cis.finalizacao()
+
+                if ia.localiza('telaInicial.PNG', 0.5):
+                    sucesso = True
+                    logging.info(f"SS: {SS} finalizada!")
+                else:
+                    logging.warning(f"Tela inicial não encontrada para UC: {Solicitacao}. Retentando...")
+                    cis.voltar_inicio()
+                    continue
+
+            except Exception as e:
+                logging.error(f"Erro ao processar SS: {Solicitacao}. Detalhes: {e}")
+                print(f"Erro ao processar SS: {Solicitacao}. Retentando...")
 
         logging.info(f"UC: {Solicitacao} finalizada!")

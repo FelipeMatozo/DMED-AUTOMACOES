@@ -1,3 +1,165 @@
 05-08-2024 11:00:37 - UC: 4447541 finalizada! Servico: T12
 05-08-2024 11:00:38 - UC: 4447542 finalizada! Servico: T12
-05-08-2024 11:00:39 - UC: 4447543 finalizada! Servico: T12
+05-08-2024 11:00:39 - UC: 4447543 finalizada! Servico: T1217-10-2024 14:55:18 - 127.0.0.1 - - [17/Oct/2024 14:55:18] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+17-10-2024 14:55:18 - 127.0.0.1 - - [17/Oct/2024 14:55:18] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+17-10-2024 14:55:18 - 127.0.0.1 - - [17/Oct/2024 14:55:18] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+17-10-2024 14:55:18 - 127.0.0.1 - - [17/Oct/2024 14:55:18] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+17-10-2024 14:55:18 - 127.0.0.1 - - [17/Oct/2024 14:55:18] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+17-10-2024 14:56:04 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\macro.py', reloading
+17-10-2024 15:14:32 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\macro.py', reloading
+17-10-2024 15:16:26 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\macro.py', reloading
+17-10-2024 15:20:21 - Tela inicial nï¿½o encontrada para UC: 20311419. Retentando...
+17-10-2024 15:29:57 - UC: 20311419 finalizada! Serviï¿½o: T11
+17-10-2024 15:29:57 - 127.0.0.1 - - [17/Oct/2024 15:29:57] "POST / HTTP/1.1" 200 -
+17-10-2024 15:29:58 - 127.0.0.1 - - [17/Oct/2024 15:29:58] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+17-10-2024 15:33:28 - 127.0.0.1 - - [17/Oct/2024 15:33:28] "[36mGET /assets/images/T10.png HTTP/1.1[0m" 304 -
+17-10-2024 15:33:28 - 127.0.0.1 - - [17/Oct/2024 15:33:28] "[36mGET /assets/images/t11.png HTTP/1.1[0m" 304 -
+17-10-2024 15:33:28 - 127.0.0.1 - - [17/Oct/2024 15:33:28] "[36mGET /assets/images/T12.png HTTP/1.1[0m" 304 -
+17-10-2024 15:33:35 - 127.0.0.1 - - [17/Oct/2024 15:33:35] "GET /gerar_t11 HTTP/1.1" 200 -
+17-10-2024 15:33:35 - 127.0.0.1 - - [17/Oct/2024 15:33:35] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+17-10-2024 15:34:33 - 'cadas_reclam.png' nï¿½o encontrada para UC: 36648329. Retentando...
+17-10-2024 15:35:12 - 'cadas_reclam.png' nï¿½o encontrada para UC: 36648329. Retentando...
+17-10-2024 15:37:06 - UC: 36648329 finalizada! Serviï¿½o: T11
+17-10-2024 15:37:06 - 127.0.0.1 - - [17/Oct/2024 15:37:06] "POST / HTTP/1.1" 200 -
+17-10-2024 15:37:06 - 127.0.0.1 - - [17/Oct/2024 15:37:06] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+17-10-2024 15:37:43 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\ReconhecimentoDeImagem.py', reloading
+17-10-2024 15:41:54 - UC: 45030537 finalizada! Serviï¿½o: T11
+17-10-2024 15:42:52 - UC: 49808222 finalizada! Serviï¿½o: T11
+17-10-2024 15:43:49 - UC: 53747755 finalizada! Serviï¿½o: T11
+17-10-2024 15:51:25 - UC: 59515686 finalizada! Serviï¿½o: T11
+17-10-2024 15:51:48 - 'cadas_reclam.png' nï¿½o encontrada para UC: 70871060. Retentando...
+17-10-2024 15:52:55 - UC: 70871060 finalizada! Serviï¿½o: T11
+17-10-2024 15:53:20 - 'cadas_reclam.png' nï¿½o encontrada para UC: 73046736. Retentando...
+17-10-2024 15:54:30 - UC: 73046736 finalizada! Serviï¿½o: T11
+17-10-2024 16:12:58 - UC: 73133620 finalizada! Serviço: T11
+17-10-2024 16:13:59 - UC: 76918378 finalizada! Serviço: T11
+17-10-2024 16:14:56 - UC: 78475341 finalizada! Serviço: T11
+17-10-2024 16:15:57 - UC: 79177077 finalizada! Serviço: T11
+17-10-2024 16:16:54 - UC: 80032761 finalizada! Serviço: T11
+17-10-2024 16:22:36 - 'cadas_reclam.png' não encontrada para UC: 87741024. Retentando...
+17-10-2024 16:25:46 - UC: 87741024 finalizada! Serviço: T11
+17-10-2024 16:26:46 - UC: 93323565 finalizada! Serviço: T11
+17-10-2024 16:27:43 - UC: 93732716 finalizada! Serviço: T11
+17-10-2024 16:28:46 - UC: 94283826 finalizada! Serviço: T11
+17-10-2024 16:29:46 - UC: 94408963 finalizada! Serviço: T11
+17-10-2024 16:30:47 - UC: 94695091 finalizada! Serviço: T11
+17-10-2024 16:31:44 - UC: 95191399 finalizada! Serviço: T11
+17-10-2024 16:32:45 - UC: 95566651 finalizada! Serviço: T11
+17-10-2024 16:33:42 - UC: 96125225 finalizada! Serviço: T11
+17-10-2024 16:34:44 - UC: 97072494 finalizada! Serviço: T11
+17-10-2024 16:35:41 - UC: 98816454 finalizada! Serviço: T11
+17-10-2024 16:35:41 - 127.0.0.1 - - [17/Oct/2024 16:35:41] "POST / HTTP/1.1" 200 -
+17-10-2024 16:35:41 - 127.0.0.1 - - [17/Oct/2024 16:35:41] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+17-10-2024 16:37:06 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\macro.py', reloading
+17-10-2024 17:02:36 - UC: 9589597 finalizada! Servico: T12
+17-10-2024 17:03:36 - UC: 19451610 finalizada! Servico: T12
+17-10-2024 17:04:33 - UC: 19451830 finalizada! Servico: T12
+17-10-2024 17:05:32 - UC: 19453035 finalizada! Servico: T12
+17-10-2024 17:06:31 - UC: 40238520 finalizada! Servico: T12
+17-10-2024 17:07:29 - UC: 41908244 finalizada! Servico: T12
+17-10-2024 17:08:26 - UC: 45567530 finalizada! Servico: T12
+17-10-2024 17:09:25 - UC: 49324365 finalizada! Servico: T12
+17-10-2024 17:10:25 - UC: 50776029 finalizada! Servico: T12
+17-10-2024 17:11:22 - UC: 70942773 finalizada! Servico: T12
+17-10-2024 17:12:19 - UC: 72925043 finalizada! Servico: T12
+17-10-2024 17:13:25 - UC: 76230910 finalizada! Servico: T12
+17-10-2024 17:14:24 - UC: 78145104 finalizada! Servico: T12
+17-10-2024 17:15:24 - UC: 79121314 finalizada! Servico: T12
+17-10-2024 17:16:21 - UC: 82819700 finalizada! Servico: T12
+17-10-2024 17:17:18 - UC: 84413166 finalizada! Servico: T12
+17-10-2024 17:18:17 - UC: 85991325 finalizada! Servico: T12
+17-10-2024 17:19:16 - UC: 87429675 finalizada! Servico: T12
+17-10-2024 17:20:14 - UC: 91497663 finalizada! Servico: T12
+17-10-2024 17:21:14 - UC: 91497779 finalizada! Servico: T12
+17-10-2024 17:22:15 - UC: 91715342 finalizada! Servico: T12
+17-10-2024 17:23:16 - UC: 93981163 finalizada! Servico: T12
+17-10-2024 17:24:27 - UC: 95329820 finalizada! Servico: T12
+17-10-2024 17:25:27 - UC: 96957778 finalizada! Servico: T12
+17-10-2024 17:30:01 - UC: 99577771 finalizada! Servico: T12
+17-10-2024 17:32:51 - UC: 100991319 finalizada! Servico: T12
+17-10-2024 17:33:41 - UC: 101087705 finalizada! Servico: T12
+17-10-2024 17:34:33 - UC: 103136665 finalizada! Servico: T12
+17-10-2024 17:35:22 - UC: 105893986 finalizada! Servico: T12
+17-10-2024 17:36:16 - UC: 108676331 finalizada! Servico: T12
+17-10-2024 17:37:08 - UC: 110034570 finalizada! Servico: T12
+17-10-2024 17:38:00 - UC: 110317149 finalizada! Servico: T12
+17-10-2024 17:38:00 - 127.0.0.1 - - [17/Oct/2024 17:38:00] "POST / HTTP/1.1" 200 -
+17-10-2024 17:38:00 - 127.0.0.1 - - [17/Oct/2024 17:38:00] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+17-10-2024 17:39:02 - 127.0.0.1 - - [17/Oct/2024 17:39:02] "[36mGET /assets/images/T10.png HTTP/1.1[0m" 304 -
+17-10-2024 17:39:02 - 127.0.0.1 - - [17/Oct/2024 17:39:02] "[36mGET /assets/images/t11.png HTTP/1.1[0m" 304 -
+17-10-2024 17:39:02 - 127.0.0.1 - - [17/Oct/2024 17:39:02] "[36mGET /assets/images/T12.png HTTP/1.1[0m" 304 -
+17-10-2024 17:40:30 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T11.py', reloading
+17-10-2024 17:58:51 - Rodando SS's: ['20247454840052', '20247454827684', '20247454834193', '20247454819983', '20247454790542', '20247454810654', '20247454856004', '20247454752709', '20247454819236', '20247454800439', '20247454824379', '20247454769241', '20247454831796', '20247454837718', '20247454780118', '20247454759127']
+17-10-2024 17:58:51 - Configuracao:  000
+17-10-2024 17:58:51 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+17-10-2024 17:58:51 - 127.0.0.1 - - [17/Oct/2024 17:58:51] "[35m[1mPOST /concluir_t11 HTTP/1.1[0m" 500 -
+17-10-2024 17:58:52 - 127.0.0.1 - - [17/Oct/2024 17:58:52] "GET /concluir_t11?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+17-10-2024 17:58:52 - 127.0.0.1 - - [17/Oct/2024 17:58:52] "GET /concluir_t11?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+17-10-2024 17:58:52 - 127.0.0.1 - - [17/Oct/2024 17:58:52] "GET /concluir_t11?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+17-10-2024 17:58:52 - 127.0.0.1 - - [17/Oct/2024 17:58:52] "[36mGET /concluir_t11?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+17-10-2024 17:59:36 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\macro.py', reloading
+17-10-2024 18:00:11 - Rodando SS's: ['20247454840052', '20247454827684', '20247454834193', '20247454819983', '20247454790542', '20247454810654', '20247454856004', '20247454752709', '20247454819236', '20247454800439', '20247454824379', '20247454769241', '20247454831796', '20247454837718', '20247454780118', '20247454759127']
+17-10-2024 18:00:11 - Configuracao:  000
+17-10-2024 18:00:11 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+17-10-2024 18:01:45 - Rodando SS's: ['20247454840052', '20247454827684', '20247454834193', '20247454819983', '20247454790542', '20247454810654', '20247454856004', '20247454752709', '20247454819236', '20247454800439', '20247454824379', '20247454769241', '20247454831796', '20247454837718', '20247454780118', '20247454759127']
+17-10-2024 18:01:45 - Configuracao:  000
+17-10-2024 18:01:45 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+17-10-2024 18:03:57 - Rodando SS's: ['20247454840052', '20247454827684', '20247454834193', '20247454819983', '20247454790542', '20247454810654', '20247454856004', '20247454752709', '20247454819236', '20247454800439', '20247454824379', '20247454769241', '20247454831796', '20247454837718', '20247454780118', '20247454759127']
+17-10-2024 18:03:57 - Configuracao:  000
+17-10-2024 18:03:57 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+17-10-2024 18:04:24 - SS: ['20247454840052', '20247454827684', '20247454834193', '20247454819983', '20247454790542', '20247454810654', '20247454856004', '20247454752709', '20247454819236', '20247454800439', '20247454824379', '20247454769241', '20247454831796', '20247454837718', '20247454780118', '20247454759127'] finalizada!
+17-10-2024 18:04:24 - UC: 20247454840052 finalizada!
+17-10-2024 18:06:27 - Rodando SS's: ['20247454840052', '20247454827684', '20247454834193', '20247454819983', '20247454790542', '20247454810654', '20247454856004', '20247454752709', '20247454819236', '20247454800439', '20247454824379', '20247454769241', '20247454831796', '20247454837718', '20247454780118', '20247454759127']
+17-10-2024 18:06:27 - Configuracao:  000
+17-10-2024 18:06:27 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+17-10-2024 18:21:28 - Rodando SS's: ['20247454840052']
+17-10-2024 18:21:28 - Configuracao:  000
+17-10-2024 18:21:28 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+17-10-2024 18:22:02 - SS: ['20247454840052'] finalizada!
+17-10-2024 18:22:02 - UC: 20247454840052 finalizada!
+17-10-2024 18:22:02 - 127.0.0.1 - - [17/Oct/2024 18:22:02] "POST /concluir_t11 HTTP/1.1" 200 -
+17-10-2024 18:22:02 - 127.0.0.1 - - [17/Oct/2024 18:22:02] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+18-10-2024 15:36:26 - Rodando SS's: ['20247454840052']
+18-10-2024 15:36:26 - Configuracao:  000
+18-10-2024 15:36:26 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:36:53 - SS: ['20247454840052'] finalizada!
+18-10-2024 15:36:53 - UC: 20247454840052 finalizada!
+18-10-2024 15:36:53 - 127.0.0.1 - - [18/Oct/2024 15:36:53] "POST /concluir_t11 HTTP/1.1" 200 -
+18-10-2024 15:36:53 - 127.0.0.1 - - [18/Oct/2024 15:36:53] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+18-10-2024 15:38:14 - Rodando SS's: ['20247454840052']
+18-10-2024 15:38:14 - Configuracao:  000
+18-10-2024 15:38:14 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:43:15 - Rodando SS's: ['20247454840052']
+18-10-2024 15:43:15 - Configuracao:  000
+18-10-2024 15:43:15 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:45:03 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T11.py', reloading
+18-10-2024 15:46:32 - Rodando SS's: ['20247454840052']
+18-10-2024 15:46:32 - Configuracao:  000
+18-10-2024 15:46:32 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:51:50 - Rodando SS's: ['20247454840052']
+18-10-2024 15:51:50 - Configuracao:  000
+18-10-2024 15:51:50 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:55:05 - Rodando SS's: ['20247454840052']
+18-10-2024 15:55:05 - Configuracao:  000
+18-10-2024 15:55:05 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:55:44 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\app.py', reloading
+18-10-2024 15:57:07 - Rodando SS's: ['20247454840052']
+18-10-2024 15:57:07 - Configuracao:  000
+18-10-2024 15:57:07 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:57:32 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\app.py', reloading
+18-10-2024 15:58:57 - Rodando SS's: ['20247454840052']
+18-10-2024 15:58:57 - Configuracao:  000
+18-10-2024 15:58:57 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 15:59:22 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\ReconhecimentoDeImagem.py', reloading
+18-10-2024 16:01:16 - Rodando SS's: ['20247454840052']
+18-10-2024 16:01:16 - Configuracao:  000
+18-10-2024 16:01:16 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 16:03:28 - Rodando SS's: ['20247454840052']
+18-10-2024 16:03:28 - Configuracao:  000
+18-10-2024 16:03:28 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 16:22:11 - Rodando SS's: ['20247454840052']
+18-10-2024 16:22:11 - Configuracao:  000
+18-10-2024 16:22:11 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO
+18-10-2024 16:27:49 - Rodando SS's: ['20247454840052']
+18-10-2024 16:27:49 - Configuracao:  000
+18-10-2024 16:27:49 - Observacao: MEDICAO COMISSIONADA, EMITIDO RELATORIO

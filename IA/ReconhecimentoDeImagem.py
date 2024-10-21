@@ -55,15 +55,16 @@ class Reconhecimento:
                     self.online = False
                     return False
 
-    def localiza_pausa(self, image_path, precisao):
+    def localiza_1x(self, image_path, precisao):
         """
-        Função localiza a imagem na tela, ela tenta localizar com um "numeroDeTentativasMax"
-        se não for possível ela informa o usuário que a imagem não está na tela
-        e pausa o programa se não for encontrada após o número máximo de tentativas.
+        Funçao localiza a imagem na tela, ela tenta localizar com um "numeroDeTentativasMax"
+        se nao for possivel ela informa o usuario que a imagem nao esta na tela
+        se for, ele move até a tela e clica na imagem
         """
         self.tentativasRealizadas = 0
         nome_imagem = os.path.basename(image_path)
         diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images', image_path)
+        
 
         while self.online:
 
@@ -76,20 +77,16 @@ class Reconhecimento:
                     py.click()
                     print(f"A tela {nome_imagem} foi encontrada.")
                     return True
+                    
                 else:
-                    print(f"Tela {nome_imagem} não foi encontrada, Tentativa {self.tentativasRealizadas + 1}")
-                    time.sleep(1)
-                    self.tentativasRealizadas += 1
-                    if self.tentativasRealizadas >= self.numeroDeTentativasMax:
-                        print(f"Tela {nome_imagem} não foi encontrada após {self.numeroDeTentativasMax} tentativas. Pausando o programa.")
-                        sys.exit()  # Encerra o programa
-            except Exception as e:
-                print(f"Erro ao localizar a tela {nome_imagem}, Tentativa {self.tentativasRealizadas + 1}: {e}")
-                time.sleep(1)
-                self.tentativasRealizadas += 1
-                if self.tentativasRealizadas >= self.numeroDeTentativasMax:
-                    print(f"Tela {nome_imagem} não foi encontrada após {self.numeroDeTentativasMax} tentativas. Pausando o programa.")
-                    sys.exit()  # Encerra o programa
+                    print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
+                    time.sleep(1) 
+                
+                    return False
+            except:
+                print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
+                time.sleep(1) 
+                return False
 
     def cliqueDuplo(self, image_path, precisao):
 
@@ -150,7 +147,7 @@ class Reconhecimento:
                 print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
                 time.sleep(1) 
                 self.tentativasRealizadas += 1
-                if self.tentativasRealizadas >= 3:
+                if self.tentativasRealizadas >= 4:
                     self.tentativasRealizadas = 0
                     return False
     
@@ -161,7 +158,7 @@ class Reconhecimento:
         lida_check= os.path.join(self.raizDoProjeto, 'assets', 'images', 'lida_check.png') 
         while self.online:
 
-            time.sleep(self.delay+0.5)
+            time.sleep(self.delay)
             
             try:
                 tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=0.6)
@@ -170,11 +167,11 @@ class Reconhecimento:
                     print('há pop up')
                     self.localiza(lida_check,0.7)
                     self.localiza('check_box.png',0.7)
-                    sleep(0.8)
+                    sleep(0.2)
                     py.click(py.moveRel(0,+59))
-                    sleep(0.8)
+                    sleep(0.2)
                     py.moveTo(tela_encontrada)
-                    sleep(1)
+                    sleep(0.2)
                     py.click(py.moveRel(+229,+178))
                     break
                 else:
@@ -192,6 +189,7 @@ class Reconhecimento:
                     self.tentativasRealizadas = 0
                     self.online = False
                     break
+
 
     def verifica(self, image_path, precisao):
         """
@@ -222,4 +220,7 @@ class Reconhecimento:
                 if self.tentativasRealizadas >= 7:
                     self.online = False
                     break
+        return False
+            
+
                 

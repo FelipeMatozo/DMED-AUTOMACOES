@@ -12,6 +12,8 @@ from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
 import plotly.graph_objs as go
 import numpy as np
+from time import sleep
+import threading
 
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
@@ -46,6 +48,24 @@ sys.path.append(macro_dir)
 
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
+
+# Variável global para controlar a pausa
+paused = False
+
+def toggle_pause():
+    global paused
+    while True:
+        sleep(0.5)  # Verifica a cada meio segundo
+
+@app.route('/pause', methods=['POST'])
+def pause():
+    global paused
+    paused = not paused
+    return jsonify({"paused": paused}), 200
+
+@app.route('/status', methods=['GET'])
+def status():
+    return jsonify({"paused": paused}), 200
 
 def read_log():
     log_file_path = 'assets\\log\\log.log'  # Coloque o caminho absoluto se necessário
@@ -111,7 +131,7 @@ def main_page():
 
         # Passar os dados para a função main de macro.py
         macro.main(ucs, subtipo, motivo, resp, obs)
-
+        threading.Thread(target=macro.main, args=(ucs, subtipo, motivo, resp, obs), daemon=True).start()
         # Exibir mensagem de sucesso
         return render_template('interface.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
 
@@ -364,4 +384,5 @@ def dashboard_table_data():
 
 if __name__ == '__main__':
     # app.run(host="0.0.0.0", port=5000, debug=True)
+    threading.Thread(target=toggle_pause, daemon=True).start()
     app.run(debug=True)
