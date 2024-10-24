@@ -7,6 +7,7 @@ import logging
 import plotly.express as px
 from IA import macro
 from IA import concluir_T11
+from IA import concluir_t12
 from IA.portas_telemetrias import find_tm
 from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
@@ -181,6 +182,23 @@ def concluir_t12():
         # Processar o POST se necessário
         pass
     return render_template('concluir_t12.html')
+
+@app.route('/concluir_ss_t12', methods=['GET', 'POST'])
+def concluir_ss_t12():
+    if request.method == 'POST':
+        ucs = request.form['concluir_ss_t12']
+        # Dividir ucs por quebras de linha e remover espaços em branco
+        ucs = ucs.splitlines()
+        ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
+        motivo = request.form['motivo']
+        obs = request.form['obs']
+
+        # Passar os dados para a função concluir_T11
+        concluir_t12.main(ucs, motivo, obs)
+
+        # Exibir mensagem de sucesso
+        return render_template('concluir_ss_t12.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
+    return render_template('concluir_ss_t12.html')
 
 @app.route('/gerar_t12', methods=['GET', 'POST'])
 def gerar_t12():

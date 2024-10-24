@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conclusão de T12 </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+  <header class="container-fluid py-3 d-flex justify-content-center align-items-center position-relative">
+    <a href="/" class="back-arrow">
+      <i class="bi bi-arrow-left-circle" style="font-size: 2rem; color: white;"></i>
+    </a>
+    <span class="emoji">⚡️</span> <h1 class="text-white ms-3">Conclusão SS T12<span class="emoji"></span></h1>
+  </header>
+
+  <div class="container mt-3">
+    {% if mensagem_sucesso %}
+      <div class="alert alert-success" role="alert">
+        {{ mensagem_sucesso }}
+      </div>
+    {% endif %}
+
+    <script>
+        function formatNumbers() {
+          const inputString = document.getElementById('ucs').textContent;
+          const numbers = inputString.split(' ');
+      
+          const ucsList = document.getElementById('ucs');
+          ucsList.innerHTML = ''; // Clear existing content
+      
+          // Create and append list items to the container
+          numbers.forEach(number => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('ucs-item'); // Add a class for styling
+            listItem.textContent = number;
+      
+            ucsList.appendChild(listItem);
+          });
+        }
+      
+        // Call the function on page load to initialize the formatting
+        formatNumbers();
+      </script>
+      
+
+
+      <style>
+        .ucs-list {
+          height: 200px; /* Set a fixed height for the container */
+          overflow-y: auto; /* Enable vertical scrolling */
+          border: 1px solid #ccc; /* Add a border */
+          padding: 5px; /* Add some padding */
+        }
+      
+        .ucs-item {
+          list-style: none; /* Remove default list bullets */
+          padding: 5px; /* Add padding to each list item */
+          border-bottom: 1px solid #ccc; /* Add a bottom border */
+          text-align: center; /* Center the text */
+        }
+        header {
+          background-color: #6C7574;
+          margin-bottom: 1%;
+        }
+        .send {
+            background-color: #6b7a91;
+            color: white;
+            font-weight: bold;
+            border-color: #343a40;
+        }
+      </style>
+
+<div class="container">
+  <div class="row">
+      <div class="col">
+        <form method="post" action="/concluir_t11">
+          <div class="mb-3">
+              <label for="concluir_t11" class="form-label">Lista de SS's (insira a lista contendo os números da Solicitações de serviço geradas sem ";" ou "," uma abaixo da outra.)</label>
+              <textarea class="form-control" id="concluir_t11" name="concluir_t11" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo (Campo interno - T12):</label>
+            <select class="form-control" id="motivo" name="motivo" required>
+              <option value="000">000 - Aprovado</option>
+              <option value="001">001 - Reprovado</option>
+            </select>
+          </div>
+          <div class="mb-3">
+              <label for="obs" class="form-label">Observações do atendente: (OBS: NAO COLOCAR ACENTOS OU "Ç")</label>
+              <input type="text" class="form-control" id="obs" name="obs" value="Ponto de medição cadastrado na CCEE" required>
+          </div>
+          <button type="submit" class="btn send">Enviar</button>
+          <button type="button" class="btn export" onclick="downloadLogs()">Exportar logs</button>
+        </form>
+        
+      </div>
+      <div class="col">
+        <div class="row justify-content-center">
+            <div class="col-md-11">
+                <h1 class="text-center">Instruções de utilização</h1>
+                <ol class="list-unstyled">
+                    <li class="mb-3">
+                        <div class="d-flex align-items-start">
+                            <div>
+                                <p class="font-weight-bold mb-1" style="color: black; font-weight: bold;">Passo 1: Dados</p>
+                                <p>Primeiro, você precisa reunir todas as SS's, a recomendação é copiar a lista 
+                                  diretamento do Excel, uma abaixo da outra e colar no campo SS.
+                                  Preencha o resto do formulario com os parametros desejados.
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1"style="color: black; font-weight: bold;">Passo 2: CISDIS12</p>
+                        <p>Configurar o ambiente do CISDIS12 para a tela de codigo ACATEND0, com a tela em branco como na imagem.</p>
+                    </li>
+                    <div class="row justify-content-center">
+                         <p style="color: red; font-size: 0.7rem;">PS: é necessario deixar a o cis em TELA CHEIA, no monitor principal, a resolução precisar ser FULL HD (1920x1080) .</p>
+                    </div>
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1 "style="color: black; font-weight: bold;">Passo 3: Executar</p>
+                        <p>Após preenchidas as informações, clicar em "Enviar" para iniciar o macro planejado.</p>
+                        <p style="color: red; font-size: 0.7rem;">PS: Recomendado deixar A interface na tela SECUNDARIA. junto com CMD para acompanhar os passos do macro.</p>
+
+                      </li>
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1 "style="color: black; font-weight: bold;">Passo 4: Monitorar</p>
+                        <p>Monitore o progresso e faça ajustes conforme necessário para manter tudo nos trilhos.</p>
+                    </li>
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1" style="color: black; font-weight: bold;">Passo 5: Concluir</p>
+                        <p>Finalize o processo e faça uma revisão para garantir que todos os objetivos foram alcançados.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <footer class="container-fluid bg-dark text-white text-center py-3">
+    <div class="col" style="color: whitesmoke;">
+      Departamento de Medição.
+      <div class="row" style="color: #f06428; justify-content: center;">
+        COPEL DISTRIBUIÇÂO
+      </div>
+    </div>
+  </footer>
+  <script>
+    function downloadLogs() {
+        window.location.href = '/download';
+    }
+</script>
+</body>
+</html>

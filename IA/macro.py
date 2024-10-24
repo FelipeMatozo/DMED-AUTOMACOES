@@ -222,7 +222,7 @@ def main(ucs, subtipo, motivo, resp, obs):
                 
                 else:
                     # Se 'cadas_reclam.png' não for localizada, reinicia o loop
-                    logging.warning(f"'cadas_reclam.png' não encontrada para UC: {unidade_consumidora}. Retentando...")
+                    logging.warning(f"UC: {unidade_consumidora}. Retentando...")
                     cadastro.voltar_inicio()
                     continue
 
@@ -238,4 +238,4 @@ def main(ucs, subtipo, motivo, resp, obs):
 
             except Exception as e:
                 logging.error(f"Erro ao processar UC: {unidade_consumidora}. Detalhes: {e}")
-                print(f"Erro ao processar UC: {unidade_consumidora}. Retentando...")
+                print(f"UC: {unidade_consumidora}. Retentando...")

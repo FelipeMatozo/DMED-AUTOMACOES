@@ -71,6 +71,7 @@ class Reconhecimento:
             time.sleep(self.delay)
 
             try:
+                print("tentando localizar tela")
                 tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=precisao)
                 if tela_encontrada is not None:
                     py.moveTo(tela_encontrada)
@@ -217,10 +218,9 @@ class Reconhecimento:
                 print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
                 time.sleep(1) 
                 self.tentativasRealizadas += 1
-                if self.tentativasRealizadas >= 7:
+                if self.tentativasRealizadas >= self.numeroDeTentativasMax:
                     self.online = False
                     break
-        return False
             
 
                 

@@ -11,13 +11,14 @@ import keyboard
 
 class CriarT:
     def __init__(self,SS, motivo, obs):
-        self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=1.3)
+        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.9)
         self.arquivo = ''
         self.SS = SS
         self.motivo = motivo
         self.obs = obs
 
     def abrir_tela_servicos(self, Solicitacao):
+        self.ia.online=True
         self.ia.localiza('telaInicial.PNG', 0.5)
         py.hotkey('alt','l')
         self.ia.localiza('SS.PNG', 0.85)
@@ -31,18 +32,22 @@ class CriarT:
         py.hotkey('alt','a')
         self.ia.verifica('comunicar_cliente.png',0.7)
         py.hotkey('alt','s')
+        sleep(1)
         self.ia.verifica('comunicado_cliente.png',0.7)
         py.hotkey('space')
+        sleep(0.5)
         py.hotkey('alt','o')
+        sleep(1)
         self.ia.verifica('sonda_t11.png',0.7)
         py.hotkey('alt','o')
         sleep(1.5)
         self.ia.localiza('portinha.png',0.7)
-        sleep(2)
+        sleep(1.5)
         if self.ia.localiza('telaInicial.PNG', 0.5):
             pass
     
     def voltar_inicio(self):
+        self.ia.online = True
         while self.ia.localiza_1x('telainicial.png', 0.5)== False:
             sleep(1.5)
             self.ia.localiza_1x('portinha.png', 0.7)
@@ -64,9 +69,7 @@ class CriarT:
         py.hotkey('alt','b')
         sleep(2)
         self.ia.localiza('Visto_verde.png', 0.7)
-        self.ia.verifica('cadas_reclam.png', 0.7)
-        py.write(self.obs)
-        sleep(1)
+    
 
     def data_e_hora(self):
         # Obter a data e hora atual
@@ -121,11 +124,9 @@ def main(SS, motivo, obs):
     logging.basicConfig(filename=log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
     conclusao = conclusao_ss()
     logging.info(f"Rodando SS's: {SS}")
-    logging.info(f"Configuracao:  {motivo}")
-    logging.info(f"Observacao: {obs}")
 
     cis = CriarT(SS, motivo, obs)
-    ia = Reconhecimento(numeroDeTentativasMax=7, delay=1)
+    ia = Reconhecimento(numeroDeTentativasMax=5, delay=1)
 
     for Solicitacao in SS:
         sucesso = False
@@ -145,15 +146,28 @@ def main(SS, motivo, obs):
                     logging.warning(f"Popup não encontrado para UC: {Solicitacao}. Detalhes: {e}")
 
                 cis.consulta_ss()
-                cis.tabzon(2)
-                py.write(motivo)
-                cis.tabzon(4)
-                cis.data_e_hora()
-                cis.finalizacao()
+
+                if ia.verifica('cadas_reclam.png', 0.55):
+                    print("Tela de Cadastro de Reclamação encontrada")
+                    py.write(obs)
+                    sleep(1)
+                    cis.tabzon(2)
+                    py.write(motivo)
+                    cis.tabzon(4)
+                    cis.data_e_hora()
+                    cis.finalizacao()
+                
+                else:
+                    # Se 'cadas_reclam.png' não for localizada, reinicia o loop
+                    logging.warning(f"SS: {Solicitacao}. Retentando...")
+                    cis.voltar_inicio()
+                    continue
+
 
                 if ia.localiza('telaInicial.PNG', 0.5):
                     sucesso = True
-                    logging.info(f"SS: {SS} finalizada!")
+                    sleep(1)
+                    logging.info(f"SS: {SS} finalizada! Servico: T11")
                 else:
                     logging.warning(f"Tela inicial não encontrada para UC: {Solicitacao}. Retentando...")
                     cis.voltar_inicio()
@@ -162,5 +176,3 @@ def main(SS, motivo, obs):
             except Exception as e:
                 logging.error(f"Erro ao processar SS: {Solicitacao}. Detalhes: {e}")
                 print(f"Erro ao processar SS: {Solicitacao}. Retentando...")
-
-        logging.info(f"UC: {Solicitacao} finalizada!")
