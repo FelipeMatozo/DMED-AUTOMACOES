@@ -25,7 +25,7 @@ class CriarT:
         
     def popupservico2(self):
         self.ia.online = True
-        self.ia.localiza("popup2.png", 0.7)
+        self.ia.localiza("popup2.png", 0.6)
         py.hotkey('alt','i')
         sleep(0.8)
 
@@ -117,16 +117,16 @@ class CadastroSolicitacao:
                 py.hotkey('alt','o')
 
     def inserir_email_T11(self):
-        self.ia.verifica('email.png',0.7)
-        print("alt f")
-        sleep(1.5)
-        py.hotkey('alt','f')
-        self.bloqueio_fatura()
-        print("alt f")
-        py.hotkey('alt','f')
-        self.bloqueio_fatura()
-        py.hotkey('alt','f')
-        sleep(1.5)
+        if self.ia.verifica('email.png',0.7):
+            print("alt f")
+            sleep(1.5)
+            py.hotkey('alt','f')
+            self.bloqueio_fatura()
+            print("alt f")
+            py.hotkey('alt','f')
+            self.bloqueio_fatura()
+            py.hotkey('alt','f')
+            sleep(1.5)
             
         
         if self.ia.inf('gerar_os.png', 0.7):
@@ -169,38 +169,32 @@ class CadastroSolicitacao:
         
 
 def main(ucs, subtipo, motivo, resp, obs):
-    # Filtrar a lista de ucs para remover '\r', '\n' e espaços em branco
+    # Filtra e ajusta a lista de UCs conforme necessário
     ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
-    # Remover o último '1' se estiver presente
     if ucs and ucs[-1] == '1':
         ucs.pop()
-    print(ucs)
 
-    # Verifica se estamos em um ambiente PyInstaller
-    if hasattr(sys, '_MEIPASS'):
-        base_path = sys._MEIPASS
-    else:
-        base_path = os.path.abspath(".")
-
-    # Caminho para o diretório de log
+    # Configuração de log e ambiente
+    base_path = sys._MEIPASS if hasattr(sys, '_MEIPASS') else os.path.abspath(".")
     log_dir = os.path.join(base_path, 'assets', 'log')
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    # Caminho completo para o arquivo de log
     log = os.path.join(log_dir, 'log.log')
     logging.basicConfig(filename=log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
     
-    # Inicia a instância de CadastroSolicitacao
     cadastro = CadastroSolicitacao(ucs, subtipo, motivo, resp, obs)
-
     programa = ProgramasExecutaveis()
     cis = CriarT()
     ia = Reconhecimento(numeroDeTentativasMax=7, delay=1)
+    
+    lista_finalizada = False  # Variável para controlar o término da lista
 
     for unidade_consumidora in ucs:
         sucesso = False
         while not sucesso:
+            if lista_finalizada:
+                break
             try:
                 print(unidade_consumidora + '\n')
                 cis.abrir_tela_servicos(unidade_consumidora)
@@ -211,27 +205,20 @@ def main(ucs, subtipo, motivo, resp, obs):
                 sleep(1)
                 cis.popupservico()
                 print(cadastro.motivo)
-
-                # Verifica se a imagem 'cadas_reclam.png' foi localizada
+                sucesso= True
                 if ia.verifica('cadas_reclam.png', 0.5):
                     print("Tela de Cadastro de Reclamação encontrada")
-                    # Verifica se o motivo é "SOL" e executa o procedimento correspondente
-                    if cadastro.motivo == 'SOL' or cadastro.motivo == 'sol':
-                        print('Iniciando solicitação')
-                        cadastro.Solicita()
-                
+                    print('Iniciando solicitação')
+                    cadastro.Solicita()
                 else:
-                    # Se 'cadas_reclam.png' não for localizada, reinicia o loop
                     logging.warning(f"UC: {unidade_consumidora}. Retentando...")
                     cadastro.voltar_inicio()
                     continue
 
-                # Verifica se a tela inicial foi localizada
                 if ia.localiza('telaInicial.PNG', 0.5):
                     sucesso = True
-                    logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo}")
+                    logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo} Macro: Geracao")
                 else:
-                    # Se 'telaInicial.png' não for localizada, reinicia o loop
                     logging.warning(f"Tela inicial não encontrada para UC: {unidade_consumidora}. Retentando...")
                     cadastro.voltar_inicio()
                     continue
@@ -239,3 +226,10 @@ def main(ucs, subtipo, motivo, resp, obs):
             except Exception as e:
                 logging.error(f"Erro ao processar UC: {unidade_consumidora}. Detalhes: {e}")
                 print(f"UC: {unidade_consumidora}. Retentando...")
+
+    lista_finalizada = True  # Marca o final do processamento
+    print("lista finalizada!")
+
+    if lista_finalizada:
+        print("Processamento de todas as UCs concluído com sucesso.")
+        return "Processamento concluído"  # Retorna ao Flask sem reiniciar o loop

@@ -162,7 +162,7 @@ class Reconhecimento:
             time.sleep(self.delay)
             
             try:
-                tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=0.6)
+                tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=0.55)
                 if tela_encontrada is not None:
                     py.moveTo(tela_encontrada)
                     print('há pop up')

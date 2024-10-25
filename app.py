@@ -68,52 +68,49 @@ def pause():
 def status():
     return jsonify({"paused": paused}), 200
 
-def read_log():
-    log_file_path = 'assets\\log\\log.log'  # Coloque o caminho absoluto se necessário
-    logging.info(f"Tentando ler o arquivo de log em: {os.path.abspath(log_file_path)}")
-
-    # Tente abrir o arquivo de log
+def read_log(log_file_path='_internal\\assets\\log\\log.log'):
     if not os.path.exists(log_file_path):
-        logging.error("Arquivo de log não encontrado.")
-        return pd.DataFrame(), False  # Retorna DataFrame vazio se o arquivo não existir
+        raise FileNotFoundError(f"O arquivo de log não foi encontrado: {log_file_path}")
 
     data_list = []
 
-    try:
-        with open(log_file_path, 'r') as file:
-            log_lines = file.readlines()
-            print(log_lines)  # Para depuração, remova ou comente em produção
-    except Exception as e:
-        logging.error(f"Erro ao abrir o arquivo de log: {str(e)}")
-        return pd.DataFrame(), False  # Retorna DataFrame vazio se houver um erro
+    # Ler o arquivo de log
+    with open(log_file_path, 'r') as file:
+        log_lines = file.readlines()
 
-    # Processa as linhas do log
+    # Processar cada linha do log
     for line in log_lines:
-        # Captura a data, UC e tipo de serviço com regex
-        date_match = re.search(r'(\d{2}-\d{2}-\d{4}) \d{2}:\d{2}:\d{2} - UC: \d+ finalizada! (?:Serviço|Servico): (T\d+)', line)
-
-        if date_match:
-            current_date = date_match.group(1)  # Captura a data
-            current_service = date_match.group(2)  # Captura o tipo de serviço
-            
+        # Usando uma expressão regular que aceita "UC:" ou "SS:"
+        match = re.search(r'(\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}) - (UC|SS): (\d+) finalizada! Servico: T(\d+) Macro: (\w+)', line)
+        if match:
+            timestamp = match.group(1)  # Data e hora
+            uc_number = match.group(3)   # Número da UC ou SS
+            service_type = 'T' + match.group(4)  # Tipo de serviço
+            macro_tipo = match.group(5)  # Tipo da macro
             # Adiciona uma entrada ao data_list
             data_list.append({
-                'Data': current_date,
-                'UCs': 1,  # Contabiliza cada UC
-                'Tipo de serviço': current_service
+                'Timestamp': timestamp,
+                'UC': uc_number,
+                'Service Type': service_type,
+                'Macro': macro_tipo
             })
 
     # Cria um DataFrame a partir da lista
     df = pd.DataFrame(data_list)
-    print(df)  # Para depuração, remova ou comente em produção
     if df.empty:
-        logging.warning("Nenhum dado encontrado no log.")
+        print("Nenhum dado encontrado no log.")
         return df, False  # Retorna DataFrame vazio e indicador de dados não encontrados
 
-    # Agrupa por Data e Tipo de serviço, somando as UCs
-    df = df.groupby(['Data', 'Tipo de serviço']).agg({'UCs': 'sum'}).reset_index()
-    print(df)  # Para depuração, remova ou comente em produção
-    return df, True  # Retorna o DataFrame e indicador de dados encontrados
+    # Agrupa por Timestamp e Service Type, mantendo as UCs em uma lista
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%d-%m-%Y %H:%M:%S')  # Converte para datetime
+    grouped_df = df.groupby(['Timestamp', 'Service Type','Macro']).agg({'UC': list}).reset_index()  # Mantém as UCs em uma lista
+    grouped_df.rename(columns={'UC': 'UCs'}, inplace=True)  # Renomeia a coluna para 'UCs'
+
+    return grouped_df, True
+
+
+# Variável global para controlar a execução da thread
+thread_running = False
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
@@ -130,14 +127,13 @@ def main_page():
         resp = request.form['resp']
         obs = request.form['obs']
 
-        # Passar os dados para a função main de macro.py
+        # Chamar a função main de macro.py e aguardar a conclusão
         macro.main(ucs, subtipo, motivo, resp, obs)
-        threading.Thread(target=macro.main, args=(ucs, subtipo, motivo, resp, obs), daemon=True).start()
-        # Exibir mensagem de sucesso
+
+        # Exibir mensagem de sucesso após a conclusão
         return render_template('interface.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
 
     return render_template('interface.html')
-
 
 @app.route('/concluir_t11', methods=['GET', 'POST'])
 def concluir_t11():
@@ -326,81 +322,40 @@ def versions():
     return render_template('versions.html')
 
 @app.route('/dashboards')
-def dashboards():       
+def dashboards():
     return render_template('dashboard.html')
 
 @app.route('/dashboards/table_data', methods=['GET'])
 def table_data():
-    df, _ = read_log()  # Aqui, garantimos que estamos desempacotando corretamente
+    df, success = read_log()
+    if not success or df.empty:
+        return {"error": "Não há dados disponíveis."}, 404
     
-    # Verifique se a coluna 'Data' está presente no DataFrame
-    if 'Data' not in df.columns:
-        print("Coluna 'Data' não encontrada no DataFrame.")
-        print(df.head())  
-        return {"error": "Coluna 'Data' não encontrada no DataFrame."}, 500
-    
-    # Formatar a data
-    df['Data'] = pd.to_datetime(df['Data'], format='%d-%m-%Y').dt.strftime('%d-%m-%Y')  
-    
-    # Converte o DataFrame para dicionário para enviar como resposta JSON
+    # Converte o DataFrame para dicionário
     table_data = df.to_dict(orient='records')
-    
     return jsonify(table_data)
 
 @app.route('/dashboards/uc_data')
 def uc_data():
-    df, success = read_log()  # Certifique-se de que o DataFrame correto está sendo retornado
+    df, success = read_log()
     if success:
-        return render_template('dashboard.html', table_data=df.to_dict(orient='records'))
+        return jsonify(df.to_dict(orient='records'))
     else:
-        return render_template('dashboard.html', table_data=None)
-
-
-@app.route('/dashboards/uc_data', methods=['GET'])
-def dashboard_uc_data():
-    try:
-        # Suponha que 'fig' é o objeto que você deseja converter
-        # Primeiro, converta fig para um dicionário e verifique seu conteúdo
-        fig_dict = fig.to_dict()
-
-        # Aqui você deve converter os arrays NumPy para listas, se houver
-        for key, value in fig_dict.items():
-            if isinstance(value, np.ndarray):  # Se o valor for um ndarray
-                fig_dict[key] = value.tolist()  # Converta para lista
-
-        return jsonify(fig_dict)
-
-    except Exception as e:
-        logging.error(f"Erro ao gerar dados do dashboard: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify([])
 
 @app.route('/dashboards/data')
 def dashboard_data():
-    df, _ = read_log()  # Certificando-se de que estamos desempacotando corretamente
-    
+    df, _ = read_log()
     if df.empty:
         return {"error": "Não há dados disponíveis."}, 404
-    
-    fig = px.bar(df, x="Data", y="UCs", color="Tipo de serviço", title="Histograma de UCs por Serviço e Dia")
-    
-    # Aumentar o tamanho do gráfico
+
+    # Criar um gráfico baseado nos dados
+    fig = px.bar(df, x="Timestamp", y="UCs", color="Service Type", title="Histograma de UCs por Serviço e Dia")
     fig.update_layout(height=300)
-    
+
     graphJSON = fig.to_json()
     return jsonify(graphJSON)
 
-@app.route('/dashboards/table_data')
-def dashboard_table_data():
-    df, _ = read_log()
-    
-    if df.empty:
-        return {"error": "Não há dados disponíveis."}, 404
-    
-    table_data = df.to_dict(orient='records')
-    return jsonify(table_data)
-
-
 if __name__ == '__main__':
-    # app.run(host="0.0.0.0", port=5000, debug=True)
     threading.Thread(target=toggle_pause, daemon=True).start()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -148,7 +148,7 @@ class TratarPlanilha:
 
 
 if __name__ == "__main__":
-    tratar = TratarPlanilha("assets/excel/SEM COMUNICACAO - OUTUBRO.xlsx")
+    tratar = TratarPlanilha("assets/excel/SEM COMUNICACAO - MELHOR OPERADORA.xlsx")
     tratar.carregar_planilhas()
     tratar.salvar_planilha()
     # Caminho para a planilha de resultados de antenas

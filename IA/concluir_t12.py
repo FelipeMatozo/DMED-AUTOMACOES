@@ -167,7 +167,7 @@ def main(SS, motivo, obs):
                 if ia.localiza('telaInicial.PNG', 0.5):
                     sucesso = True
                     sleep(1)
-                    logging.info(f"SS: {SS} finalizada! Servico: T12")
+                    logging.info(f"SS: {SS} finalizada! Servico: T12 Macro: Conclusao")
                 else:
                     logging.warning(f"Tela inicial não encontrada para UC: {Solicitacao}. Retentando...")
                     cis.voltar_inicio()

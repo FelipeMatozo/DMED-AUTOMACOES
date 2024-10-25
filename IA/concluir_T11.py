@@ -53,7 +53,6 @@ class CriarT:
             self.ia.localiza_1x('portinha.png', 0.7)
 
     def popupservico(self):
-
         print('Procurando popup')
         self.ia.popup()
         self.ia.online = True
@@ -167,7 +166,7 @@ def main(SS, motivo, obs):
                 if ia.localiza('telaInicial.PNG', 0.5):
                     sucesso = True
                     sleep(1)
-                    logging.info(f"SS: {SS} finalizada! Servico: T11")
+                    logging.info(f"SS: {SS} finalizada! Servico: T11 Macro: Conclusao")
                 else:
                     logging.warning(f"Tela inicial não encontrada para UC: {Solicitacao}. Retentando...")
                     cis.voltar_inicio()
