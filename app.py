@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify,send_from_directory, url_for, redirect
+from flask import Flask, render_template, request, jsonify,send_from_directory, url_for, redirect, make_response
 import sys
 import os
 import pandas as pd
@@ -6,6 +6,7 @@ import re
 import logging
 import plotly.express as px
 from IA import macro
+from IA.CCEE import cadastro
 from IA import concluir_T11
 from IA import concluir_t12
 from IA.portas_telemetrias import find_tm
@@ -68,9 +69,15 @@ def pause():
 def status():
     return jsonify({"paused": paused}), 200
 
-def read_log(log_file_path='_internal\\assets\\log\\log.log'):
-    if not os.path.exists(log_file_path):
-        raise FileNotFoundError(f"O arquivo de log não foi encontrado: {log_file_path}")
+def read_log(log_file_path_1='_internal\\assets\\log\\log.log', log_file_path_2='assets\\log\\log.log'):
+    # Verifica se o primeiro caminho existe
+    if os.path.exists(log_file_path_1):
+        log_file_path = log_file_path_1
+    # Verifica se o segundo caminho existe
+    elif os.path.exists(log_file_path_2):
+        log_file_path = log_file_path_2
+    else:
+        raise FileNotFoundError("O arquivo de log não foi encontrado em nenhum dos caminhos.")
 
     data_list = []
 
@@ -103,7 +110,7 @@ def read_log(log_file_path='_internal\\assets\\log\\log.log'):
 
     # Agrupa por Timestamp e Service Type, mantendo as UCs em uma lista
     df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%d-%m-%Y %H:%M:%S')  # Converte para datetime
-    grouped_df = df.groupby(['Timestamp', 'Service Type','Macro']).agg({'UC': list}).reset_index()  # Mantém as UCs em uma lista
+    grouped_df = df.groupby(['Timestamp', 'Service Type', 'Macro']).agg({'UC': list}).reset_index()  # Mantém as UCs em uma lista
     grouped_df.rename(columns={'UC': 'UCs'}, inplace=True)  # Renomeia a coluna para 'UCs'
 
     return grouped_df, True
@@ -134,6 +141,66 @@ def main_page():
         return render_template('interface.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
 
     return render_template('interface.html')
+
+# Variável para controlar a pausa
+continuar_evento = threading.Event()
+
+@app.route('/cadastro_ccee', methods=['GET', 'POST'])
+def cadastro_page():
+    global continuar_evento
+
+    # Verifique se o cookie de usuário já está presente
+    saved_username = request.cookies.get('username')
+
+    if request.method == 'POST':
+        ucs = request.form['cadastro_ccee']
+        username = request.form['username']
+        password = request.form['password']
+        remember_me = request.form.get('remember_me')  # Captura o checkbox "Mantenha-me conectado"
+        
+        # Processa a lista de UC's
+        ucs = ucs.splitlines()
+        ucs = [uc.strip() for uc in ucs if uc.strip()]
+
+        # Define o evento de pausa
+        continuar_evento.clear()
+        threading.Thread(target=cadastro.main, args=(ucs, continuar_evento, username, password)).start()
+
+        # Cria uma resposta para configurar o cookie
+        response = make_response(redirect(url_for('cadastro_page')))
+        
+        # Define o cookie se "Mantenha-me conectado" estiver marcado
+        if remember_me:
+            response.set_cookie('username', username, max_age=30*24*60*60)  # Expira em 30 dias
+        else:
+            response.delete_cookie('username')  # Remove o cookie se o checkbox não for marcado
+
+        return response
+
+    # Renderiza a página e preenche o nome de usuário se o cookie estiver presente
+    return render_template('cadastro_ccee.html', saved_username=saved_username)
+
+@app.route('/continuar_cadastro', methods=['POST'])
+def continuar_cadastro():
+    global continuar_evento
+    continuar_evento.set()  # Libera a pausa no Selenium
+    return redirect('/cadastro_ccee')
+
+# @app.route('/cadastro_ccee', methods=['GET', 'POST'])
+# def cadastro_page():
+#     if request.method == 'POST':
+#         ucs = request.form['cadastro_ccee']
+#         # Dividir ucs por quebras de linha e remover espaços em branco
+#         ucs = ucs.splitlines()
+#         ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
+
+        
+#         cadastro.main(ucs)
+    
+#         # Exibir mensagem de sucesso
+#         return render_template('cadastro_ccee.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
+#     return render_template('cadastro_ccee.html')
+
 
 @app.route('/concluir_t11', methods=['GET', 'POST'])
 def concluir_t11():

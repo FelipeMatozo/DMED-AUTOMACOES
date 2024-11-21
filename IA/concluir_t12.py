@@ -28,7 +28,7 @@ class CriarT:
         py.press('enter')
         sleep(2)
 
-    def finalizacao(self):
+    def finalizacao(self,SS):
         py.hotkey('alt','a')
         self.ia.verifica('comunicar_cliente.png',0.7)
         py.hotkey('alt','s')
@@ -38,8 +38,11 @@ class CriarT:
         sleep(0.5)
         py.hotkey('alt','o')
         sleep(1)
-        self.ia.verifica('sonda_t11.png',0.7)
-        py.hotkey('alt','o')
+        if self.ia.verifica('sonda_t11.png',0.65):
+            py.hotkey('alt','o')
+            logging.info(f"SS: {SS} finalizada! Servico: T12 Macro: Conclusao")
+        else:
+            logging.info(f"Verificar SS: {SS} Servico: T12 Macro: Conclusao")
         sleep(1.5)
         self.ia.localiza('portinha.png',0.7)
         sleep(1.5)
@@ -155,7 +158,7 @@ def main(SS, motivo, obs):
                     py.write(motivo)
                     cis.tabzon(4)
                     cis.data_e_hora()
-                    cis.finalizacao()
+                    cis.finalizacao(Solicitacao)
                 
                 else:
                     # Se 'cadas_reclam.png' não for localizada, reinicia o loop
@@ -167,11 +170,10 @@ def main(SS, motivo, obs):
                 if ia.localiza('telaInicial.PNG', 0.5):
                     sucesso = True
                     sleep(1)
-                    logging.info(f"SS: {SS} finalizada! Servico: T12 Macro: Conclusao")
                 else:
-                    logging.warning(f"Tela inicial não encontrada para UC: {Solicitacao}. Retentando...")
+                    logging.warning(f"Verificar conclusao: {Solicitacao}")
                     cis.voltar_inicio()
-                    continue
+                    sucesso = True
 
             except Exception as e:
                 logging.error(f"Erro ao processar SS: {Solicitacao}. Detalhes: {e}")

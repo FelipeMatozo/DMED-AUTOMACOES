@@ -83,16 +83,17 @@ class CadastroSolicitacao:
             py.hotkey('alt','n')
             sleep(0.3)
     
-    def operacao_med(self):
+    def operacao_med(self, unidade_consumidora, subtipo):
         if self.ia.inf('oper_med.png', 0.65):
             py.hotkey('alt','o')
             self.ia.localiza('confirmar_area.png',0.8)
             py.hotkey('alt','s')
             py.press('enter')
             sleep(1)
-        if self.ia.inf('ordem.png',0.95):
+        if self.ia.inf('ordem.png',0.8):
             sleep(1)
-            py.hotkey('alt','o')
+            py.hotkey('alt','o')        
+            logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo} Macro: Geracao")
 
         self.ia.localiza('sonda.png',0.6)
         py.hotkey('alt','o')
@@ -151,7 +152,7 @@ class CadastroSolicitacao:
         self.inserir_obs()
         self.operacao_med()
 
-    def Solicita(self): #SOL
+    def Solicita(self,unidade_consumidora, subtipo): #SOL
         self.ia.online = True
         self.tabzon(3)
         py.write(self.resp)
@@ -165,7 +166,7 @@ class CadastroSolicitacao:
         self.tabzon(5)
         self.inserir_obs()
         self.inserir_email_T11()
-        self.operacao_med()
+        self.operacao_med(unidade_consumidora, subtipo)
         
 
 def main(ucs, subtipo, motivo, resp, obs):
@@ -209,7 +210,7 @@ def main(ucs, subtipo, motivo, resp, obs):
                 if ia.verifica('cadas_reclam.png', 0.5):
                     print("Tela de Cadastro de Reclamação encontrada")
                     print('Iniciando solicitação')
-                    cadastro.Solicita()
+                    cadastro.Solicita(unidade_consumidora, subtipo)
                 else:
                     logging.warning(f"UC: {unidade_consumidora}. Retentando...")
                     cadastro.voltar_inicio()
@@ -219,9 +220,9 @@ def main(ucs, subtipo, motivo, resp, obs):
                     sucesso = True
                     logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo} Macro: Geracao")
                 else:
-                    logging.warning(f"Tela inicial não encontrada para UC: {unidade_consumidora}. Retentando...")
+                    logging.warning(f"Verificar geração: {unidade_consumidora}.")
                     cadastro.voltar_inicio()
-                    continue
+                    sucesso = True
 
             except Exception as e:
                 logging.error(f"Erro ao processar UC: {unidade_consumidora}. Detalhes: {e}")
