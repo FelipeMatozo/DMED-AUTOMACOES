@@ -170,12 +170,12 @@ class CadastroSolicitacao:
         
 
 def main(ucs, subtipo, motivo, resp, obs):
-    # Filtra e ajusta a lista de UCs conforme necessário
-    ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
-    if ucs and ucs[-1] == '1':
+    # Remove espaços desnecessários e limpa a lista
+    ucs = [uc.strip() for uc in ucs if uc.strip()]
+    if ucs and ucs[-1] == '1':  # Remove UC de controle (opcional)
         ucs.pop()
 
-    # Configuração de log e ambiente
+    # Configuração de logging
     base_path = sys._MEIPASS if hasattr(sys, '_MEIPASS') else os.path.abspath(".")
     log_dir = os.path.join(base_path, 'assets', 'log')
     if not os.path.exists(log_dir):
@@ -183,21 +183,20 @@ def main(ucs, subtipo, motivo, resp, obs):
 
     log = os.path.join(log_dir, 'log.log')
     logging.basicConfig(filename=log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
-    
+
     cadastro = CadastroSolicitacao(ucs, subtipo, motivo, resp, obs)
-    programa = ProgramasExecutaveis()
     cis = CriarT()
     ia = Reconhecimento(numeroDeTentativasMax=7, delay=1)
-    
-    lista_finalizada = False  # Variável para controlar o término da lista
+
+    # Controle de processamento (garantir execução única)
+    lista_processada = False  # Marca quando a lista foi concluída
 
     for unidade_consumidora in ucs:
         sucesso = False
         while not sucesso:
-            if lista_finalizada:
-                break
             try:
-                print(unidade_consumidora + '\n')
+                print(f"Processando UC: {unidade_consumidora}")
+                # Chamadas principais do processo
                 cis.abrir_tela_servicos(unidade_consumidora)
                 sleep(2)
                 cis.popupservico()
@@ -205,20 +204,20 @@ def main(ucs, subtipo, motivo, resp, obs):
                 cis.popupservico2()
                 sleep(1)
                 cis.popupservico()
-                print(cadastro.motivo)
-                sucesso= True
+
+                # Verifica tela de cadastro e inicia solicitação
                 if ia.verifica('cadas_reclam.png', 0.5):
                     print("Tela de Cadastro de Reclamação encontrada")
-                    print('Iniciando solicitação')
                     cadastro.Solicita(unidade_consumidora, subtipo)
                 else:
                     logging.warning(f"UC: {unidade_consumidora}. Retentando...")
                     cadastro.voltar_inicio()
-                    continue
+                    continue  # Reinicia o loop para essa UC específica
 
+                # Verifica se voltou à tela inicial
                 if ia.localiza('telaInicial.PNG', 0.5):
-                    sucesso = True
-                    logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo} Macro: Geracao")
+                    logging.info(f"UC: {unidade_consumidora} finalizada! Serviço: {subtipo}")
+                    sucesso = True  # Finaliza o loop desta UC
                 else:
                     logging.warning(f"Verificar geração: {unidade_consumidora}.")
                     cadastro.voltar_inicio()
@@ -226,11 +225,12 @@ def main(ucs, subtipo, motivo, resp, obs):
 
             except Exception as e:
                 logging.error(f"Erro ao processar UC: {unidade_consumidora}. Detalhes: {e}")
-                print(f"UC: {unidade_consumidora}. Retentando...")
+                print(f"Erro ao processar UC: {unidade_consumidora}. Retentando...")
 
-    lista_finalizada = True  # Marca o final do processamento
-    print("lista finalizada!")
+    # Marca lista como processada
+    lista_processada = True
 
-    if lista_finalizada:
+    # Garante que o loop não reinicie
+    if lista_processada:
         print("Processamento de todas as UCs concluído com sucesso.")
-        return "Processamento concluído"  # Retorna ao Flask sem reiniciar o loop
+        return "Processamento concluído"  # Retorna ao Flask

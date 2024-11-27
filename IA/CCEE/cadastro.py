@@ -9,8 +9,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 import pandas as pd
-import os
 import sys
+import os
+# Adicione o diretório base ao sys.path
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
+sys.path.insert(0, base_dir)
+from IA.ReconhecimentoDeImagem import Reconhecimento
 import unicodedata
 import re
 from selenium.common.exceptions import TimeoutException,NoSuchElementException
@@ -18,8 +22,8 @@ from selenium.webdriver.support.ui import Select
 from time import sleep
 from datetime import datetime
 from selenium.webdriver.common.action_chains import ActionChains
-from IA.ReconhecimentoDeImagem import Reconhecimento
 import pyautogui as py
+import pyperclip
 import sys
 import math
 import os
@@ -322,14 +326,21 @@ class page_ccee:
         
 
     def inserir_apelido(self):
-        self.ia.cliqueDuplo('nome_completo.png', 0.5)
+        self.ia.verifica('nome_completo.png', 0.7)
+        py.moveRel(0,+24)
+        py.tripleClick()
         nome_completo = py.hotkey('ctrl','c')
+        nome_completo = pyperclip.paste()
+        print(nome_completo)
         apelido = self.encurta_nome(nome_completo)
+        print(apelido)
+        self.tabzon(1)
         py.write(apelido)
+        sleep(1)
 
     def inserir_dados_pnt_med(self, ini_vig, cap_ger, cap_con):
         """Insere a data de conclusão de vigência e a capacidade nominal de geração no formulário."""
-        self.tabzon(3)
+        self.tabzon(2)
         # Converter a data para o formato DD/MM/YYYY
         try:
             # Parse a string de data e hora
@@ -342,12 +353,18 @@ class page_ccee:
             return  # Retorna se a data estiver em formato inválido
         
         py.write(data_formatada)
+        self.tabzon(1)
+        py.write(cap_ger)
+        self.tabzon(1)
+        py.write(cap_con)
+        sleep(1)
         
 
     def start_cadastro(self):
         print("Iniciando cadastro")
+        self.ia.verifica("inicio_cadastro.png", 0.7)
         # nome_curto = self.encurta_nome()
-        self.inserir_apelido("nome_curto")
+        self.inserir_apelido()
         
     def ver_tcs(self, tc_a, tc_b, tc_c):
         """Verifica se as colunas TC_A, TC_B e TC_C estão preenchidas e conta o total."""
@@ -373,18 +390,36 @@ class page_ccee:
         print(f"Total preenchido: {preenchidos}")
 
         if(preenchidos==2):
-            self.ia.localiza("2_elementos.png", 0.6)
-        if(preenchidos==3):
-            self.ia.localiza("3_elementos.png", 0.6)
-        
-        
-
+            self.tabzon(1)
+            py.hotkey('enter')
+            self.tabzon(2)
             
+        if(preenchidos==3):
+            self.tabzon(2)
+            py.hotkey('enter')
+            self.tabzon(1)
+        
+    def localizacao(self, municipio):
+        py.hotkey('enter')
+        x = 0
+        while(x<18):
+            py.hotkey('down')
+            x=x+1
+
+        py.hotkey('enter')
+
+        print(municipio)
+        self.ia.localiza("cidade.png", 0.8)
+        py.moveRel(0,-70)
+        self.ia.localizar_palavra_rolando(municipio, max_tentativas=20, scroll_pixels=-260)
+        self.tabzon(2)
+        py.hotkey('enter')
 
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
             sleep(0.3)
             py.hotkey('tab')
+            
 
     
 
@@ -399,7 +434,14 @@ class inf_planilha:
         """Carrega os dados da planilha em um DataFrame do Pandas e padroniza os nomes das colunas"""
         if os.path.exists(self.caminho_planilha):
             self.dados = pd.read_excel(self.caminho_planilha)
+            
+            # Padronizar nomes das colunas
             self._padronizar_nomes_colunas()
+
+            # Tratar a coluna "UC"
+            if 'UC' in self.dados.columns:
+                self.dados['UC'] = self.dados['UC'].astype(str).str.strip()
+                self.dados['UC'] = self.dados['UC'].str.replace(r'\.0$', '', regex=True)
         else:
             raise FileNotFoundError(f"Planilha não encontrada: {self.caminho_planilha}")
 
@@ -424,8 +466,10 @@ class inf_planilha:
         if self.dados is not None:
             # Converte a coluna "UC" e o valor de busca para string, removendo espaços em branco
             self.dados['UC'] = self.dados['UC'].astype(str).str.strip()
-            uc = str(uc).strip()
+            self.dados['UC'] = self.dados['UC'].str.normalize('NFKD')  # Remove acentos ou caracteres especiais
 
+            uc = str(uc).strip()
+            print(self.dados['UC'].head())
             # Localiza a linha correspondente à UC
             info_uc = self.dados[self.dados['UC'] == uc]
             if not info_uc.empty:
@@ -480,9 +524,11 @@ def main(lista_ucs, continuar_evento, usuario, senha):
             print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
             print(f"data vigencia:{ini_vig}")
             print(cap_ger)
-            # ccee.start_cadastro()
-            # ccee.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
+            ccee.start_cadastro()
+            ccee.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
             ccee.ver_tcs(tc_a, tc_b, tc_c)
+
+            ccee.localizacao(municipio)
             ## Chama a função para inserir o código no campo da página
             # ccee.novo_ponto_medicao()
             # ccee.clicar_solicitacoes()
@@ -503,4 +549,4 @@ def main(lista_ucs, continuar_evento, usuario, senha):
             
             
 if __name__ == "__main__":
-    main(lista_ucs=["111001790" , "31620515"])
+    main(lista_ucs=["111001790" , "31620515" , "105086940"])

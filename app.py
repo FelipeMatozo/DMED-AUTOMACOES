@@ -14,8 +14,9 @@ from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
 import plotly.graph_objs as go
 import numpy as np
-from time import sleep
+from time import sleep, time
 import threading
+import keyboard
 
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
@@ -51,13 +52,57 @@ sys.path.append(macro_dir)
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
 
-# Variável global para controlar a pausa
-paused = False
+# Variável global de controle
+paused = threading.Event()
 
-def toggle_pause():
+
+# Função para monitorar a tecla 'Esc'
+def monitorar_teclado():
+    """
+    Monitora o teclado globalmente para detectar quando 'Esc' é pressionado.
+    Alterna entre pausar e retomar o programa, com controle de debouncing.
+    """
+    global paused
+    ultima_interacao = 0  # Armazena o timestamp da última interação
+
+    while True:
+        if keyboard.is_pressed("esc"):
+            agora = time()
+            if agora - ultima_interacao > 1:  # Tempo mínimo entre alternâncias (1 segundo)
+                if paused.is_set():
+                    paused.clear()  # Retomar execução
+                    print("Execução retomada!")
+                else:
+                    paused.set()  # Pausar execução
+                    print("Execução pausada!")
+                ultima_interacao = agora
+            sleep(0.1)  # Pequena espera para evitar múltiplos eventos
+
+
+# Função de automação
+def automacao():
     global paused
     while True:
-        sleep(0.5)  # Verifica a cada meio segundo
+        if paused.is_set():
+            print("Automação pausada...")
+            while paused.is_set():
+                sleep(0.5)  # Aguarda enquanto pausado
+            print("Automação retomada!")
+        
+        # Lógica da automação (exemplo)
+        print("Automação em execução...")
+        sleep(1)
+
+
+@app.route('/toggle_pause', methods=['POST'])
+def toggle_pause():
+    global paused
+    if paused.is_set():
+        paused.clear()  # Retomar
+        return jsonify({"status": "Resumido"})
+    else:
+        paused.set()  # Pausar
+        return jsonify({"status": "Pausado"})
 
 @app.route('/pause', methods=['POST'])
 def pause():
@@ -424,5 +469,11 @@ def dashboard_data():
     return jsonify(graphJSON)
 
 if __name__ == '__main__':
-    threading.Thread(target=toggle_pause, daemon=True).start()
+     # Inicia o thread para monitorar o teclado
+    teclado_thread = threading.Thread(target=monitorar_teclado, daemon=True)
+    teclado_thread.start()
+     
+    # Inicia o thread para executar a automação
+    automacao_thread = threading.Thread(target=automacao, daemon=True)
+    automacao_thread.start()
     app.run(host="0.0.0.0", port=5000, debug=True)

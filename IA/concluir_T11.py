@@ -129,7 +129,7 @@ def main(SS, motivo, obs):
 
     cis = CriarT(SS, motivo, obs)
     ia = Reconhecimento(numeroDeTentativasMax=5, delay=1)
-
+    lista_processada = False
     for Solicitacao in SS:
         sucesso = False
         while not sucesso:
@@ -177,3 +177,11 @@ def main(SS, motivo, obs):
             except Exception as e:
                 logging.error(f"Erro ao processar SS: {Solicitacao}. Detalhes: {e}")
                 print(f"Erro ao processar SS: {Solicitacao}. Retentando...")
+
+    # Marca lista como processada
+    lista_processada = True
+
+    # Garante que o loop não reinicie
+    if lista_processada:
+        print("Processamento de todas as UCs concluído com sucesso.")
+        return "Processamento concluído"  # Retorna ao Flask

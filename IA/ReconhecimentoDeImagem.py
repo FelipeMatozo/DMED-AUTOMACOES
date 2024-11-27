@@ -2,6 +2,20 @@ import pyautogui as py
 import os, sys
 import time
 from time import sleep
+import pytesseract
+from pytesseract import pytesseract,Output
+import pyautogui
+from PIL import Image
+
+from unidecode import unidecode  # Importando a biblioteca unidecode
+
+# Defina o caminho para a pasta onde o Tesseract foi instalado
+os.environ['TESSDATA_PREFIX'] = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR"
+
+# Defina o caminho para o executável do Tesseract
+pytesseract.tesseract_cmd = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR\tesseract.exe"
+
+
 
 class Reconhecimento:
     
@@ -221,6 +235,46 @@ class Reconhecimento:
                 if self.tentativasRealizadas >= self.numeroDeTentativasMax:
                     self.online = False
                     break
-            
+    
+    def localizar_palavra_rolando(self, palavra, max_tentativas=10, scroll_pixels=-300, lang="por"):
+        """Procura uma palavra na tela rolando até encontrá-la e clica nela."""
+        # Remove os acentos da palavra passada como argumento
+        palavra_sem_acento = unidecode(palavra.lower())
+        
+        tentativa = 0
+        while tentativa < max_tentativas:
+            # Captura a tela atual
+            screenshot_path = 'tela.png'
+            pyautogui.screenshot(screenshot_path)
+            imagem = Image.open(screenshot_path)
+
+            # Realiza OCR na imagem com o caminho explícito do tessdata
+            resultados = pytesseract.image_to_data(
+                imagem,
+                lang=lang,
+                config="--tessdata-dir C:/Users/L805958/dmed/SISTEMA_RPA_DMED/Tesseract-OCR/tessdata --psm 6 --oem 1",
+                output_type=Output.DICT
+            )
+
+            # Procura pela palavra
+            for i, texto in enumerate(resultados['text']):
+                # Comparar o texto detectado sem modificar, mas a palavra passada será sem acento
+                if unidecode(texto.lower()) == palavra_sem_acento:  # Ignora acentos da palavra passada
+                    x, y, w, h = (resultados['left'][i], resultados['top'][i],
+                                resultados['width'][i], resultados['height'][i])
+                    centro_x = x + w // 2
+                    centro_y = y + h // 2
+
+                    # Move e clica na posição encontrada
+                    pyautogui.click(centro_x, centro_y)
+                    print(f'Palavra "{palavra}" encontrada e clicada!')
+                    return True
+
+            # Se não encontrou, rola a tela e tenta novamente
+            pyautogui.scroll(scroll_pixels)  # Scroll para cima (-) ou para baixo (+)
+            tentativa += 1
+            time.sleep(1)  # Pequena pausa para a rolagem ser processada
+
+        print(f'Palavra "{palavra}" não encontrada após {max_tentativas} tentativas.')
 
                 
