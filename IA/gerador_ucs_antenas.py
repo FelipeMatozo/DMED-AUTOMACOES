@@ -1,6 +1,6 @@
 '''
 Este programa permite ao usuário buscar as 5 antenas mais próximas de uma (UC) específica no estado do Paraná.
-Ele utiliza dados de localização das UCs e das antenas, sendo esses dados lidos de arquivos CSV e Excel, respectivamente.
+Ele utiliza dados de localização das UCs e das antenas, sendo esses dados lidos de um banco.
 Ao inserir o número de uma UC e clicar no botão "Buscar", o programa calcula as distâncias entre essa UC e todas as antenas listadas, encontrando as 5 antenas mais próximas.
 Em seguida, ele exibe um mapa interativo usando a biblioteca Folium, mostrando a localização da UC, das antenas próximas e as linhas que as conectam.
 Além disso, o mapa também apresenta uma legenda colorida indicando as operadoras das antenas (TIM, Claro, Vivo, Sercomtel) e a distância até a UC em quilômetros.
@@ -28,7 +28,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 script_cor = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 from apps.utils import strings
-from apps.utils.banco_utils import buscar_dados, buscar_todos_dados, ver_exist
+from IA.banco_utils import buscar_dados, buscar_todos_dados, ver_exist
 
 
 
@@ -44,17 +44,18 @@ def buscar_lat_lon(uc):
 
 
 # Encontra as 5 antenas mais próximas da UC dada
+# Encontra as 5 antenas mais próximas da UC dada
 def encontrar_antenas_mais_proximas(uc_lat, uc_lon, n=5, threshold_dist=0.008, offset=0.00002):
     # Buscar todas as antenas da tabela antenas_parana
-    colunas = ["latitude_antena", "longitude_antena", "operadora"]
+    colunas = ["latitude_antena", "longitude_antena", "operadora", "estacao"]
     antenas = buscar_todos_dados("antenas_parana", colunas)
 
     distancias_antenas = []
     
     # Calcular as distâncias entre a UC e as antenas
-    for antena_lat, antena_lon, operadora in antenas:
+    for antena_lat, antena_lon, operadora, estacao in antenas:
         distancia = geodesic((uc_lat, uc_lon), (antena_lat, antena_lon)).kilometers
-        distancias_antenas.append((distancia, (antena_lat, antena_lon, operadora, distancia)))
+        distancias_antenas.append((distancia, (antena_lat, antena_lon, operadora, distancia, estacao)))
 
     # Usa a função "nsmallest" que busca as N antenas com as menores distâncias da UC
     antenas_mais_proximas = nsmallest(n, distancias_antenas, key=lambda x: x[0])
@@ -69,10 +70,11 @@ def encontrar_antenas_mais_proximas(uc_lat, uc_lon, n=5, threshold_dist=0.008, o
         if distancia_entre_antenas < threshold_dist:
             antenas_mais_proximas[i] = (
                 antenas_mais_proximas[i][0], 
-                (lat_atual + (i * 0.00002), lon_atual + (i * offset), antenas_mais_proximas[i][1][2], antenas_mais_proximas[i][1][3])
+                (lat_atual + (i * 0.00002), lon_atual + (i * offset), antenas_mais_proximas[i][1][2], antenas_mais_proximas[i][1][3], antenas_mais_proximas[i][1][4])
             )
         
     return [antena[1] for antena in antenas_mais_proximas]
+
 
 def calcular_ponto_medio(lat1, lon1, lat2, lon2):
     """Calcula um ponto médio aproximado entre dois pontos geográficos."""
@@ -99,18 +101,22 @@ def buscar(numero_uc):
                     popup_text = f"Operadora: {antena[2]}\nDistância até a UC: {distancia_km:.2f} km"
                     folium.Marker((antena[0], antena[1]), popup=popup_text, icon=folium.Icon(color='blue')).add_to(parana_map)
 
-                folium.Marker([latitude_uc, longitude_uc], popup=f'UC: {numero_uc}', icon=folium.Icon(color='green')).add_to(parana_map)
+                 # Adiciona o marcador para a UC com latitude e longitude no popup
+                popup_uc = f"UC: {numero_uc}\nLatitude: {latitude_uc}\nLongitude: {longitude_uc}"
+                folium.Marker([latitude_uc, longitude_uc], popup=popup_uc, icon=folium.Icon(color='green')).add_to(parana_map)
 
                 cores_operadoras = {'Tim': 'blue', 'Claro': 'red', 'Vivo': 'purple', 'Sercomtel': 'orange'}
 
                 for antena in antenas_proximas:
                     distancia_km = antena[3]
                     operadora = antena[2]
+                    estacao = antena[4]
                     lat_antena = antena[0]
                     lon_antena = antena[1]
                     cor_icone = cores_operadoras.get(operadora, 'gray')
                     popup_text = (
                         f"Operadora: {operadora}\n"
+                        f"Estação: {estacao}\n"
                         f"Distância até a UC: {distancia_km:.2f} km\n"
                         f"Latitude: {lat_antena:.6f}\n"
                         f"Longitude: {lon_antena:.6f}"

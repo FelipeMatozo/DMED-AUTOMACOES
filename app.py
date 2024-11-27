@@ -1,13 +1,22 @@
-from flask import Flask, render_template, request, jsonify,send_from_directory, url_for, redirect
+from flask import Flask, render_template, request, jsonify,send_from_directory, url_for, redirect, make_response
 import sys
 import os
 import pandas as pd
+import re
+import logging
 import plotly.express as px
 from IA import macro
+from IA.CCEE import cadastro
 from IA import concluir_T11
+from IA import concluir_t12
 from IA.portas_telemetrias import find_tm
 from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
+import plotly.graph_objs as go
+import numpy as np
+from time import sleep, time
+import threading
+import keyboard
 
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
@@ -43,45 +52,117 @@ sys.path.append(macro_dir)
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
 
+# Variável global de controle
+paused = threading.Event()
 
 
-def read_log():
-    log_path = os.path.join(app.static_folder, 'log', 'log.log')
-    with open(log_path, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
+# Função para monitorar a tecla 'Esc'
+def monitorar_teclado():
+    """
+    Monitora o teclado globalmente para detectar quando 'Esc' é pressionado.
+    Alterna entre pausar e retomar o programa, com controle de debouncing.
+    """
+    global paused
+    ultima_interacao = 0  # Armazena o timestamp da última interação
 
-    data = []
-    ucs_data = []
-    current_config = None
-    for line in lines:
-        if "Configuracao" in line:
-            parts = line.split(': ')
-            current_config = parts[1].split(',')[0]  # Pega apenas a primeira parte antes da vírgula
-        if "Rodando UC's" in line:
-            datetime_str = ' '.join(line.split(' ')[:2])  # A data e hora estão no início da linha
-            ucs_str = line.split(': ')[-1].strip().strip("[]")
-            ucs = ucs_str.replace("'", "").split(", ")
-            data.append({"Date": datetime_str, "UCs": len(ucs), "Config": current_config})
-        if "finalizada" in line:
-            parts = line.split(' ')
-            datetime_str = ' '.join(parts[:2])  # A data e hora estão no início da linha
-            uc_number = parts[3]
-            ucs_data.append({"Date": datetime_str, "UC": uc_number, "Config": current_config})
+    while True:
+        if keyboard.is_pressed("esc"):
+            agora = time()
+            if agora - ultima_interacao > 1:  # Tempo mínimo entre alternâncias (1 segundo)
+                if paused.is_set():
+                    paused.clear()  # Retomar execução
+                    print("Execução retomada!")
+                else:
+                    paused.set()  # Pausar execução
+                    print("Execução pausada!")
+                ultima_interacao = agora
+            sleep(0.1)  # Pequena espera para evitar múltiplos eventos
 
-    # Verificação se data não está vazia
-    if not data:
-        data.append({"Date": None, "UCs": 0, "Config": None})
-    
-    df = pd.DataFrame(data)
-    if not df.empty:
-        df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y %H:%M:%S', errors='coerce')  # Converter a coluna DateTime para o formato datetime
-        df = df.groupby(['Date', 'Config']).sum().reset_index()
 
-    ucs_df = pd.DataFrame(ucs_data)
-    if not ucs_df.empty:
-        ucs_df['Date'] = pd.to_datetime(ucs_df['Date'], format='%d-%m-%Y %H:%M:%S', errors='coerce')
+# Função de automação
+def automacao():
+    global paused
+    while True:
+        if paused.is_set():
+            print("Automação pausada...")
+            while paused.is_set():
+                sleep(0.5)  # Aguarda enquanto pausado
+            print("Automação retomada!")
+        
+        # Lógica da automação (exemplo)
+        print("Automação em execução...")
+        sleep(1)
 
-    return df, ucs_df
+
+@app.route('/toggle_pause', methods=['POST'])
+def toggle_pause():
+    global paused
+    if paused.is_set():
+        paused.clear()  # Retomar
+        return jsonify({"status": "Resumido"})
+    else:
+        paused.set()  # Pausar
+        return jsonify({"status": "Pausado"})
+
+@app.route('/pause', methods=['POST'])
+def pause():
+    global paused
+    paused = not paused
+    return jsonify({"paused": paused}), 200
+
+@app.route('/status', methods=['GET'])
+def status():
+    return jsonify({"paused": paused}), 200
+
+def read_log(log_file_path_1='_internal\\assets\\log\\log.log', log_file_path_2='assets\\log\\log.log'):
+    # Verifica se o primeiro caminho existe
+    if os.path.exists(log_file_path_1):
+        log_file_path = log_file_path_1
+    # Verifica se o segundo caminho existe
+    elif os.path.exists(log_file_path_2):
+        log_file_path = log_file_path_2
+    else:
+        raise FileNotFoundError("O arquivo de log não foi encontrado em nenhum dos caminhos.")
+
+    data_list = []
+
+    # Ler o arquivo de log
+    with open(log_file_path, 'r') as file:
+        log_lines = file.readlines()
+
+    # Processar cada linha do log
+    for line in log_lines:
+        # Usando uma expressão regular que aceita "UC:" ou "SS:"
+        match = re.search(r'(\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}) - (UC|SS): (\d+) finalizada! Servico: T(\d+) Macro: (\w+)', line)
+        if match:
+            timestamp = match.group(1)  # Data e hora
+            uc_number = match.group(3)   # Número da UC ou SS
+            service_type = 'T' + match.group(4)  # Tipo de serviço
+            macro_tipo = match.group(5)  # Tipo da macro
+            # Adiciona uma entrada ao data_list
+            data_list.append({
+                'Timestamp': timestamp,
+                'UC': uc_number,
+                'Service Type': service_type,
+                'Macro': macro_tipo
+            })
+
+    # Cria um DataFrame a partir da lista
+    df = pd.DataFrame(data_list)
+    if df.empty:
+        print("Nenhum dado encontrado no log.")
+        return df, False  # Retorna DataFrame vazio e indicador de dados não encontrados
+
+    # Agrupa por Timestamp e Service Type, mantendo as UCs em uma lista
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%d-%m-%Y %H:%M:%S')  # Converte para datetime
+    grouped_df = df.groupby(['Timestamp', 'Service Type', 'Macro']).agg({'UC': list}).reset_index()  # Mantém as UCs em uma lista
+    grouped_df.rename(columns={'UC': 'UCs'}, inplace=True)  # Renomeia a coluna para 'UCs'
+
+    return grouped_df, True
+
+
+# Variável global para controlar a execução da thread
+thread_running = False
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
@@ -98,13 +179,72 @@ def main_page():
         resp = request.form['resp']
         obs = request.form['obs']
 
-        # Passar os dados para a função main de macro.py
+        # Chamar a função main de macro.py e aguardar a conclusão
         macro.main(ucs, subtipo, motivo, resp, obs)
 
-        # Exibir mensagem de sucesso
+        # Exibir mensagem de sucesso após a conclusão
         return render_template('interface.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
 
     return render_template('interface.html')
+
+# Variável para controlar a pausa
+continuar_evento = threading.Event()
+
+@app.route('/cadastro_ccee', methods=['GET', 'POST'])
+def cadastro_page():
+    global continuar_evento
+
+    # Verifique se o cookie de usuário já está presente
+    saved_username = request.cookies.get('username')
+
+    if request.method == 'POST':
+        ucs = request.form['cadastro_ccee']
+        username = request.form['username']
+        password = request.form['password']
+        remember_me = request.form.get('remember_me')  # Captura o checkbox "Mantenha-me conectado"
+        
+        # Processa a lista de UC's
+        ucs = ucs.splitlines()
+        ucs = [uc.strip() for uc in ucs if uc.strip()]
+
+        # Define o evento de pausa
+        continuar_evento.clear()
+        threading.Thread(target=cadastro.main, args=(ucs, continuar_evento, username, password)).start()
+
+        # Cria uma resposta para configurar o cookie
+        response = make_response(redirect(url_for('cadastro_page')))
+        
+        # Define o cookie se "Mantenha-me conectado" estiver marcado
+        if remember_me:
+            response.set_cookie('username', username, max_age=30*24*60*60)  # Expira em 30 dias
+        else:
+            response.delete_cookie('username')  # Remove o cookie se o checkbox não for marcado
+
+        return response
+
+    # Renderiza a página e preenche o nome de usuário se o cookie estiver presente
+    return render_template('cadastro_ccee.html', saved_username=saved_username)
+
+@app.route('/continuar_cadastro', methods=['POST'])
+def continuar_cadastro():
+    global continuar_evento
+    continuar_evento.set()  # Libera a pausa no Selenium
+    return redirect('/cadastro_ccee')
+
+# @app.route('/cadastro_ccee', methods=['GET', 'POST'])
+# def cadastro_page():
+#     if request.method == 'POST':
+#         ucs = request.form['cadastro_ccee']
+#         # Dividir ucs por quebras de linha e remover espaços em branco
+#         ucs = ucs.splitlines()
+#         ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
+
+        
+#         cadastro.main(ucs)
+    
+#         # Exibir mensagem de sucesso
+#         return render_template('cadastro_ccee.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
+#     return render_template('cadastro_ccee.html')
 
 
 @app.route('/concluir_t11', methods=['GET', 'POST'])
@@ -151,6 +291,23 @@ def concluir_t12():
         pass
     return render_template('concluir_t12.html')
 
+@app.route('/concluir_ss_t12', methods=['GET', 'POST'])
+def concluir_ss_t12():
+    if request.method == 'POST':
+        ucs = request.form['concluir_ss_t12']
+        # Dividir ucs por quebras de linha e remover espaços em branco
+        ucs = ucs.splitlines()
+        ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
+        motivo = request.form['motivo']
+        obs = request.form['obs']
+
+        # Passar os dados para a função concluir_T11
+        concluir_t12.main(ucs, motivo, obs)
+
+        # Exibir mensagem de sucesso
+        return render_template('concluir_ss_t12.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
+    return render_template('concluir_ss_t12.html')
+
 @app.route('/gerar_t12', methods=['GET', 'POST'])
 def gerar_t12():
     if request.method == 'POST':
@@ -195,7 +352,7 @@ def portas_telemetrias():
 
         telemetrias_lista = find_tm(telemetrias)
 
-
+        
         # Exibir mensagem de sucesso
         return render_template('portas_telemetrias.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!", telemetrias_valor="\n".join(telemetrias_lista))
     
@@ -208,16 +365,21 @@ def download_excel():
         if not telemetrias:
             return render_template('portas_telemetrias.html', mensagem_erro="Campo 'telemetrias' não pode estar vazio.")
         
-         # Criar o diretório, caso não exista
+        # Dividir a string de telemetrias em uma lista, se necessário
+        # Dividir a string de telemetrias em uma lista
+        valores = telemetrias.splitlines()  # Dividir por quebras de linha # Supondo que os valores sejam separados por vírgulas
+        # Adicionar "00" à esquerda de cada valor
+        print(valores)
+        # Criar o diretório, caso não exista
         criar_pasta_excel()
-        
+        valores_tratados = [f'00{valor.strip()}' for valor in valores]
         # Gerar o arquivo Excel usando a função exportar_para_excel
         caminho_arquivo_excel = os.path.join(CAMINHO_EXCEL, 'dados_tms.xlsx')
-        exportar_para_excel(tms_lista=telemetrias, caminho_arquivo_excel=caminho_arquivo_excel)
+        exportar_para_excel('IRIS', 'codigo_tm', valores=valores_tratados, caminho_arquivo_excel=caminho_arquivo_excel)
+
         # return render_template('portas_telemetrias.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!", telemetrias_valor=telemetrias)
 
     return send_from_directory(directory=CAMINHO_EXCEL, path='dados_tms.xlsx', as_attachment=True)
-
 
 @app.route('/mapa', methods=['GET', 'POST'])
 def mapa():
@@ -272,28 +434,46 @@ def versions():
     return render_template('versions.html')
 
 @app.route('/dashboards')
-def dashboards():       
+def dashboards():
     return render_template('dashboard.html')
 
-@app.route('/dashboards/data')
-def dashboard_data():
-    df, _ = read_log()
-    fig = px.bar(df, x="Date", y="UCs", color="Config", title="Histograma de UCs por Configuração e Dia")
-    graphJSON = fig.to_json()
-    return jsonify(graphJSON)
-
-@app.route('/dashboards/table_data')
-def dashboard_table_data():
-    df, _ = read_log()
+@app.route('/dashboards/table_data', methods=['GET'])
+def table_data():
+    df, success = read_log()
+    if not success or df.empty:
+        return {"error": "Não há dados disponíveis."}, 404
+    
+    # Converte o DataFrame para dicionário
     table_data = df.to_dict(orient='records')
     return jsonify(table_data)
 
 @app.route('/dashboards/uc_data')
-def dashboard_uc_data():
-    _, ucs_df = read_log()
-    uc_data = ucs_df.to_dict(orient='records')
-    return jsonify(uc_data)
+def uc_data():
+    df, success = read_log()
+    if success:
+        return jsonify(df.to_dict(orient='records'))
+    else:
+        return jsonify([])
 
+@app.route('/dashboards/data')
+def dashboard_data():
+    df, _ = read_log()
+    if df.empty:
+        return {"error": "Não há dados disponíveis."}, 404
+
+    # Criar um gráfico baseado nos dados
+    fig = px.bar(df, x="Timestamp", y="UCs", color="Service Type", title="Histograma de UCs por Serviço e Dia")
+    fig.update_layout(height=300)
+
+    graphJSON = fig.to_json()
+    return jsonify(graphJSON)
 
 if __name__ == '__main__':
+     # Inicia o thread para monitorar o teclado
+    teclado_thread = threading.Thread(target=monitorar_teclado, daemon=True)
+    teclado_thread.start()
+     
+    # Inicia o thread para executar a automação
+    automacao_thread = threading.Thread(target=automacao, daemon=True)
+    automacao_thread.start()
     app.run(host="0.0.0.0", port=5000, debug=True)

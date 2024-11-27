@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Macro de Cadastro CCEE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+  <header class="container-fluid py-3 d-flex justify-content-center align-items-center position-relative">
+    <a href="/" class="back-arrow">
+      <i class="bi bi-arrow-left-circle" style="font-size: 2rem; color: white;"></i>
+    </a>
+    <span class="emoji">⚡️</span> 
+    <h1 class="text-white ms-3">Cadastro CCEE</h1>
+  </header>
+
+  <style>
+    header {
+        background-color: #5C754D;
+        margin-bottom: 1%;
+    }
+    .send {
+        background-color: #68a048;
+        color: white;
+        font-weight: bold;
+        border-color: #343a40;
+    }
+    .btn-warning {
+        background-color: #e71414;
+        color: aliceblue;
+    }
+    .container {
+        background-color:rgba(181, 203, 182, 0.8); /* Cor sólida sem transparência */
+        padding: 20px;
+        z-index: 1;
+    }
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url("{{ url_for('static', filename='images/fundo_cadastro.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #F5F5F5
+    }
+    .inner-container {
+        padding: 20px;
+    }
+    
+    
+  </style>
+
+  <div class="container mt-3">
+    {% if mensagem_sucesso %}
+      <div class="alert alert-success" role="alert">
+        {{ mensagem_sucesso }}
+      </div>
+    {% endif %}
+
+
+    
+    <!-- Formulário principal -->
+    <div class="inner-container">
+      <div class="row">
+        <div class="col">
+          <form method="post" action="/cadastro_ccee" onsubmit="saveLoginData()">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" required><br>
+            <div class="mb-3"></div>
+            <label for="password">|   Senha:</label>
+            <input type="password" id="password" name="password" required>
+            <!-- <input type="checkbox" id="show-password" onclick="this.previousElementSibling.type = this.checked ? 'text' : 'password';"> Mostrar senha<br> -->
+
+            <!-- Checkbox "Mantenha-me conectado" -->
+            <input type="checkbox" id="remember-me" name="remember_me">
+            <label for="remember-me">Mantenha-me conectado</label><br>
+
+            <div class="mb-3"></div>
+            <div class="mb-3"></div>
+            <div class="mb-4"></div>
+            <div class="mb-3">
+              <label for="ucs" class="form-label">UC (insira a lista de UCS, sem ";" ou "," uma abaixo da outra.)</label>
+              <textarea class="form-control" id="cadastro_ccee" name="cadastro_ccee" required></textarea>
+            </div>
+            <button type="submit" class="btn send">Enviar</button>
+            <button type="button" class="btn export" onclick="downloadLogs()">Exportar logs</button>
+          </form>
+          
+          <div class="text-center mt-4">
+            <h2 class="text-center">Após o login</h2>
+            <form method="post" action="/continuar_cadastro">
+              <button type="submit" class="btn btn-warning">Continuar</button>
+            </form>
+          </div>
+        </div>
+        <script>
+          function showContinueButton() {
+              document.getElementById("continue-section").style.display = "block";
+          }
+      
+          // Função para salvar o login e a senha no localStorage se o checkbox estiver marcado
+          function saveLoginData() {
+              const username = document.getElementById("username").value;
+              const password = document.getElementById("password").value;
+              const rememberMe = document.getElementById("remember-me").checked;
+      
+              if (rememberMe) {
+                  localStorage.setItem("savedUsername", username);
+                  localStorage.setItem("savedPassword", password);
+                  localStorage.setItem("rememberMe", "true");
+              } else {
+                  localStorage.removeItem("savedUsername");
+                  localStorage.removeItem("savedPassword");
+                  localStorage.removeItem("rememberMe");
+              }
+          }
+      
+          // Função para preencher os campos com dados salvos no localStorage
+          function loadLoginData() {
+              const savedUsername = localStorage.getItem("savedUsername");
+              const savedPassword = localStorage.getItem("savedPassword");
+              const rememberMe = localStorage.getItem("rememberMe") === "true";
+      
+              if (rememberMe) {
+                  if (savedUsername) {
+                      document.getElementById("username").value = savedUsername;
+                  }
+                  if (savedPassword) {
+                      document.getElementById("password").value = savedPassword;
+                  }
+                  document.getElementById("remember-me").checked = true;
+              }
+          }
+      
+          // Chama a função para preencher os dados automaticamente ao carregar a página
+          document.addEventListener("DOMContentLoaded", loadLoginData);
+      
+          function downloadLogs() {
+              window.location.href = '/download';
+          }
+      </script>
+        <!-- Instruções de uso -->
+        <div class="col">
+          <div class="row justify-content-center">
+            <div class="col-md-11">
+              <h1 style="color: rgb(255, 255, 255)" class="text-center">Instruções de utilização</h1>
+              <ol class="list-unstyled">
+                <!-- Passos de utilização -->
+                <li class="mb-3">
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 1: Dados</p>
+                  <p>- Primeiro, reúna todas as UC's e cole no campo UC.</p>
+                </li>
+                <li class="mb-3">
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 2: Executar</p>
+                  <p>- Após preenchidas as informações, clique em "Enviar" para iniciar o macro.</p>
+                  <p style="color: red; font-size: 0.7rem;">Recomendado deixar a interface na tela SECUNDÁRIA (FULL HD).</p>
+                </li>
+                <li class="mb-3">
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 3: CISDIS12</p>
+                  <p>- Realize o login completo na CCEE após clicar em enviar.</p>
+                </li>
+                <li class="mb-3">
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 4: Monitorar</p>
+                  <p>- Monitore o progresso e faça ajustes conforme necessário.</p>
+                </li>
+                <li class="mb-3">
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 5: Concluir</p>
+                  <p>- Finalize o processo e revise os resultados.</p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+   
+    
+  </div>
+
+  <footer class="container-fluid bg-dark text-white text-center py-3">
+    <div class="col" style="color: whitesmoke;">
+      Departamento de Medição.
+      <div class="row" style="color: #f06428; justify-content: center;">
+        COPEL DISTRIBUIÇÃO
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    function downloadLogs() {
+      window.location.href = '/download';
+    }
+  </script>
+</body>
+</html>

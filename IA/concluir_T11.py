@@ -7,49 +7,71 @@ import sys
 import os
 import logging
 from datetime import datetime
+import keyboard
 
 class CriarT:
     def __init__(self,SS, motivo, obs):
-        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.5)
+        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.9)
         self.arquivo = ''
         self.SS = SS
         self.motivo = motivo
         self.obs = obs
 
     def abrir_tela_servicos(self, Solicitacao):
-        self.ia.localiza('telaInicial.PNG', 0.6)
+        self.ia.online=True
+        self.ia.localiza('telaInicial.PNG', 0.5)
         py.hotkey('alt','l')
         self.ia.localiza('SS.PNG', 0.85)
         py.write('01')
         py.hotkey('tab')
         py.write(f'{Solicitacao}')
         py.press('enter')
+        sleep(2)
 
-    def finalizacao(self):
+    def finalizacao(self, SS):
         py.hotkey('alt','a')
         self.ia.verifica('comunicar_cliente.png',0.7)
         py.hotkey('alt','s')
+        sleep(1)
         self.ia.verifica('comunicado_cliente.png',0.7)
         py.hotkey('space')
+        sleep(0.5)
         py.hotkey('alt','o')
-        self.ia.verifica('sonda_t11.png',0.7)
-        py.hotkey('alt','o')
+        sleep(1)
+        if self.ia.verifica('sonda_t11.png',0.65):
+            py.hotkey('alt','o')
+            logging.info(f"SS: {SS} finalizada! Servico: T11 Macro: Conclusao")
+        else:
+            logging.info(f"Verificar SS: {SS} Servico: T11 Macro: Conclusao")
+        sleep(1.5)
         self.ia.localiza('portinha.png',0.7)
-
+        sleep(1.5)
+        if self.ia.localiza('telaInicial.PNG', 0.5):
+            pass
+    
+    def voltar_inicio(self):
+        self.ia.online = True
+        while self.ia.localiza_1x('telainicial.png', 0.5)== False:
+            sleep(1.5)
+            self.ia.localiza_1x('portinha.png', 0.7)
 
     def popupservico(self):
         print('Procurando popup')
         self.ia.popup()
+        self.ia.online = True
+            
     
     def consulta_ss(self):
-        self.ia.localiza('Consulta_SS.PNG', 0.7)
+        print("tentando localizar Consulta SS")
+        self.ia.localiza('Consulta_SS.PNG', 0.6)
+        py.click()
+        sleep(2)
         self.ia.localiza('Acompanhamento_SS.png', 0.7)
+        sleep(0.3)
         py.hotkey('alt','b')
         sleep(2)
         self.ia.localiza('Visto_verde.png', 0.7)
-        self.ia.verifica('cadas_reclam.png', 0.7)
-        py.write(self.obs)
-        sleep(1)
+    
 
     def data_e_hora(self):
         # Obter a data e hora atual
@@ -62,6 +84,7 @@ class CriarT:
         
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
+            sleep(0.3)
             py.hotkey('tab')
 
 class conclusao_ss:
@@ -71,11 +94,23 @@ class conclusao_ss:
         for tabs in range(numerodetabs):
             py.hotkey('tab')
 
+# Variável global para controlar a pausa
+paused = False
+
+def pause_program():
+    global paused
+    while True:
+        if keyboard.is_pressed('p'):  # Altere 'p' para a tecla que você deseja usar
+            paused = not paused  # Alterna entre pausar e retomar
+            print("Programa pausado!" if paused else "Programa retomado!")
+            sleep(1)  # Para evitar múltiplas ativações rápidas
+
 def main(SS, motivo, obs):
 
     SS = [servico.replace('\r', '').replace('\n', '').strip() for servico in SS if servico.replace('\r', '').replace('\n', '').strip()]
     print(SS, motivo, obs)
-     # Verifica se estamos em um ambiente PyInstaller
+    
+    # Verifica se estamos em um ambiente PyInstaller
     if hasattr(sys, '_MEIPASS'):
         base_path = sys._MEIPASS
     else:
@@ -91,25 +126,62 @@ def main(SS, motivo, obs):
     logging.basicConfig(filename=log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
     conclusao = conclusao_ss()
     logging.info(f"Rodando SS's: {SS}")
-    logging.info(f"Configuracao:  {motivo}")
-    logging.info(f"Observacao: {obs}")
 
     cis = CriarT(SS, motivo, obs)
-    ia = Reconhecimento()
-
+    ia = Reconhecimento(numeroDeTentativasMax=5, delay=1)
+    lista_processada = False
     for Solicitacao in SS:
-        print(Solicitacao + '\n')
-        cis.abrir_tela_servicos(Solicitacao)
-        cis.popupservico()
-        cis.consulta_ss()
-        cis.tabzon(2)
-        py.write(motivo)
-        cis.tabzon(4)
-        cis.data_e_hora()
-        cis.finalizacao()
-        
-        
+        sucesso = False
+        while not sucesso:
+            try:
+                print(Solicitacao + '\n')
+
+                # Verifica se o programa está pausado
+                while paused:
+                    sleep(0.5)  # Espera enquanto o programa está pausado
+
+                # Executa suas funções aqui
+                cis.abrir_tela_servicos(Solicitacao)
+                try:
+                    cis.popupservico()
+                except Exception as e:
+                    logging.warning(f"Popup não encontrado para UC: {Solicitacao}. Detalhes: {e}")
+
+                cis.consulta_ss()
+
+                if ia.verifica('cadas_reclam.png', 0.5):
+                    print("Tela de Cadastro de Reclamação encontrada")
+                    py.write(obs)
+                    sleep(1)
+                    cis.tabzon(2)
+                    py.write(motivo)
+                    cis.tabzon(4)
+                    cis.data_e_hora()
+                    cis.finalizacao()
+                
+                else:
+                    # Se 'cadas_reclam.png' não for localizada, reinicia o loop
+                    logging.warning(f"SS: {Solicitacao}. Retentando...")
+                    cis.voltar_inicio()
+                    continue
 
 
+                if ia.localiza('telaInicial.PNG', 0.5):
+                    sucesso = True
+                    sleep(1)
+                else:
+                    logging.warning(f"Verificar conclusao: {Solicitacao}")
+                    cis.voltar_inicio()
+                    sucesso = True
 
-        logging.info(f"UC: {Solicitacao} finalizada!")
+            except Exception as e:
+                logging.error(f"Erro ao processar SS: {Solicitacao}. Detalhes: {e}")
+                print(f"Erro ao processar SS: {Solicitacao}. Retentando...")
+
+    # Marca lista como processada
+    lista_processada = True
+
+    # Garante que o loop não reinicie
+    if lista_processada:
+        print("Processamento de todas as UCs concluído com sucesso.")
+        return "Processamento concluído"  # Retorna ao Flask

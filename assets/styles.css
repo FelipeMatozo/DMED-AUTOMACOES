@@ -89,12 +89,16 @@ footer {
 }
 
 /* Estilo dos botões quando estão ativos ou selecionados */
-.bottonmenu:active,
-.bottonmenu:focus,
+.bottonmenu:active{
+  background-color: #0d6efd;
+}
+.bottonmenu:focus{
+  background-color: #0d6efd;
+}
 .bottonmenu.active {
-    background-color: #f06428 !important; /* Laranja quando ativo ou selecionado */
-    border-color: #f06428 !important; /* Laranja quando ativo ou selecionado */
-    box-shadow: #f06428 !important; /* Remove a sombra padrão */
+    background-color: #5328f0 !important; /* Laranja quando ativo ou selecionado */
+    border-color: #282bf0 !important; /* Laranja quando ativo ou selecionado */
+    box-shadow: #2b28f0 !important; /* Remove a sombra padrão */
 }
 
 /* Estilo dos botões ao receber foco */
@@ -180,10 +184,12 @@ footer {
   }
 
   .btn-primary{
-    background-color: #f06428;
+    background-color: #a0a0a0;
     font-weight: bold;
   }
-
+  .btn-primary:hover{
+    background-color: #1a3d11;
+  }
 
   .export{
     background-color: #343a40 ;
@@ -202,6 +208,7 @@ footer {
   #container {
     display: flex;
     flex-wrap: wrap;
+    
 }
 #plotly-chart {
     flex: 1 1 60%;
