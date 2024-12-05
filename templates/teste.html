@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Dinâmica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='interface.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <img src="/assets/images/copel.png" alt="Logo Copel">
+    </div>
+    <div class="header-menu">
+        <a href="#">INÍCIO</a>
+        <a href="/dashboards">Relatórios</a>
+        <a href="/mapa">Cobertura de sinal</a>
+        <a href="/cadastro_ccee">Cadastro CCEE</a>
+        <a href="/versions">Históricos de versões</a>
+    </div>
+    <div class="header-right">
+        <span>Bem-vindo</span>
+        <i class="fas fa-bell"></i>
+        <i class="fas fa-user"></i>
+    </div>
+</header>
+
+<div class="main-content">
+    <h2>Conteúdo Principal</h2>
+    <div class="container">
+        <!-- Quadrados dinâmicos -->
+        <div class="macro-item t10">
+            <div class="section">
+                <a href="/gerar_t10">
+                    <button>Gerar</button>
+                </a>
+                <a href="/concluir_t10">
+                    <button>Concluir</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="macro-item t11">
+            <div class="section">
+                <a href="/gerar_t11">
+                    <button>Gerar</button>
+                </a>
+                <a href="/concluir_t11">
+                    <button>Concluir</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="macro-item t12">
+            <div class="section">
+                <a href="/gerar_t12">
+                    <button>Gerar</button>
+                </a>
+                <a href="/concluir_t12">
+                    <button>Concluir</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-title" style="color: #ffffff;">
+        Departamento de Medição
+    </div>
+    <div class="row" style="color: #f06428;">
+        COPEL DISTRIBUIÇÃO
+    </div>
+</footer>
+
+</body>
+</html>

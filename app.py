@@ -32,16 +32,6 @@ sys.path.append(project_dir)
 apps_dir = os.path.join(project_dir, 'apps')
 sys.path.append(apps_dir)
 
-# Determine se estamos em um ambiente PyInstaller
-if hasattr(sys, '_MEIPASS'):
-    base_path = sys._MEIPASS
-else:
-    base_path = os.path.abspath(".")
-
-# Adicionar o caminho do diretório do projeto ao sys.path
-project_dir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(project_dir)
-
 # Adicionar o caminho do diretório 'IA' ao sys.path
 macro_dir = os.path.join(project_dir, 'IA')
 sys.path.append(macro_dir)
@@ -52,46 +42,46 @@ sys.path.append(macro_dir)
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
 
-# Variável global de controle
-paused = threading.Event()
+# # Variável global de controle
+# paused = threading.Event()
 
 
-# Função para monitorar a tecla 'Esc'
-def monitorar_teclado():
-    """
-    Monitora o teclado globalmente para detectar quando 'Esc' é pressionado.
-    Alterna entre pausar e retomar o programa, com controle de debouncing.
-    """
-    global paused
-    ultima_interacao = 0  # Armazena o timestamp da última interação
+# # Função para monitorar a tecla 'Esc'
+# def monitorar_teclado():
+#     """
+#     Monitora o teclado globalmente para detectar quando 'Esc' é pressionado.
+#     Alterna entre pausar e retomar o programa, com controle de debouncing.
+#     """
+#     global paused
+#     ultima_interacao = 0  # Armazena o timestamp da última interação
 
-    while True:
-        if keyboard.is_pressed("esc"):
-            agora = time()
-            if agora - ultima_interacao > 1:  # Tempo mínimo entre alternâncias (1 segundo)
-                if paused.is_set():
-                    paused.clear()  # Retomar execução
-                    print("Execução retomada!")
-                else:
-                    paused.set()  # Pausar execução
-                    print("Execução pausada!")
-                ultima_interacao = agora
-            sleep(0.1)  # Pequena espera para evitar múltiplos eventos
+#     while True:
+#         if keyboard.is_pressed("esc"):
+#             agora = time()
+#             if agora - ultima_interacao > 1:  # Tempo mínimo entre alternâncias (1 segundo)
+#                 if paused.is_set():
+#                     paused.clear()  # Retomar execução
+#                     print("Execução retomada!")
+#                 else:
+#                     paused.set()  # Pausar execução
+#                     print("Execução pausada!")
+#                 ultima_interacao = agora
+#             sleep(0.1)  # Pequena espera para evitar múltiplos eventos
 
 
-# Função de automação
-def automacao():
-    global paused
-    while True:
-        if paused.is_set():
-            print("Automação pausada...")
-            while paused.is_set():
-                sleep(0.5)  # Aguarda enquanto pausado
-            print("Automação retomada!")
+# # Função de automação
+# def automacao():
+#     global paused
+#     while True:
+#         if paused.is_set():
+#             print("Automação pausada...")
+#             while paused.is_set():
+#                 sleep(0.5)  # Aguarda enquanto pausado
+#             print("Automação retomada!")
         
-        # Lógica da automação (exemplo)
-        print("Automação em execução...")
-        sleep(1)
+#         # Lógica da automação (exemplo)
+#         print("Automação em execução...")
+#         sleep(1)
 
 
 @app.route('/toggle_pause', methods=['POST'])
@@ -469,11 +459,11 @@ def dashboard_data():
     return jsonify(graphJSON)
 
 if __name__ == '__main__':
-     # Inicia o thread para monitorar o teclado
-    teclado_thread = threading.Thread(target=monitorar_teclado, daemon=True)
-    teclado_thread.start()
+    #  # Inicia o thread para monitorar o teclado
+    # teclado_thread = threading.Thread(target=monitorar_teclado, daemon=True)
+    # teclado_thread.start()
      
-    # Inicia o thread para executar a automação
-    automacao_thread = threading.Thread(target=automacao, daemon=True)
-    automacao_thread.start()
+    # # Inicia o thread para executar a automação
+    # automacao_thread = threading.Thread(target=automacao, daemon=True)
+    # automacao_thread.start()
     app.run(host="0.0.0.0", port=5000, debug=True)

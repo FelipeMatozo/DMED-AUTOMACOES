@@ -1,0 +1,312 @@
+/* Estilos principais */
+body {
+    font-family: "Poppins", Sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #dad1d1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Cabeçalho */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    z-index: 1000; /* Garante que o header fique acima de outros elementos */
+    box-shadow: 0 4px 2px -2px rgb(192, 191, 191); /* Adiciona uma sombra sutil para o header */
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left img {
+    height: 50px;
+    margin-right: 10px; /* Trouxe a logo mais para perto */
+}
+
+/* Ajustando o espaço dos ícones na parte direita do cabeçalho */
+.header-right {
+    display: flex;
+    align-items: center;
+    margin-left: 130px;
+}
+
+.header-right i {
+    margin-left: 10px;
+    font-size: 1.2em;
+}
+
+.header-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 20px; /* Ajustei a distância entre o menu e a logo */
+}
+
+.header-menu a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 1em;
+    padding: 10px;
+    position: relative;
+}
+
+.header-menu a:hover {
+    color: #f06428;  /* Muda a cor do texto para laranja */
+}
+
+/* Adicionando a linha laranja ao passar o mouse */
+.header-menu a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+.header-menu a:hover::after {
+    background-color: #f06428;  /* Linha laranja */
+}
+
+/* Conteúdo principal */
+.main-content {
+    padding: 20px;
+    background-color: #dad1d1; /* Cor de fundo clara para o conteúdo */
+    flex-grow: 1;
+    margin-top: 80px; /* Ajusta o conteúdo para começar abaixo do header */
+}
+/* Estilo para o título "Automações" */
+.titulo-automações {
+    font-size: 3em; /* Tamanho grande do texto */
+    font-weight: 600; /* Peso da fonte */
+    color: #040738; /* Cor laranja */
+    text-align: center; /* Centralizar o título */
+    margin-top: 50px; /* Espaço acima do título */
+    margin-bottom: 0px; /* Espaço abaixo do título */
+}
+
+/* Bloco branco para os quadrados */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap:0px;
+    margin: 20px;
+    background-color: #ffffff;  /* Fundo branco para o bloco de quadrados */
+    padding: 20px;  /* Espaçamento interno */
+    border-radius: 10px;  /* Borda arredondada no bloco */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+    margin-top: 70px;
+}
+
+/* Quadrados dinâmicos */
+.macro-item {
+    width: 250px; /* Ajustando a largura */
+    height: 250px; /* Ajustando a altura para tornar as imagens quadradas */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.3s ease;
+    overflow: hidden;
+    margin: 0px
+}
+
+/* Cortina branca e transparente */
+.macro-item::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6); /* Cortina branca */
+    transition: top 0.3s ease;
+}
+
+/* Mostrar cortina e botões ao passar o mouse */
+.macro-item:hover::before {
+    top: 0; /* A cortina sobe */
+}
+
+.macro-item h3 {
+    text-align: center;
+    font-size: 1.2em;
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Faixa preta na parte inferior */
+.macro-item .faixa {
+    background-color: #000; /* Fundo preto */
+    color: white; /* Cor do texto branca */
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-radius: 0 0 10px 10px; /* Arredonda os cantos inferiores */
+    opacity: 1;
+    transition: opacity 0.3s ease; /* Adicionando a transição de opacidade */
+}
+
+/* Sumir com a faixa ao passar o mouse */
+.macro-item:hover .faixa {
+    opacity: 0; /* A faixa desaparece */
+}
+
+/* Ajustes para o conteúdo dentro de cada quadrado */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    bottom: 50px; /* Ajustado para não sobrepor a faixa */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Mostrar botões */
+.macro-item:hover .section {
+    opacity: 1;
+}
+
+.section a {
+    text-decoration: none;
+}
+
+.section button {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.section button:hover {
+    opacity: 0.9;
+}
+
+.section .gerar-button {
+    background-color: #28a745; /* Verde para "Gerar" */
+}
+
+.section .concluir-button {
+    background-color: #007bff; /* Azul para "Concluir" */
+}
+
+.macro-item a:focus {
+    outline: none;
+    border: none;
+}
+
+/* Efeitos no hover das imagens */
+.macro-item.t10 {
+    background-image: url('/assets/images/T10.png');
+}
+
+.macro-item.t11 {
+    background-image: url('/assets/images/T11.png');
+}
+
+.macro-item.t12 {
+    background-image: url('/assets/images/T12.png');
+}
+.orange-line {
+    width: 100vw; /* Garante que a faixa ocupe 100% da largura da janela de visualização */
+    height: 100px; /* Ajuste a altura conforme necessário */
+    background-color: #f06428; /* Cor laranja */
+    margin: 0px 0; /* Adiciona espaçamento acima e abaixo da faixa */
+    position: absolute;
+    left: 0; /* Garante que a faixa começa no lado esquerdo */
+}
+
+/* Faixa laranja */
+.image-text-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 50px;
+    margin-top: 140px;
+}
+
+/* Imagem */
+.image-container {
+    flex: 1;
+    max-width: 600px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 0px;
+}
+
+/* Texto */
+.text-container {
+    flex: 1;
+    max-width: 800px;
+    height: 580px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-container h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #f06428; /* Cor laranja */
+}
+
+.text-container p {
+    font-size: 1em;
+    color: #220000;
+}
+
+/* Estilo do footer */
+footer {
+    background-color: #000000;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    margin-top: auto;
+}
+
+.section a button {
+    color: white; /* Cor do texto */
+    font-weight: bold;
+    background-color: #007bff;
+}
+
+.section a button.gerar {
+    color: rgb(255, 255, 255); /* Cor do texto do botão "Gerar" */
+    background-color: #2C5274;
+}
+
+.section a button.concluir {
+    color: rgb(255, 255, 255); /* Cor do texto do botão "Concluir" */
+    background-color: #000000;
+}
