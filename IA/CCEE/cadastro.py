@@ -434,6 +434,7 @@ class inserir_inf:
 
     def dados_medidor(self, rg, ult_calib):
         print(rg)
+        
     def modelo_med(self, porta): 
         corrente_nom = 2,5
         tensao_nom = 120

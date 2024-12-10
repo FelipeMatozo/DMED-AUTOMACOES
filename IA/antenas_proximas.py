@@ -73,7 +73,7 @@ class TratarPlanilha:
 
     def encontrar_antenas_mais_proximas(self, uc_lat, uc_lon, n=3):
         colunas = ["latitude_antena", "longitude_antena", "operadora", "estacao"]
-        antenas = buscar_todos_dados("antenas_parana", colunas)
+        antenas = buscar_todos_dados("parana_antenas", colunas)
 
         distancias_antenas = []
         

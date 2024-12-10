@@ -11,3 +11,77 @@
 26-11-2024 10:49:15 - 127.0.0.1 - - [26/Nov/2024 10:49:15] "GET /download HTTP/1.1" 200 -
 26-11-2024 10:49:47 - SS: nada. Retentando...
 26-11-2024 10:50:11 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\macro.py', reloading
+05-12-2024 15:19:09 - Rodando SS's: ['45435435']
+05-12-2024 15:19:47 - SS: 45435435. Retentando...
+05-12-2024 15:22:52 - Rodando SS's: ['54354355']
+05-12-2024 15:23:31 - SS: 54354355. Retentando...
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "GET / HTTP/1.1" 200 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/interface.css HTTP/1.1[0m" 304 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/images/copel.png HTTP/1.1[0m" 304 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/images/moca_ml.png HTTP/1.1[0m" 304 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/images/T10.png HTTP/1.1[0m" 304 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/images/T11.png HTTP/1.1[0m" 304 -
+05-12-2024 15:25:59 - 127.0.0.1 - - [05/Dec/2024 15:25:59] "[36mGET /assets/images/T12.png HTTP/1.1[0m" 304 -
+05-12-2024 15:26:26 - Rodando SS's: ['4534534543']
+05-12-2024 15:32:20 - Rodando SS's: ['34234324']
+05-12-2024 15:36:06 - Rodando SS's: ['545435345']
+05-12-2024 15:37:54 - Rodando SS's: ['4324234324']
+05-12-2024 15:43:13 - Rodando SS's: ['3423432']
+05-12-2024 15:44:30 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T12.py', reloading
+05-12-2024 16:03:01 - Rodando SS's: ['20247909146881', '20247909147494']
+05-12-2024 16:15:59 - Rodando SS's: ['20247909146881', '20247909147494']
+05-12-2024 16:17:26 - Rodando SS's: ['20247909147494']
+05-12-2024 16:18:01 - SS: 20247909147494 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:18:09 - 127.0.0.1 - - [05/Dec/2024 16:18:09] "POST /concluir_ss_t12 HTTP/1.1" 200 -
+05-12-2024 16:18:09 - 127.0.0.1 - - [05/Dec/2024 16:18:09] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+05-12-2024 16:19:32 - Rodando SS's: ['20247909150354', '20247909156041', '20247909163740', '20247909175092', '20247909185889', '20247909192795', '20247909193494', '20247909200500', '20247909208848', '20247909214846', '20247909215571', '20247909222449', '20247909226036', '20247909226675', '20247909237080', '20247909237601', '20247909240260']
+05-12-2024 16:20:07 - SS: 20247909150354 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:20:50 - SS: 20247909156041 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:21:33 - SS: 20247909163740 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:22:16 - SS: 20247909175092 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:22:59 - SS: 20247909185889 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:23:42 - SS: 20247909192795 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:24:25 - SS: 20247909193494 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:25:07 - SS: 20247909200500 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:25:51 - SS: 20247909208848 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:26:33 - SS: 20247909214846 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:27:16 - SS: 20247909215571 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:27:59 - SS: 20247909222449 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:28:42 - SS: 20247909226036 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:29:25 - SS: 20247909226675 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:30:08 - SS: 20247909237080 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:30:51 - SS: 20247909237601 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:31:33 - SS: 20247909240260 finalizada! Servico: T12 Macro: Conclusao
+05-12-2024 16:31:41 - 127.0.0.1 - - [05/Dec/2024 16:31:41] "POST /concluir_ss_t12 HTTP/1.1" 200 -
+05-12-2024 16:31:41 - 127.0.0.1 - - [05/Dec/2024 16:31:41] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+05-12-2024 16:31:50 - 127.0.0.1 - - [05/Dec/2024 16:31:50] "GET /download HTTP/1.1" 200 -
+05-12-2024 16:34:15 - 127.0.0.1 - - [05/Dec/2024 16:34:15] "GET / HTTP/1.1" 200 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/interface.css HTTP/1.1[0m" 304 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/images/moca_ml.png HTTP/1.1[0m" 304 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/images/copel.png HTTP/1.1[0m" 304 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/images/T10.png HTTP/1.1[0m" 304 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/images/T11.png HTTP/1.1[0m" 304 -
+05-12-2024 16:34:16 - 127.0.0.1 - - [05/Dec/2024 16:34:16] "[36mGET /assets/images/T12.png HTTP/1.1[0m" 304 -
+05-12-2024 16:34:18 - 127.0.0.1 - - [05/Dec/2024 16:34:18] "GET /concluir_t11 HTTP/1.1" 200 -
+05-12-2024 16:34:18 - 127.0.0.1 - - [05/Dec/2024 16:34:18] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+05-12-2024 16:35:21 - Rodando SS's: ['20247828723182', '20247828738438']
+05-12-2024 16:35:57 - SS: 20247828723182 finalizada! Servico: T11 Macro: Conclusao
+05-12-2024 16:36:39 - SS: 20247828738438 finalizada! Servico: T11 Macro: Conclusao
+05-12-2024 16:36:47 - 127.0.0.1 - - [05/Dec/2024 16:36:47] "POST /concluir_t11 HTTP/1.1" 200 -
+05-12-2024 16:36:47 - 127.0.0.1 - - [05/Dec/2024 16:36:47] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+05-12-2024 16:38:01 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T12.py', reloading
+09-12-2024 17:17:49 - Rodando SS's: ['20247878282840']
+09-12-2024 17:19:30 - SS: 20247878282840. Retentando...
+09-12-2024 17:20:03 - Rodando SS's: ['20247878282840']
+09-12-2024 17:21:32 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T11.py', reloading
+09-12-2024 17:21:34 - Verificar SS: 20247878282840 Servico: T11 Macro: Conclusao
+09-12-2024 17:22:35 - Rodando SS's: ['20247878282840']
+09-12-2024 17:24:04 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T11.py', reloading
+09-12-2024 17:24:06 - Verificar SS: 20247878282840 Servico: T11 Macro: Conclusao
+09-12-2024 17:24:53 - Rodando SS's: ['20247878282840']
+09-12-2024 17:26:06 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\concluir_T11.py', reloading
+09-12-2024 17:26:57 - Rodando SS's: ['20247878282840']
+09-12-2024 17:27:24 - Verificar SS: 20247878282840 Servico: T11 Macro: Conclusao
+09-12-2024 17:27:38 - Verificar conclusao: 20247878282840

@@ -29,6 +29,7 @@ class CriarT:
         sleep(2)
 
     def finalizacao(self,SS):
+        sleep(1)
         py.hotkey('alt','a')
         self.ia.verifica('comunicar_cliente.png',0.7)
         py.hotkey('alt','s')
@@ -80,7 +81,9 @@ class CriarT:
         print(f"Data e hora: {agora}")
         # Formatar a data e hora no formato desejado
         formato = agora.strftime("%d%m%Y%H%M")
+        print(formato)
         py.write(formato)
+
 
         
     def tabzon(self, numerodetabs):
@@ -107,7 +110,7 @@ def pause_program():
             sleep(1)  # Para evitar múltiplas ativações rápidas
 
 def main(SS, motivo, obs):
-
+    print("iniciando Conclusao T12")
     SS = [servico.replace('\r', '').replace('\n', '').strip() for servico in SS if servico.replace('\r', '').replace('\n', '').strip()]
     print(SS, motivo, obs)
     
@@ -153,7 +156,7 @@ def main(SS, motivo, obs):
 
                 if ia.verifica('cadas_reclam.png', 0.55):
                     print("Tela de Cadastro de Reclamação encontrada")
-                    py.write(obs)
+                    py.write(obs)   
                     sleep(1)
                     cis.tabzon(2)
                     py.write(motivo)
