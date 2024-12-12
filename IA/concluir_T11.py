@@ -153,11 +153,11 @@ def main(SS, motivo, obs):
                     print("Tela de Cadastro de Reclamação encontrada")
                     py.write(obs)
                     sleep(1)
-                    cis.tabzon(2)       
-                    py.write(motivo)                         
+                    cis.tabzon(2)
+                    py.write(motivo)
                     cis.tabzon(4)
                     cis.data_e_hora()
-                    cis.finalizacao(Solicitacao)                
+                    cis.finalizacao(Solicitacao)
                 
                 else:
                     # Se 'cadas_reclam.png' não for localizada, reinicia o loop

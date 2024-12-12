@@ -36,8 +36,18 @@ sys.path.append(apps_dir)
 macro_dir = os.path.join(project_dir, 'IA')
 sys.path.append(macro_dir)
 
+diretorio_base = os.path.dirname(os.path.abspath(__file__))
+# Arquivo de controle de pausa/despausa
+PAUSE_FILE = os.path.join(diretorio_base, 'assets','txt','pause.txt')
 
-
+@app.route('/despausar', methods=['POST'])
+def despausar():
+    """Despausa a execução alterando o arquivo pause.txt."""
+    try:
+        with open(PAUSE_FILE, 'w') as file:
+            file.write('despausar')
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
@@ -84,25 +94,6 @@ CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 #         sleep(1)
 
 
-@app.route('/toggle_pause', methods=['POST'])
-def toggle_pause():
-    global paused
-    if paused.is_set():
-        paused.clear()  # Retomar
-        return jsonify({"status": "Resumido"})
-    else:
-        paused.set()  # Pausar
-        return jsonify({"status": "Pausado"})
-
-@app.route('/pause', methods=['POST'])
-def pause():
-    global paused
-    paused = not paused
-    return jsonify({"paused": paused}), 200
-
-@app.route('/status', methods=['GET'])
-def status():
-    return jsonify({"paused": paused}), 200
 
 def read_log(log_file_path_1='_internal\\assets\\log\\log.log', log_file_path_2='assets\\log\\log.log'):
     # Verifica se o primeiro caminho existe
@@ -184,14 +175,11 @@ continuar_evento = threading.Event()
 def cadastro_page():
     global continuar_evento
 
-    # Verifique se o cookie de usuário já está presente
-    saved_username = request.cookies.get('username')
 
     if request.method == 'POST':
         ucs = request.form['cadastro_ccee']
-        username = request.form['username']
-        password = request.form['password']
-        remember_me = request.form.get('remember_me')  # Captura o checkbox "Mantenha-me conectado"
+        
+       
         
         # Processa a lista de UC's
         ucs = ucs.splitlines()
@@ -199,21 +187,14 @@ def cadastro_page():
 
         # Define o evento de pausa
         continuar_evento.clear()
-        threading.Thread(target=cadastro.main, args=(ucs, continuar_evento, username, password)).start()
+        threading.Thread(target=cadastro.main, args=(ucs, continuar_evento)).start()
 
         # Cria uma resposta para configurar o cookie
         response = make_response(redirect(url_for('cadastro_page')))
-        
-        # Define o cookie se "Mantenha-me conectado" estiver marcado
-        if remember_me:
-            response.set_cookie('username', username, max_age=30*24*60*60)  # Expira em 30 dias
-        else:
-            response.delete_cookie('username')  # Remove o cookie se o checkbox não for marcado
-
-        return response
+    
 
     # Renderiza a página e preenche o nome de usuário se o cookie estiver presente
-    return render_template('cadastro_ccee.html', saved_username=saved_username)
+    return render_template('cadastro_ccee.html')
 
 @app.route('/continuar_cadastro', methods=['POST'])
 def continuar_cadastro():

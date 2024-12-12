@@ -274,6 +274,7 @@ class Reconhecimento:
             pyautogui.scroll(scroll_pixels)  # Scroll para cima (-) ou para baixo (+)
             tentativa += 1
             time.sleep(1)  # Pequena pausa para a rolagem ser processada
+            print(f"Palavra {palavra}")
 
         print(f'Palavra "{palavra}" não encontrada após {max_tentativas} tentativas.')
 
