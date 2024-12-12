@@ -22,18 +22,6 @@ class TratarPlanilha:
         self.data_df.columns = [unidecode(col).strip() for col in self.data_df.columns]
         return self.data_df
 
-
-    def remover_colunas(self):
-
-        # Remover as colunas indesejadas
-        colunas_para_remover = [
-            "SITUAO_UC","GRUPO_TENSAO_ORIG","GRUPO_TENSAO_FAT","COORD_CIS"
-        ]
-
-        # Remover as colunas do DataFrame
-        self.data_df = self.data_df.drop(columns=colunas_para_remover, errors='ignore')
-        print("Colunas indesejadas removidas com sucesso.")
-
         
 
     def salvar_excel(self, output_path='assets/excel/coordenadas_tratadas.xlsx'):
@@ -71,7 +59,6 @@ if __name__ == "__main__":
     tratar= TratarPlanilha(data_path="assets\\excel\\Coordenadas.xlsx")
     tratar.carregar_planilhas()
     tratar.normalizar_nomes_colunas()
-    tratar.remover_colunas()
     tratar.separa_coluna(coluna="COORD_GOOGLE")
     tratar.salvar_excel()
     tratar.adiciona_banco()

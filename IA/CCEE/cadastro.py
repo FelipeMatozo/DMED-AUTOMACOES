@@ -34,7 +34,6 @@ from time import sleep
 
 class page_ccee:
     def __init__(self, url):
-        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.9)
         self.path_ccee = url
         self.driver = None
 
@@ -295,39 +294,38 @@ class page_ccee:
         finally:
             # Volta ao contexto principal (opcional)
             self.driver.switch_to.default_content()
-
+            
+class inserir_inf:
+    def __init__(self):
+        self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.9)
+    
+    def start_cadastro(self):
+        print("Iniciando cadastro")
+        self.ia.verifica("inicio_cadastro.png", 0.7)
+        # nome_curto = self.encurta_nome()
+        self.inserir_apelido()
+    
     def encurta_nome(self, nome):
         """Copia o texto do campo 'nomePontoMedicao', encurta pulando a primeira palavra e mantendo as duas próximas."""
-        
+
         palavras = nome.split()  # Divide o texto em palavras
 
-        if len(palavras) > 4:
-            texto_encurtado = " ".join(palavras[1:4])  # Pula a primeira palavra e pega as próximas duas
-        elif len(palavras) == 4:
-            texto_encurtado = " ".join(palavras[1:])  # Pega a segunda palavra se houver apenas duas
+        # Pega a segunda e a terceira palavras, se houverem
+        if len(palavras) > 2:
+            texto_encurtado = " ".join(palavras[1:3])  # Pega as duas palavras seguintes
         else:
-            texto_encurtado = ""  # Se houver apenas uma palavra ou nenhuma
+            texto_encurtado = " ".join(palavras[1:])  # Se houver menos de 3 palavras, pega até o final
 
         # Limita o texto encurtado a 15 caracteres
         if len(texto_encurtado) > 15:
             texto_encurtado = texto_encurtado[:15]  # Trunca o texto para 15 caracteres
 
-            # Se a última palavra estiver sendo truncada, continua removendo até que esteja dentro do limite
-            while len(texto_encurtado) > 15:
-                # Encontra a última palavra e a reduz em um caractere
-                palavras_espacos = texto_encurtado.rsplit(' ', 1)  # Divide em duas partes na última ocorrência de espaço
-                if len(palavras_espacos) == 2:
-                    texto_encurtado = f"{palavras_espacos[0]} {palavras_espacos[1][:-1]}"
-                else:
-                    texto_encurtado = palavras_espacos[0][:-1]  # Remove um caractere se só houver uma palavra
-
         print(f'Texto encurtado do campo "nomePontoMedicao": "{texto_encurtado}"')
         return texto_encurtado
-        
-
+   
     def inserir_apelido(self):
         self.ia.verifica('nome_completo.png', 0.7)
-        py.moveRel(0,+24)
+        py.moveRel(0,+32)
         py.tripleClick()
         nome_completo = py.hotkey('ctrl','c')
         nome_completo = pyperclip.paste()
@@ -358,13 +356,6 @@ class page_ccee:
         self.tabzon(1)
         py.write(cap_con)
         sleep(1)
-        
-
-    def start_cadastro(self):
-        print("Iniciando cadastro")
-        self.ia.verifica("inicio_cadastro.png", 0.7)
-        # nome_curto = self.encurta_nome()
-        self.inserir_apelido()
         
     def ver_tcs(self, tc_a, tc_b, tc_c):
         """Verifica se as colunas TC_A, TC_B e TC_C estão preenchidas e conta o total."""
@@ -401,26 +392,60 @@ class page_ccee:
         
     def localizacao(self, municipio):
         py.hotkey('enter')
+        py.write("P")
         x = 0
-        while(x<18):
+        while(x<4):
             py.hotkey('down')
             x=x+1
 
         py.hotkey('enter')
 
         print(municipio)
+        
         self.ia.localiza("cidade.png", 0.8)
         py.moveRel(0,-70)
-        self.ia.localizar_palavra_rolando(municipio, max_tentativas=20, scroll_pixels=-260)
+        primeira_letra = municipio[0]
+        py.write(primeira_letra)
+        self.ia.localizar_palavra_rolando(municipio, max_tentativas=20, scroll_pixels=-175)
         self.tabzon(2)
         py.hotkey('enter')
+        self.tabzon(2)
+        py.write("https://coleta.ccee.copel.com.br/")
+        self.tabzon(1)
+        py.write("cliente")
+        self.tabzon(1)
+        py.write("cas")     
+        self.tabzon(1)
+        py.write("cliente")
+        self.tabzon(1)
+        py.write("cas")
+
+        self.tabzon(3)
+        py.hotkey('enter')
+        py.hotkey('down')
+        py.hotkey('enter')
+        sleep(1)
+        self.tabzon(1)
+        py.write("COPEL DISTRIB")
+        self.tabzon(1)
+        py.hotkey('enter')
+        sleep(0.5)
+        py.scroll(-1000) 
+
+    def dados_medidor(self, rg, ult_calib):
+        print(rg)
+        
+    def modelo_med(self, porta): 
+        corrente_nom = 2,5
+        tensao_nom = 120
+        id_med = 1
+        ip = "27.0.140"
 
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
             sleep(0.3)
             py.hotkey('tab')
-            
-
+        
     
 
 class inf_planilha:
@@ -494,14 +519,16 @@ class inf_planilha:
                 tc_a = tratar_valor(linha['TC_A'])
                 tc_b = tratar_valor(linha['TC_B'])
                 tc_c = tratar_valor(linha['TC_C'])
+                ult_calib = tratar_valor(linha['Conclusao_MS_680'])
+                porta = tratar_valor(linha['Porta'])
 
                 # Retorna todas as variáveis
-                return (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con, tc_a, tc_b, tc_c)
+                return (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con, tc_a, tc_b, tc_c, ult_calib, porta)
             else:
                 print(f"UC {uc} não encontrada na planilha.")
         return None
-
-def main(lista_ucs, continuar_evento, usuario, senha):
+# def main(lista_ucs, continuar_evento, usuario, senha):
+def main(lista_ucs):
     lista_ucs = [servico.replace('\r', '').replace('\n', '').strip() for servico in lista_ucs if servico.replace('\r', '').replace('\n', '').strip()]
     print(lista_ucs)
     
@@ -513,40 +540,47 @@ def main(lista_ucs, continuar_evento, usuario, senha):
 
     planilha = inf_planilha("assets\\excel\\plan_teste.xlsx")
     ccee = page_ccee("https://operacao.ccee.org.br/")
+    start = inserir_inf()
     # ccee.entrar_ccee(continuar_evento, usuario, senha)
 
     for uc in lista_ucs:
         info = planilha.buscar_info_uc(uc)
         if info:
-            (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con,tc_a, tc_b, tc_c) = info
+            (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con,tc_a, tc_b, tc_c, ult_calib, porta) = info
 
-            print(f"Informações para UC {uc}:")
-            print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
-            print(f"data vigencia:{ini_vig}")
-            print(cap_ger)
-            ccee.start_cadastro()
-            ccee.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
-            ccee.ver_tcs(tc_a, tc_b, tc_c)
+            if start.ia.verifica("inicio_cadastro.png", 0.7):
+                print(f"Informações para UC {uc}:")
+                print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
+                print(f"data vigencia:{ini_vig},{municipio}")
+                print(cap_ger)
+                start.start_cadastro()
+                start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
+                start.ver_tcs(tc_a, tc_b, tc_c)
 
-            ccee.localizacao(municipio)
-            ## Chama a função para inserir o código no campo da página
-            # ccee.novo_ponto_medicao()
-            # ccee.clicar_solicitacoes()
-            # ccee.inserir_codigo_ponto(cod_ponto)
-            
+                start.localizacao(municipio)
+                start.dados_medidor(rg,ult_calib)
+                start.modelo_med(porta)
+                ## Chama a função para inserir o código no campo da página
+                # ccee.novo_ponto_medicao()
+                # ccee.clicar_solicitacoes()
+                # ccee.inserir_codigo_ponto(cod_ponto)
+                
 
-            # ccee.seleciona_opcao("601")
-            # ccee.encontra_pts_med(cod_ponto)
-            # ccee.clicar_pesquisar()
+                # ccee.seleciona_opcao("601")
+                # ccee.encontra_pts_med(cod_ponto)
+                # ccee.clicar_pesquisar()
 
-            # if ccee.verificar_pesquisa() == True:
-            #     print("Ponto de medição encontrado")
-            # else:
-            #     print("Ponto de medição não encontrado")
-            #     ccee.novo_ponto_medicao()
-            #     ccee.inserir_codigo_ponto(cod_ponto)
+                # if ccee.verificar_pesquisa() == True:
+                #     print("Ponto de medição encontrado")
+                # else:
+                #     print("Ponto de medição não encontrado")
+                #     ccee.novo_ponto_medicao()
+                #     ccee.inserir_codigo_ponto(cod_ponto)
+            else:
+                print("ERRO")
            
             
             
 if __name__ == "__main__":
-    main(lista_ucs=["111001790" , "31620515" , "105086940"])
+    main(lista_ucs=["105086940"])
+    # PRRLOIENTR101

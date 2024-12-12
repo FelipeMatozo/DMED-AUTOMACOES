@@ -106,7 +106,7 @@ def pause_program():
             sleep(1)  # Para evitar múltiplas ativações rápidas
 
 def main(SS, motivo, obs):
-
+    print("iniciando Conclusao T11")
     SS = [servico.replace('\r', '').replace('\n', '').strip() for servico in SS if servico.replace('\r', '').replace('\n', '').strip()]
     print(SS, motivo, obs)
     
@@ -153,11 +153,11 @@ def main(SS, motivo, obs):
                     print("Tela de Cadastro de Reclamação encontrada")
                     py.write(obs)
                     sleep(1)
-                    cis.tabzon(2)
-                    py.write(motivo)
+                    cis.tabzon(2)       
+                    py.write(motivo)                         
                     cis.tabzon(4)
                     cis.data_e_hora()
-                    cis.finalizacao()
+                    cis.finalizacao(Solicitacao)                
                 
                 else:
                     # Se 'cadas_reclam.png' não for localizada, reinicia o loop
