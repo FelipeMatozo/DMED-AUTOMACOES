@@ -215,7 +215,7 @@ class Reconhecimento:
         self.tentativasRealizadas = 0
         nome_imagem = os.path.basename(image_path)
         diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images', image_path)
-    
+        self.online = True
 
         while self.online:
 

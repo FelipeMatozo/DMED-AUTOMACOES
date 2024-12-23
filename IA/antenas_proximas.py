@@ -122,7 +122,7 @@ class TratarPlanilha:
         df_resultados.to_excel(resultado_path, index=False)
         print(f"Resultados de antenas salvos em: {resultado_path}")
 
-    def merge_com_planilha_antenas(self, antennas_path, output_path='assets/excel/Final_sinal_op/Ucs_desconec - out2511.xlsx'):
+    def merge_com_planilha_antenas(self, antennas_path, output_path='assets/excel/Final_sinal_op/Ucs_desconec - DEZ1812.xlsx'):
         # Carregar a planilha de antenas
         antennas_df = pd.read_excel(antennas_path)
 
@@ -131,7 +131,7 @@ class TratarPlanilha:
 
         # Reorganizar as colunas na ordem desejada
         colunas_desejadas = [
-            "UC","Cliente","RG","Município","MED","Operadora","Marca TM", "TM Hemera","Regional 1",
+            "UC","Cliente","RG","MUNICÍPIO","MED","Operadora","TM","Regional 1",
             "Melhor antena", "Distância 1", "Segunda antena", "Distância 2","Terceira antena", 
             "Distância 3"
            
@@ -148,7 +148,7 @@ class TratarPlanilha:
 
 
 if __name__ == "__main__":
-    tratar = TratarPlanilha("assets/excel/sem comunicacao - out2511.xlsx")
+    tratar = TratarPlanilha("assets/excel/UNIDADES CONECTADAS SEM LEITURA - MELHOR ANTENA.xlsx")
     tratar.carregar_planilhas()
     tratar.salvar_planilha()
     # Caminho para a planilha de resultados de antenas

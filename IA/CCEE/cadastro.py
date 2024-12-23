@@ -302,8 +302,11 @@ class inserir_inf:
     def __init__(self):
         self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.9)
         # Diretório base do projeto (onde o script está localizado)
-        self.diretorio_base = os.path.dirname(os.path.abspath(__file__))
-        self.PAUSE_FILE = os.path.join(self.diretorio_base,'assets', 'txt', 'pause.txt')
+        self.diretorio_base = os.path.dirname(os.path.abspath(__file__),)
+        self.PAUSE_FILE = os.path.join(os.path.dirname(os.path.dirname(self.diretorio_base)), 'assets', 'txt', 'pause.txt')
+        self.caminho_log = os.path.join(os.path.dirname(os.path.dirname(self.diretorio_base)), 'assets', 'log', 'log_ccee.log')
+
+
     
     def start_cadastro(self):
         print("Iniciando cadastro")
@@ -629,6 +632,7 @@ class inserir_inf:
         
         # Certifique-se de que o arquivo exista antes de entrar no loop
         if not os.path.exists(self.PAUSE_FILE):
+            print(self.PAUSE_FILE)
             with open(self.PAUSE_FILE, 'w') as file:
                 file.write('pausar')  # Escreva o estado inicial no arquivo
             print(f"Arquivo {self.PAUSE_FILE} criado para sinalizar pausa.")
@@ -717,7 +721,7 @@ class inf_planilha:
                 linha = info_uc.iloc[0]
             
                 print("Valores brutos das colunas:")
-                print(f"Marca: {linha['Marca']}, Modelo: {linha['Modelo']}, Versão: {linha['Versao']}")
+                print(f"Marca: {linha['Marca']}, Modelo: {linha['Modelo']}, Versão: {linha['Firmware']}")
 
 
                 def tratar_valor(valor):
@@ -744,18 +748,17 @@ class inf_planilha:
                 tp_a = tratar_valor(linha['TP_A'])
                 marca = tratar_valor(linha['Marca'])
                 modelo = tratar_valor(linha['Modelo'])
-                versao = tratar_valor(linha['Versao'])      
+                firmware = tratar_valor(linha['Firmware'])      
 
 
                 # Retorna todas as variáveis
-                return (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con, tc_a, tc_b, tc_c, ult_calib, porta, rel_exis,tp_a, marca, modelo, versao)
+                return (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con, tc_a, tc_b, tc_c, ult_calib, porta, rel_exis,tp_a, marca, modelo, firmware)
             else:
                 print(f"UC {uc} não encontrada na planilha.")
         return None
     
 # def main(lista_ucs, continuar_evento, usuario, senha):
 def main(lista_ucs):
-    lista_ucs = [servico.replace('\r', '').replace('\n', '').strip() for servico in lista_ucs if servico.replace('\r', '').replace('\n', '').strip()]
     print(lista_ucs)
     
     # Verifica se estamos em um ambiente PyInstaller
@@ -768,63 +771,55 @@ def main(lista_ucs):
     # ccee = page_ccee("https://operacao.ccee.org.br/")
     start = inserir_inf()
     # ccee.entrar_ccee(continuar_evento, usuario, senha)
-
+    print(start.PAUSE_FILE)
+    logging.basicConfig(filename=start.caminho_log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
+    logging.info(f"Iniciando lista de ucs: {lista_ucs}")
     for uc in lista_ucs:
         info = planilha.buscar_info_uc(uc) 
-            
         if info:
-            (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con,tc_a, tc_b, tc_c, ult_calib, porta, rel_exis, tp_a, marca, modelo, versao) = info
-            marca= str(marca)
+            (cod_ponto, cliente, rg, municipio, regional, etapa, ini_vig, cap_ger, cap_con, tc_a, tc_b, tc_c, ult_calib, porta, rel_exis, tp_a, marca, modelo, firmware) = info
+            marca = str(marca)
 
-            try:
-                start.ia.localiza("limpar.png", 0.6)
-                start.ia.localiza("acoes.png",0.7)
-                start.ia.localiza("novo_ponto.png",0.7)
-                sleep(2)
-                start.ia.localiza("ponto_mapeado.png",0.8)
-                py.write(cod_ponto)
+            while True:  # Loop para recomeçar a UC atual em caso de falha
+                try:
+                    print(f'Começando UC: {uc}')
+                    # Substituir por suas operações antes da verificação da imagem
+                    # start.ia.localiza("limpar.png", 0.6)
+                    # start.ia.localiza("acoes.png", 0.7)
+                    # start.ia.localiza("novo_ponto.png", 0.7)
+                    # sleep(2)
+                    # start.ia.localiza("ponto_mapeado.png", 0.8)
+                    # py.write(cod_ponto)
 
-                # if start.ia.verifica("inicio_cadastro.png", 0.7):
-                #     print(f"Informações para UC {uc}:")
-                #     print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
-                #     print(f"data vigencia:{ini_vig},{municipio}")
-                
-                #     #######################################################
-                #     # print(cap_ger)
-                #     start.start_cadastro()
-                #     start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
-                #     tcs = start.ver_tcs(tc_a, tc_b, tc_c)
-                #     start.localizacao(municipio)      
-
-                #     #######################################################
-                #     valor_tp= start.trans_corren(tcs, tc_a, tc_b,tc_c, rel_exis, tp_a)
-                #     #######################################################
-                #     start.dados_medidor(rg, ult_calib, valor_tp, marca, modelo, versao)
-                #     start.modelo_med(porta)
-
-                    #######################################################
-                    ## Chama a função para inserir o código no campo da página
-                    # ccee.novo_ponto_medicao()
-                    # ccee.clicar_solicitacoes()
-                    # ccee.inserir_codigo_ponto(cod_ponto)
+                    # Verificação para encontrar a imagem da tela
+                    if not start.ia.verifica("inicio_cadastro.png", 0.7):
+                        print(f"Tela 'inicio_cadastro.png' não encontrada. Recomeçando UC: {uc}")
+                        start.pausar_execucao()
+                        continue  # Reinicia o loop para a mesma UC
                     
+                    print(f"Informações para UC {uc}:")
+                    print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
+                    print(f"Data vigência: {ini_vig}, {municipio}")
+                    
+                    #######################################################
+                    start.start_cadastro()
+                    start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
+                    tcs = start.ver_tcs(tc_a, tc_b, tc_c)
+                    start.localizacao(municipio)
+                    #######################################################
+                    valor_tp = start.trans_corren(tcs, tc_a, tc_b, tc_c, rel_exis, tp_a)
+                    #######################################################
+                    start.dados_medidor(rg, ult_calib, valor_tp, marca, modelo, firmware)
+                    start.modelo_med(porta)
+                    #######################################################
+                    # Se tudo deu certo, sai do loop para a próxima UC
+                    break
 
-                    # ccee.seleciona_opcao("601")
-                    # ccee.encontra_pts_med(cod_ponto)
-                    # ccee.clicar_pesquisar()
+                except Exception as e:
+                    logging.error(f"Erro ao processar UC: {uc}. Detalhes: {e}")
+                    print(f"Erro ao processar UC: {uc}. Detalhes: {e}")
+                    break  # Sai do loop em caso de erro crítico
 
-                    # if ccee.verificar_pesquisa() == True:
-                    #     print("Ponto de medição encontrado")
-                    # else:
-                    #     print("Ponto de medição não encontrado")
-                    #     ccee.novo_ponto_medicao()
-                    #     ccee.inserir_codigo_ponto(cod_ponto)
-
-                # else:
-                #     print("ERRO")
-            except Exception as e:
-                print(f"Erro ao processar SS: {uc}. Detalhes: {e}")
-           
 if __name__ == "__main__":
-    main(lista_ucs=["94445834"])
+    main(lista_ucs=[""])
     

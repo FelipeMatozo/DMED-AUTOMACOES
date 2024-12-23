@@ -80,19 +80,38 @@
       <div class="row">
         <div class="col">
           <form method="post" action="/cadastro_ccee" onsubmit="saveLoginData()">
-            
-        
-          
+
               <label for="ucs" class="form-label">UC (insira a lista de UCS, sem ";" ou "," uma abaixo da outra.)</label>
               <textarea class="form-control" id="cadastro_ccee" name="cadastro_ccee" required></textarea>
           </div></div>
           <div class="button-group mt-4">
             <button type="submit" class="btn send">Enviar</button>
+          </form>
             <a href="{{ url_for('static', filename='log/log_ccee.log') }}" class="btn btn-black">Baixar Log</a>
-            <button id="despausar" class="btn btn-black">Retomar</button>
+            <button id="despausar" class="btn btn-black" onclick="despausar()">Retomar</button>
           </div>
-          
-              </div>
+        </div>
+        
+        <script>
+          function despausar() {
+            fetch('/despausar', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Execução retomada com sucesso!');
+                } else {
+                    response.json().then(data => {
+                        alert(`Erro: ${data.message}`);
+                    });
+                }
+            })
+            .catch(error => {
+                alert(`Erro na requisição: ${error.message}`);
+            });
+        }
+
+        </script>
           
         <!-- Instruções de uso -->
         <div class="col">
@@ -129,25 +148,7 @@
       </div>
     </div>
   </div>
-   
-  <script>
-    // Pausar execução
-    $("#pausar").click(function() {
-      $.post("/pausar", function() {
-        alert("Execução pausada!");
-        location.reload();
-      });
-    });
   
-    // Despausar execução
-    $("#despausar").click(function() {
-      $.post("/despausar", function() {
-        alert("Execução retomada!");
-        location.reload();
-      });
-    });
-  </script>
-  </div>
 
   <footer class="container-fluid bg-dark text-white text-center py-3">
     <div class="col" style="color: whitesmoke;">

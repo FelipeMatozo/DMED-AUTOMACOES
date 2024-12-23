@@ -37,8 +37,8 @@ macro_dir = os.path.join(project_dir, 'IA')
 sys.path.append(macro_dir)
 
 diretorio_base = os.path.dirname(os.path.abspath(__file__))
-# Arquivo de controle de pausa/despausa
-PAUSE_FILE = os.path.join(diretorio_base, 'assets','txt','pause.txt')
+# Arquivo de controle de pausa/despaerweewrwe
+PAUSE_FILE = os.path.join(diretorio_base, 'assets', 'txt', 'pause.txt')
 
 @app.route('/despausar', methods=['POST'])
 def despausar():
@@ -46,8 +46,12 @@ def despausar():
     try:
         with open(PAUSE_FILE, 'w') as file:
             file.write('despausar')
+        logging.info("Execução retomada pelo usuário.")
+        return jsonify({'status': 'success', 'message': 'Execução retomada com sucesso!'}), 200
     except Exception as e:
+        logging.error(f"Erro ao tentar despausar: {str(e)}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 
@@ -179,15 +183,13 @@ def cadastro_page():
     if request.method == 'POST':
         ucs = request.form['cadastro_ccee']
         
-       
-        
         # Processa a lista de UC's
         ucs = ucs.splitlines()
         ucs = [uc.strip() for uc in ucs if uc.strip()]
-
+        print(ucs)
         # Define o evento de pausa
         continuar_evento.clear()
-        threading.Thread(target=cadastro.main, args=(ucs, continuar_evento)).start()
+        threading.Thread(target=cadastro.main, args=(ucs,)).start()
 
         # Cria uma resposta para configurar o cookie
         response = make_response(redirect(url_for('cadastro_page')))
@@ -196,11 +198,7 @@ def cadastro_page():
     # Renderiza a página e preenche o nome de usuário se o cookie estiver presente
     return render_template('cadastro_ccee.html')
 
-@app.route('/continuar_cadastro', methods=['POST'])
-def continuar_cadastro():
-    global continuar_evento
-    continuar_evento.set()  # Libera a pausa no Selenium
-    return redirect('/cadastro_ccee')
+
 
 # @app.route('/cadastro_ccee', methods=['GET', 'POST'])
 # def cadastro_page():
