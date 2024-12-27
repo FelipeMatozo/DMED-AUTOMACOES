@@ -448,7 +448,7 @@ class inserir_inf:
         self.ia.localiza("gravar.png", 0.8)
         sleep(0.5)
         py.click()
-        sleep(20)
+        sleep(10)
          
     def trans_corren(self, q_tcs, tc_a,tc_b,tc_c, rel_exis, tp_a):
         quantidade_tcs = q_tcs
@@ -477,7 +477,11 @@ class inserir_inf:
         
 
         q_tcs =str(q_tcs)
-        self.ia.localiza("trans_corrente.png", 0.9)
+
+        if not self.ia.localiza("trans_corrente.png", 0.87):
+            self.pausar_execucao()
+            pass
+
         sleep(2)
         self.ia.localiza("q_transform.png", 0.7)
         py.write(q_tcs)
@@ -671,7 +675,7 @@ class inf_planilha:
         self.dados = None
         self.carregar_dados()
 
-    def carregar_dados(self):
+    def carregar_dados(self): 
         """Carrega os dados da planilha em um DataFrame do Pandas e padroniza os nomes das colunas"""
         if os.path.exists(self.caminho_planilha):
             self.dados = pd.read_excel(self.caminho_planilha)
