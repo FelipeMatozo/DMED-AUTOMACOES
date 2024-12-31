@@ -215,7 +215,7 @@ class Reconhecimento:
         self.tentativasRealizadas = 0
         nome_imagem = os.path.basename(image_path)
         diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images', image_path)
-    
+        self.online = True
 
         while self.online:
 
@@ -274,6 +274,7 @@ class Reconhecimento:
             pyautogui.scroll(scroll_pixels)  # Scroll para cima (-) ou para baixo (+)
             tentativa += 1
             time.sleep(1)  # Pequena pausa para a rolagem ser processada
+            print(f"Palavra {palavra}")
 
         print(f'Palavra "{palavra}" não encontrada após {max_tentativas} tentativas.')
 

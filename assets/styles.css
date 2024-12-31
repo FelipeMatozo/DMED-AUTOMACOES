@@ -181,7 +181,12 @@ footer {
   .file-directory li {
     margin-bottom: 5px;
   }
-
+  .button-group {
+    display: flex;
+    justify-content: flex-start; /* Alinha os botões à esquerda */
+    gap: 10px; /* Espaço entre os botões */
+    margin-top: 20px; /* Distância da caixa de texto */
+  }
   .btn-primary{
     background-color: #a0a0a0;
     font-weight: bold;

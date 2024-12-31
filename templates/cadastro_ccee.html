@@ -51,8 +51,19 @@
     .inner-container {
         padding: 20px;
     }
-    
-    
+    /* Botão preto */
+    .btn-black {
+      background-color: black;
+      color: white;
+      font-weight: bold;
+    }
+    .d-flex.gap-2 > button {
+      margin-right: 0.1rem; /* Espaço entre botões */
+    }
+
+    textarea {
+      margin-bottom: 1.0rem; /* Distância entre textarea e botões */
+    }
   </style>
 
   <div class="container mt-3">
@@ -69,81 +80,39 @@
       <div class="row">
         <div class="col">
           <form method="post" action="/cadastro_ccee" onsubmit="saveLoginData()">
-            <label for="username">Usuário:</label>
-            <input type="text" id="username" name="username" required><br>
-            <div class="mb-3"></div>
-            <label for="password">|   Senha:</label>
-            <input type="password" id="password" name="password" required>
-            <!-- <input type="checkbox" id="show-password" onclick="this.previousElementSibling.type = this.checked ? 'text' : 'password';"> Mostrar senha<br> -->
 
-            <!-- Checkbox "Mantenha-me conectado" -->
-            <input type="checkbox" id="remember-me" name="remember_me">
-            <label for="remember-me">Mantenha-me conectado</label><br>
-
-            <div class="mb-3"></div>
-            <div class="mb-3"></div>
-            <div class="mb-4"></div>
-            <div class="mb-3">
               <label for="ucs" class="form-label">UC (insira a lista de UCS, sem ";" ou "," uma abaixo da outra.)</label>
               <textarea class="form-control" id="cadastro_ccee" name="cadastro_ccee" required></textarea>
-            </div>
+          </div></div>
+          <div class="button-group mt-4">
             <button type="submit" class="btn send">Enviar</button>
-            <button type="button" class="btn export" onclick="downloadLogs()">Exportar logs</button>
           </form>
-          
-          <div class="text-center mt-4">
-            <h2 class="text-center">Após o login</h2>
-            <form method="post" action="/continuar_cadastro">
-              <button type="submit" class="btn btn-warning">Continuar</button>
-            </form>
+            <a href="{{ url_for('static', filename='log/log_ccee.log') }}" class="btn btn-black">Baixar Log</a>
+            <button id="despausar" class="btn btn-black" onclick="despausar()">Retomar</button>
           </div>
         </div>
+        
         <script>
-          function showContinueButton() {
-              document.getElementById("continue-section").style.display = "block";
-          }
-      
-          // Função para salvar o login e a senha no localStorage se o checkbox estiver marcado
-          function saveLoginData() {
-              const username = document.getElementById("username").value;
-              const password = document.getElementById("password").value;
-              const rememberMe = document.getElementById("remember-me").checked;
-      
-              if (rememberMe) {
-                  localStorage.setItem("savedUsername", username);
-                  localStorage.setItem("savedPassword", password);
-                  localStorage.setItem("rememberMe", "true");
-              } else {
-                  localStorage.removeItem("savedUsername");
-                  localStorage.removeItem("savedPassword");
-                  localStorage.removeItem("rememberMe");
-              }
-          }
-      
-          // Função para preencher os campos com dados salvos no localStorage
-          function loadLoginData() {
-              const savedUsername = localStorage.getItem("savedUsername");
-              const savedPassword = localStorage.getItem("savedPassword");
-              const rememberMe = localStorage.getItem("rememberMe") === "true";
-      
-              if (rememberMe) {
-                  if (savedUsername) {
-                      document.getElementById("username").value = savedUsername;
-                  }
-                  if (savedPassword) {
-                      document.getElementById("password").value = savedPassword;
-                  }
-                  document.getElementById("remember-me").checked = true;
-              }
-          }
-      
-          // Chama a função para preencher os dados automaticamente ao carregar a página
-          document.addEventListener("DOMContentLoaded", loadLoginData);
-      
-          function downloadLogs() {
-              window.location.href = '/download';
-          }
-      </script>
+          function despausar() {
+            fetch('/despausar', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Execução retomada com sucesso!');
+                } else {
+                    response.json().then(data => {
+                        alert(`Erro: ${data.message}`);
+                    });
+                }
+            })
+            .catch(error => {
+                alert(`Erro na requisição: ${error.message}`);
+            });
+        }
+
+        </script>
+          
         <!-- Instruções de uso -->
         <div class="col">
           <div class="row justify-content-center">
@@ -179,9 +148,7 @@
       </div>
     </div>
   </div>
-   
-    
-  </div>
+  
 
   <footer class="container-fluid bg-dark text-white text-center py-3">
     <div class="col" style="color: whitesmoke;">

@@ -6,11 +6,17 @@ import time
 import os
 from unidecode import unidecode  # Import necessário para remover acentos
 
-# Defina o caminho para a pasta onde o Tesseract foi instalado
-os.environ['TESSDATA_PREFIX'] = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR"
+diretorio_base = os.path.dirname(os.path.abspath(__file__),)
+os.environ['TESSDATA_PREFIX'] = os.path.join(os.path.dirname(os.path.dirname(diretorio_base)), 'Tesseract-OCR')
+        
 
-# Defina o caminho para o executável do Tesseract
-pytesseract.tesseract_cmd = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR\tesseract.exe"
+# # Defina o caminho para a pasta onde o Tesseract foi instalado
+# os.environ['TESSDATA_PREFIX'] = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR"
+
+# # Defina o caminho para o executável do Tesseract
+# pytesseract.tesseract_cmd = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR\tesseract.exe"
+pytesseract.tesseract_cmd = os.path.join(os.path.dirname(os.path.dirname(diretorio_base)), 'Tesseract-OCR','tesseract.exe')
+        
 
 def localizar_palavra_rolando(palavras, max_tentativas=10, scroll_pixels=-300, lang="por"):
     """Procura palavras na tela rolando até encontrá-las e clica nelas."""
