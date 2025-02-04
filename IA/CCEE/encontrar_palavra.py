@@ -57,8 +57,4 @@ def localizar_palavra_rolando(palavras, max_tentativas=10, scroll_pixels=-300, l
 
     print(f'Nenhuma palavra encontrada após {max_tentativas} tentativas.')
 
-sleep(4)
-
-# Exemplo de uso
-nomes = ["MARINGÁ", "CURITIBA", "CASCAVEL"]  # Palavras na variável
-localizar_palavra_rolando(nomes, max_tentativas=20, scroll_pixels=-260)
+sleep(3)
