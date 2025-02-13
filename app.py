@@ -9,6 +9,7 @@ from IA import macro
 from IA.CCEE import cadastro
 from IA import concluir_T11
 from IA import concluir_T12
+from IA.CCEE import relatorio_CCEE
 from IA.portas_telemetrias import find_tm
 from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
@@ -17,6 +18,7 @@ import numpy as np
 from time import sleep, time
 import threading
 import keyboard
+from flask import Flask, request, redirect, url_for, flash, render_template
 
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
@@ -96,8 +98,6 @@ CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
 #         # Lógica da automação (exemplo)
 #         print("Automação em execução...")
 #         sleep(1)
-
-
 
 def read_log(log_file_path_1='_internal\\assets\\log\\log.log', log_file_path_2='assets\\log\\log.log'):
     # Verifica se o primeiro caminho existe
@@ -190,7 +190,8 @@ def cadastro_page():
         # Define o evento de pausa
         continuar_evento.clear()
         threading.Thread(target=cadastro.main, args=(ucs,)).start()
-
+        # Limpa a pasta onde a planilha foi salva
+        # limpar_pasta(caminho_padrao)
         # Cria uma resposta para configurar o cookie
         response = make_response(redirect(url_for('cadastro_page')))
     
@@ -214,7 +215,6 @@ def cadastro_page():
 #         # Exibir mensagem de sucesso
 #         return render_template('cadastro_ccee.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
 #     return render_template('cadastro_ccee.html')
-
 
 @app.route('/concluir_t11', methods=['GET', 'POST'])
 def concluir_t11():
@@ -244,7 +244,6 @@ def gerar_t11():
         # Processar o POST se necessário
         pass
     return render_template('gerar_t11.html')
-
 
 @app.route('/concluir_t10', methods=['GET', 'POST'])
 def concluir_t10():
@@ -304,7 +303,6 @@ def menu_rpas_T12():
         # Processar o POST se necessário
         pass
     return render_template('menu_rpas_T12.html')
-
 
 # Função para criar a pasta, caso não exista
 def criar_pasta_excel():
@@ -374,12 +372,10 @@ def mapa_uc():
     
     return render_template('mapa.html')
 
-
 @app.route('/exibir_mapa')
 def exibir_mapa():
     # Renderiza o template com o mapa incluído
     return render_template('mapa.html')
-
 
 @app.route('/gerar_t10', methods=['GET', 'POST'])
 def gerar_t10():
@@ -436,6 +432,71 @@ def dashboard_data():
 
     graphJSON = fig.to_json()
     return jsonify(graphJSON)
+
+@app.route('/relatorio_ccee', methods=['GET', 'POST'])
+def relatorio_pm():
+    if request.method == 'POST':
+        print(request.form)  # Ver o que está sendo enviado
+
+        pms = request.form.get('pm', '')  # Evita erro se a chave não existir
+        pms = pms.splitlines()
+        pms = [pm.replace('\r', '').replace('\n', '').strip() for pm in pms if pm.strip()]
+
+        threading.Thread(target=relatorio_CCEE.start, args=(pms,)).start()
+
+    return render_template('relatorio_ccee.html')
+
+# Definir a chave secreta para permitir sessões
+app.secret_key = 'minha_chave_super_secreta'
+
+# Definir o caminho padrão para salvar a planilha
+caminho_padrao = os.path.join(os.path.expanduser("~"), "Documents", "CCEE_Planilha")
+
+# Criar o diretório caso não exista
+os.makedirs(caminho_padrao, exist_ok=True)
+
+@app.route('/upload_excel', methods=['POST'])
+def upload_excel():
+    if 'file' not in request.files:
+        return '', 204  # Retorna sem conteúdo (mantém a página)
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return '', 204  # Nenhuma ação se não houver arquivo
+
+    if file and file.filename.endswith(('.xlsx', '.xls')):
+        # Limpa a pasta onde a planilha foi salva
+        limpar_pasta(caminho_padrao)
+        file_path = os.path.join(caminho_padrao, 'consulta_pm.xlsx')  # Sempre salva como consulta_pm.xlsx
+        try:
+            file.save(file_path)
+        except Exception:
+            return '', 204  # Se houver erro, não altera a página
+
+    return '', 204  # Retorna sem atualizar nada
+
+def limpar_pasta(diretorio):
+    """Remove todos os arquivos da pasta especificada."""
+    try:
+        for arquivo in os.listdir(diretorio):
+            caminho_arquivo = os.path.join(diretorio, arquivo)
+            if os.path.isfile(caminho_arquivo):
+                os.remove(caminho_arquivo)
+        print(f"Pasta {diretorio} limpa com sucesso.")
+    except Exception as e:
+        print(f"Erro ao limpar a pasta {diretorio}: {e}")
+
+@app.route('/')
+def index():
+    return render_template('cadastro_ccee.html')
+
+# @app.route('/relatorio_ccee', methods=['GET', 'POST'])
+# def relatorio_ccee():
+#     if request.method == 'POST':
+#         # Processar o POST se necessário
+#         pass
+#     return render_template('gerar_t11.html')
 
 if __name__ == '__main__':
     #  # Inicia o thread para monitorar o teclado

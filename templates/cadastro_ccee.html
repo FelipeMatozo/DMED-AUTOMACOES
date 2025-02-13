@@ -80,18 +80,28 @@
       <div class="row">
         <div class="col">
           <form method="post" action="/cadastro_ccee" onsubmit="saveLoginData()">
-
+            <div class="mb-3"></div>
               <label for="ucs" class="form-label">UC (insira a lista de UCS, sem ";" ou "," uma abaixo da outra.)</label>
               <textarea class="form-control" id="cadastro_ccee" name="cadastro_ccee" required></textarea>
-          </div></div>
+          </div>
           <div class="button-group mt-4">
             <button type="submit" class="btn send">Enviar</button>
           </form>
             <a href="{{ url_for('static', filename='log/log_ccee.log') }}" class="btn btn-black">Baixar Log</a>
             <button id="despausar" class="btn btn-black" onclick="despausar()">Retomar</button>
           </div>
-        </div>
         
+        <!-- Área de Upload do Arquivo Excel -->
+    
+      <h3 class="text-center">Upload de Planilha Excel</h3>
+      <form method="post" action="/upload_excel" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="file" class="form-label">Selecione o arquivo Excel:</label>
+          <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Planilha</button>
+      </form>
+    
         <script>
           function despausar() {
             fetch('/despausar', {
@@ -121,24 +131,28 @@
               <ol class="list-unstyled">
                 <!-- Passos de utilização -->
                 <li class="mb-3">
-                  <p class="font-weight-bold mb-1" style="color: black;">Passo 1: Dados</p>
-                  <p>- Primeiro, reúna todas as UC's e cole no campo UC.</p>
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 1: Planilha</p>
+                  <p>- Primeiro, faça o upload do arquivo excel e clique em "Enviar Planilha"</p>
                 </li>
                 <li class="mb-3">
-                  <p class="font-weight-bold mb-1" style="color: black;">Passo 2: Executar</p>
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 2: Dados</p>
+                  <p>- Reúna todas as UC's e cole no campo UC.</p>
+                </li>
+                <li class="mb-3">
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 3: Executar</p>
                   <p>- Após preenchidas as informações, clique em "Enviar" para iniciar o macro.</p>
                   <p style="color: red; font-size: 0.7rem;">Recomendado deixar a interface na tela SECUNDÁRIA (FULL HD).</p>
                 </li>
                 <li class="mb-3">
-                  <p class="font-weight-bold mb-1" style="color: black;">Passo 3: CISDIS12</p>
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 4: CISDIS12</p>
                   <p>- Realize o login completo na CCEE após clicar em enviar.</p>
                 </li>
                 <li class="mb-3">
-                  <p class="font-weight-bold mb-1" style="color: black;">Passo 4: Monitorar</p>
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 5: Monitorar</p>
                   <p>- Monitore o progresso e faça ajustes conforme necessário.</p>
                 </li>
                 <li class="mb-3">
-                  <p class="font-weight-bold mb-1" style="color: black;">Passo 5: Concluir</p>
+                  <p class="font-weight-bold mb-1" style="color: black;">Passo 6: Concluir</p>
                   <p>- Finalize o processo e revise os resultados.</p>
                 </li>
               </ol>

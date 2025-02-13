@@ -68,6 +68,44 @@ class Reconhecimento:
                 if self.tentativasRealizadas >= self.numeroDeTentativasMax:
                     self.online = False
                     return False
+    
+    def localiza_ccee(self, image_path, precisao):
+        """
+        Funçao localiza a imagem na tela, ela tenta localizar com um "numeroDeTentativasMax"
+        se nao for possivel ela informa o usuario que a imagem nao esta na tela
+        se for, ele move até a tela e clica na imagem
+        """
+        self.tentativasRealizadas = 0
+        nome_imagem = os.path.basename(image_path)
+        diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images_ccee', image_path)
+        
+
+        while self.online:
+
+            time.sleep(self.delay)
+
+            try:
+                tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=precisao)
+                if tela_encontrada is not None:
+                    py.moveTo(tela_encontrada)
+                    py.click()
+                    print(f"A tela {nome_imagem} foi encontrada.")
+                    return True
+                    
+                else:
+                    print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
+                    time.sleep(1) 
+                    self.tentativasRealizadas += 1
+                    if self.tentativasRealizadas >= self.numeroDeTentativasMax:
+                        self.online = False
+                        return False
+            except:
+                print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
+                time.sleep(1) 
+                self.tentativasRealizadas += 1
+                if self.tentativasRealizadas >= self.numeroDeTentativasMax:
+                    self.online = False
+                    return False
 
     def localiza_1x(self, image_path, precisao):
         """
@@ -215,6 +253,37 @@ class Reconhecimento:
         self.tentativasRealizadas = 0
         nome_imagem = os.path.basename(image_path)
         diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images', image_path)
+        self.online = True
+
+        while self.online:
+
+            time.sleep(1)
+
+            try:
+                tela_encontrada = py.locateOnScreen(diretorioDaImagen, confidence=precisao)
+                if tela_encontrada is not None:
+                    py.moveTo(tela_encontrada)
+                    print(f"A tela {nome_imagem} foi encontrada.")
+                    return True  
+                    
+            except:
+                print(f"Tela {nome_imagem} não foi encontrada,Tentativa {self.tentativasRealizadas + 1}")
+                time.sleep(1) 
+                self.tentativasRealizadas += 1
+                if self.tentativasRealizadas >= self.numeroDeTentativasMax:
+                    self.online = False
+                    break
+
+    def verifica_ccee(self, image_path, precisao):
+        """
+        Funçao localiza a imagem na tela, ela tenta localizar com um "numeroDeTentativasMax"
+        se nao for possivel ela informa o usuario que a imagem nao esta na tela
+        se for, ele move até a tela e clica na imagem
+        """
+        self.tentativasRealizadas = 0
+        nome_imagem = os.path.basename(image_path)
+        diretorioDaImagen = os.path.join(self.raizDoProjeto, 'assets', 'images_ccee', image_path)
+        print(diretorioDaImagen)
         self.online = True
 
         while self.online:

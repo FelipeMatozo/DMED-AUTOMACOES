@@ -31,272 +31,6 @@ import logging
 from datetime import datetime, timedelta
 import keyboard
 from time import sleep
-
-
-
-# class page_ccee:
-#     def __init__(self, url):
-#         self.path_ccee = url
-#         self.driver = None
-
-#     def entrar_ccee(self, continuar_evento, usuario, senha):
-#         options = Options()
-#         self.driver = webdriver.Firefox(options=options)
-#         self.driver.get(self.path_ccee)
-        
-#         print(usuario)
-#         wait = WebDriverWait(self.driver, 10)
-#         # Localiza os campos de entrada de login e senha
-#         username_input = wait.until(EC.presence_of_element_located((By.NAME, "username")))  # Substitua pelo nome correto
-#         password_input = wait.until(EC.presence_of_element_located((By.NAME, "password")))  # Substitua pelo nome correto
-
-#         # Insere as credenciais
-#         username_input.clear()
-#         username_input.send_keys(usuario)
-#         password_input.clear()
-#         password_input.send_keys(senha)
-
-#         # Clica no botão de login
-#         login_button = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//button[contains(text(), 'Entrar')]")
-#             ))
-#         login_button.click()
-        
-#         # Clica no botão de login
-#         sms_button = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//button[contains(text(), 'SMS')]")
-#             ))
-#         sms_button.click()
-
-#         print("Esperando o login manual na interface Flask...")
-#         continuar_evento.wait()  # Pausa aqui até que o evento seja ativado
-
-
-#         print("Login confirmado. Continuando com o processo.")
-
-#         # # Abrir uma nova guia e acessar a URL desejada
-#         # self.driver.execute_script("window.open('https://operacao.ccee.org.br/ui/scde/cadastro/pontosdemedicao', '_blank');")
-        
-#         # # Alternar para a nova guia
-#         # self.driver.switch_to.window(self.driver.window_handles[-1])
-#         sleep(5)
-
-#     def buscar_info_uc(self, info_uc):
-#         """Método para buscar informações no site da CCEE para uma UC específica"""
-#         # Exemplo de busca no site da CCEE usando informações da UC
-#         pass
-
-#     def encontra_pts_med(self, cod_ponto):
-#         """Função para encontrar e clicar em 'Pontos de Medição' e inserir o 'cod_ponto' no campo apropriado"""
-        
-#         wait = WebDriverWait(self.driver, 10)
-
-#         try:
-#             # Localiza o link "Pontos de Medição" e clica
-#             pontos_medicao_link = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//div[contains(@class, 'ng-tns-c31-149')]//a[contains(., 'Pontos de Medição')]")
-#             ))
-#             pontos_medicao_link.click()
-
-#             # Aguarda o iframe estar disponível e muda o contexto para o iframe
-#             iframe = wait.until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'https://scde.ccee.org.br/ui/cadastro/pontos-medicao/pesquisa')]")))
-#             self.driver.switch_to.frame(iframe)
-
-#             # Adiciona uma pausa para garantir que o campo está carregado
-#             time.sleep(2)  # Ajuste conforme necessário
-
-#             # Aguarda o campo de entrada do código SCDE estar visível e insere o valor de 'cod_ponto'
-#             cod_ponto_input = wait.until(EC.visibility_of_element_located(
-#                 (By.XPATH, "//input[@name='gx-form-group-4']")
-#             ))
-#             cod_ponto_input.clear()  # Limpa o campo caso tenha algum valor pré-existente
-#             cod_ponto_input.send_keys(cod_ponto)
-
-#             print(f"Valor '{cod_ponto}' inserido no campo de código SCDE.")
-
-#         except TimeoutException:
-#             print("Elemento 'Pontos de Medição' ou campo de entrada do código SCDE não encontrado.")
-#         except Exception as e:
-#             print(f"Erro ao interagir com a página: {e}")
-#         finally:
-#             # Sempre que terminar, volte ao contexto principal (opcional)
-#             self.driver.switch_to.default_content()
-
-#     def seleciona_opcao(self, valor_opcao="601", valor_inclusao="1401"):
-#         """Seleciona opções específicas em caixas de seleção na página."""
-#         sleep(3)
-#         wait = WebDriverWait(self.driver, 10)
-
-        
-        
-#         try:
-#             # Seleciona a primeira caixa de seleção
-#             select_element = wait.until(EC.element_to_be_clickable(
-#                 (By.NAME, "gx-form-group-2")
-#             ))
-#             select_element.click()
-
-#             # Seleciona a opção "Medição" (valor_opcao) pelo valor
-#             opcao = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//option[contains(text(), 'Medição')]")
-#             ))
-#             opcao.click()
-#             print("Opção 'Medição' selecionada.")
-
-#             # Seleciona a opção "Solic. Inclusão - cadastro" (valor_inclusao) pelo valor
-#             opcao_inclusao = select_element.find_element(By.XPATH, f"//option[@value='{valor_inclusao}']")
-#             opcao_inclusao.click()
-#             print("Opção 'Solic. Inclusão - cadastro' selecionada.")
-
-#         except TimeoutException:
-#             print("Caixa de seleção não encontrada.")
-#         except Exception as e:
-#             print(f"Erro ao interagir com a caixa de seleção: {e}")
-
-#     def clicar_pesquisar(self):
-
-#         wait = WebDriverWait(self.driver, 10)
-#         try:
-#             # Aguarda o botão 'Pesquisar' estar visível e clica
-#             pesquisar_btn = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//button[contains(@class, 'btn-primary') and contains(., 'Pesquisar')]")
-#             ))
-#             pesquisar_btn.click()
-#             print("Botão 'Pesquisar' clicado.")
-
-#         except TimeoutException:
-#             print("Botão 'Pesquisar' não encontrado.")
-#         except Exception as e:
-#             print(f"Erro ao interagir com o botão 'Pesquisar': {e}")
-
-#     def clicar_solicitacoes(self):
-#         """Clica no botão 'Solicitações' na página dentro de um iframe"""
-#         wait = WebDriverWait(self.driver, 10)
-#         try:
-#             # Muda para o iframe que contém o botão
-#             iframe = wait.until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'https://scde.ccee.org.br/ui/cadastro/pontos-medicao/pesquisa')]")))
-#             self.driver.switch_to.frame(iframe)
-
-#             # Espera até que o botão esteja visível e clicável
-#             solicitacoes_btn = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//button[contains(text(), 'Solicitações')]")
-#             ))
-#             solicitacoes_btn.click()
-#             print("Botão 'Solicitações' clicado.")
-
-#             # Após clicar no botão, espera que o select apareça
-#             self.seleciona_opcao()
-
-#             # Retorna ao contexto principal, se necessário
-#             self.driver.switch_to.default_content()
-
-#         except TimeoutException:
-#             print("Botão 'Solicitações' não encontrado.")
-#         except Exception as e:
-#             print(f"Erro ao interagir com o botão 'Solicitações': {e}")
-
-#     def verificar_pesquisa(self):
-#         """Verifica se o `span` de resultados está presente na página após a pesquisa."""
-        
-#         wait = WebDriverWait(self.driver, 10)
-        
-#         try:
-#             # Aguarda a presença do span que indica resultados
-#             span_resultado = wait.until(EC.presence_of_element_located(
-#                 (By.XPATH, "//span[@ng-if='pontosMedicaoResultado && pontosMedicaoResultado.length']")
-#             ))
-#             print("Resultados encontrados.")
-#             return True  # Span encontrado
-
-#         except TimeoutException:
-#             print("Resultados não encontrados.")
-#             return False  # Span não encontrado
-
-#     def novo_ponto_medicao(self):
-#         """Clica no link 'Novo ponto de medição' se não houver resultados."""
-        
-#         wait = WebDriverWait(self.driver, 10)
-        
-#         try:
-#             # Muda para o iframe
-#             iframe = wait.until(EC.presence_of_element_located((By.XPATH, "//iframe[contains(@src, 'https://scde.ccee.org.br/ui/cadastro/pontos-medicao/pesquisa')]")))
-#             self.driver.switch_to.frame(iframe)
-
-#             # Localiza e clica no botão de dropdown "Ações"
-#             dropdown_btn = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//button[@data-toggle='dropdown' and contains(., 'Ações')]")
-#             ))
-#             dropdown_btn.click()  # Abre o dropdown
-#             print("Dropdown 'Ações' clicado.")
-
-#             # Aguarda um pouco para garantir que as opções do dropdown estejam visíveis     
-
-#             sleep(1)  # Ajuste o tempo se necessário
-
-#             # Localiza e clica no link 'Novo ponto de medição'
-#             link_novo_ponto = wait.until(EC.element_to_be_clickable(
-#                 (By.XPATH, "//a[@ui-sref='root.cadastro.pontosMedicao.criacao.principal' and contains(., 'Novo ponto de medição')]")
-#             ))
-#             link_novo_ponto.click()
-#             print("Clicou em 'Novo ponto de medição'.")
-
-#         except TimeoutException:
-#             print("Erro: O link 'Novo ponto de medição' ou o botão de dropdown não foi encontrado ou não está clicável.")
-#         except Exception as e:
-#             print(f"Ocorreu um erro: {e}")
-#         finally:
-#             # Sempre que terminar, volte ao contexto principal (opcional)
-#             self.driver.switch_to.default_content()
-
-#     def inserir_codigo_ponto(self, cod_ponto):
-#         """Insere o código do ponto no campo de texto 'codigoMaePontoMapeado' e seleciona a opção correspondente no menu suspenso."""
-        
-#         wait = WebDriverWait(self.driver, 10)
-        
-#         try:
-#             # Muda para o iframe onde o campo está localizado
-#             iframe = wait.until(EC.presence_of_element_located(
-#                 (By.XPATH, "//iframe[contains(@src, 'https://scde.ccee.org.br/ui/cadastro/pontos-medicao/pesquisa')]")
-#             ))
-#             self.driver.switch_to.frame(iframe)  # Muda o contexto para o iframe
-
-#             # Localiza o campo de texto e insere o código do ponto
-#             input_cod_ponto = wait.until(EC.presence_of_element_located(
-#                 (By.NAME, "codigoMaePontoMapeado")
-#             ))
-#             input_cod_ponto.clear()  # Limpa o campo antes de inserir
-#             input_cod_ponto.send_keys(cod_ponto)  # Insere o código
-#             print(f"Código '{cod_ponto}' inserido no campo 'codigoMaePontoMapeado'.")
-
-#             # Espera até que o menu suspenso esteja visível
-#             menu_suspenso = wait.until(
-#                 EC.visibility_of_element_located((By.CLASS_NAME, "dropdown-menu"))
-#             )
-            
-#             # Clica para abrir o menu suspenso (se necessário)
-#             menu_suspenso.click()
-
-#             # Espera até que as opções estejam disponíveis
-#             opcoes = wait.until(
-#                 EC.visibility_of_all_elements_located((By.XPATH, "//li/a[contains(@ng-click, '$ctrl.selectOption')]"))
-#             )
-            
-#             # Procura pela opção desejada e clica nela
-#             for opcao in opcoes:
-#                 if cod_ponto in opcao.text:
-#                     opcao.click()  # Clica na opção desejada
-#                     print(f'Opção selecionada: {cod_ponto}')
-#                     break
-#             else:
-#                 print(f'Opção "{cod_ponto}" não encontrada no menu.')
-
-#         except TimeoutException:
-#             print("Erro: O campo de texto 'codigoMaePontoMapeado' não foi encontrado ou está inacessível.")
-#         except Exception as e:
-#             print(f'Ocorreu um erro: {e}')
-#         finally:
-#             # Volta ao contexto principal (opcional)
-#             self.driver.switch_to.default_content()
             
 class inserir_inf:
     def __init__(self):
@@ -383,7 +117,8 @@ class inserir_inf:
 
         if is_preenchido(tc_a):
             preenchidos += 1
-        if is_preenchido(tc_b):
+        if is_preenchido(tc_b):     
+
             preenchidos += 1
         if is_preenchido(tc_c):
             preenchidos += 1
@@ -425,11 +160,11 @@ class inserir_inf:
         self.tabzon(2)
         py.write("https://coleta.ccee.copel.com.br/")
         self.tabzon(1)
-        py.write("cliente")
+        py.write("client_id")
         self.tabzon(1)
         py.write("cas")     
         self.tabzon(1)
-        py.write("cliente")
+        py.write("client_secret")
         self.tabzon(1)
         py.write("cas")
 
@@ -448,7 +183,7 @@ class inserir_inf:
         self.ia.localiza("gravar.png", 0.8)
         sleep(0.5)
         py.click()
-        sleep(10)
+        sleep(3)
          
     def trans_corren(self, q_tcs, tc_a,tc_b,tc_c, rel_exis, tp_a):
         quantidade_tcs = q_tcs
@@ -590,7 +325,9 @@ class inserir_inf:
         self.tabzon(1)
         py.write(ult_calib_ajustada)
         self.tabzon(7)
+        py.scroll(-1500)
         self.ia.localiza("fabricante_med.png", 0.6)
+        py.move(0,50)
         if marca == "LANDIS+GYR":
             py.write("l")
             py.hotkey("enter")
@@ -598,8 +335,11 @@ class inserir_inf:
             self.ia.localizar_palavra_rolando(marca, max_tentativas=20, scroll_pixels=1)
 
         self.ia.localiza("modelo_med.png", 0.6)
+        py.move(0,50)
         self.ia.localizar_palavra_rolando(modelo, max_tentativas=20, scroll_pixels=1)
-        self.ia.localiza("versao_firm.png", 0.6)
+        self.ia.localiza("versao_firm.png", 0.75)
+        py.move(0,50)
+        sleep(0.5)
         self.ia.localizar_palavra_rolando(versao, max_tentativas=20, scroll_pixels=1)
         self.tabzon(2)
 
@@ -622,10 +362,18 @@ class inserir_inf:
         py.write(porta)
         py.scroll(-1000)
 
-        self.ia.localiza("atualizar.png", 0.8)
+        self.ia.localiza("atualizar.png", 0.7)
         comentario = 'Cadastro de ponto de medição cliente livre'
         py.write(comentario)
+        sleep(2)
+        py.hotkey("f5")
 
+    def tela_inicio(self):
+        self.ia.verifica_ccee("tela_inicio.png", 0.65)
+        py.scroll(-1300)
+        self.ia.localiza_ccee("ponto_medicao.png", 0.65)
+        return True
+    
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
             sleep(0.3)
@@ -677,16 +425,23 @@ class inf_planilha:
 
     def carregar_dados(self): 
         """Carrega os dados da planilha em um DataFrame do Pandas e padroniza os nomes das colunas"""
-        if os.path.exists(self.caminho_planilha):
-            self.dados = pd.read_excel(self.caminho_planilha)
-            
-            # Padronizar nomes das colunas
-            self._padronizar_nomes_colunas()
+    
+        # Verifica se o arquivo existe
+        if os.path.isfile(self.caminho_planilha):
+            try:
+                self.dados = pd.read_excel(self.caminho_planilha)
+                print(f"{self.caminho_planilha} - caminho da planilha")
+                print(self.dados)
 
-            # Tratar a coluna "UC"
-            if 'UC' in self.dados.columns:
-                self.dados['UC'] = self.dados['UC'].astype(str).str.strip()
-                self.dados['UC'] = self.dados['UC'].str.replace(r'\.0$', '', regex=True)
+                # Padronizar nomes das colunas
+                self._padronizar_nomes_colunas()
+
+                # Tratar a coluna "UC"
+                if 'UC' in self.dados.columns:
+                    self.dados['UC'] = self.dados['UC'].astype(str).str.strip()
+                    self.dados['UC'] = self.dados['UC'].str.replace(r'\.0$', '', regex=True)
+            except Exception as e:
+                raise Exception(f"Erro ao carregar a planilha: {e}")
         else:
             raise FileNotFoundError(f"Planilha não encontrada: {self.caminho_planilha}")
 
@@ -705,7 +460,7 @@ class inf_planilha:
 
         # Aplica a função de normalização a cada coluna
         self.dados.columns = [remover_acentos(col).strip() for col in self.dados.columns]
-
+    
     def buscar_info_uc(self, uc):
         """Busca as informações de uma UC específica na planilha e armazena em variáveis específicas"""
         if self.dados is not None:
@@ -725,7 +480,7 @@ class inf_planilha:
                 linha = info_uc.iloc[0]
             
                 print("Valores brutos das colunas:")
-                print(f"Marca: {linha['Marca']}, Modelo: {linha['Modelo']}, Versão: {linha['Firmware']}")
+                print(f"Marca: {linha['Marca']}, Modelo: {linha['Modelo']}, Versão: {linha['Versao']}")
 
 
                 def tratar_valor(valor):
@@ -752,7 +507,7 @@ class inf_planilha:
                 tp_a = tratar_valor(linha['TP_A'])
                 marca = tratar_valor(linha['Marca'])
                 modelo = tratar_valor(linha['Modelo'])
-                firmware = tratar_valor(linha['Firmware'])      
+                firmware = tratar_valor(linha['Versao'])      
 
 
                 # Retorna todas as variáveis
@@ -770,14 +525,17 @@ def main(lista_ucs):
         base_path = sys._MEIPASS
     else:
         base_path = os.path.abspath(".")
-
-    planilha = inf_planilha("assets\\excel\\plan_teste.xlsx")
+    planilha_dados = os.path.join(os.path.expanduser("~"), "Documents", "CCEE_Planilha","consulta_pm.xlsx")
+    
+    print(planilha_dados)
+    planilha = inf_planilha(planilha_dados)
     # ccee = page_ccee("https://operacao.ccee.org.br/")
     start = inserir_inf()
     # ccee.entrar_ccee(continuar_evento, usuario, senha)
     print(start.PAUSE_FILE)
     logging.basicConfig(filename=start.caminho_log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
     logging.info(f"Iniciando lista de ucs: {lista_ucs}")
+    start.tela_inicio()
     for uc in lista_ucs:
         info = planilha.buscar_info_uc(uc) 
         if info:
@@ -788,36 +546,42 @@ def main(lista_ucs):
                 try:
                     print(f'Começando UC: {uc}')
                     # Substituir por suas operações antes da verificação da imagem
-                    # start.ia.localiza("limpar.png", 0.6)
-                    # start.ia.localiza("acoes.png", 0.7)
-                    # start.ia.localiza("novo_ponto.png", 0.7)
-                    # sleep(2)
-                    # start.ia.localiza("ponto_mapeado.png", 0.8)
-                    # py.write(cod_ponto)
+                    start.ia.localiza("acoes.png", 0.7)
+                    start.ia.localiza("novo_ponto.png", 0.7)
+                    sleep(2)
+                    if start.ia.localiza("ponto_mapeado.png", 0.8):
+                        py.write(cod_ponto)
+                        py.moveRel(0,45)
+                        py.click()
 
-                    # Verificação para encontrar a imagem da tela
-                    if not start.ia.verifica("inicio_cadastro.png", 0.7):
-                        print(f"Tela 'inicio_cadastro.png' não encontrada. Recomeçando UC: {uc}")
+                        # # Verificação para encontrar a imagem da tela
+                        if not start.ia.verifica("inicio_cadastro.png", 0.7):
+                            print(f"Tela 'inicio_cadastro.png' não encontrada. Recomeçando UC: {uc}")
+                            start.pausar_execucao()
+                            continue  # Reinicia o loop para a mesma UC
+                        
+                        print(f"Informações para UC {uc}:")
+                        print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
+                        print(f"Data vigência: {ini_vig}, {municipio}")
+                        
+                        # #######################################################
+                        start.start_cadastro()
+                        start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
+                        tcs = start.ver_tcs(tc_a, tc_b, tc_c)
+                        start.localizacao(municipio)
+                        # # #######################################################
+
+                        valor_tp = start.trans_corren(tcs, tc_a, tc_b, tc_c, rel_exis, tp_a)
+                        # #######################################################
+
+
+                        start.dados_medidor(rg, ult_calib, valor_tp, marca, modelo, firmware)
+                        start.modelo_med(porta)
+                        #######################################################
+                        # Se tudo deu certo, sai do loop para a próxima UC
+                        break
+                    else:
                         start.pausar_execucao()
-                        continue  # Reinicia o loop para a mesma UC
-                    
-                    print(f"Informações para UC {uc}:")
-                    print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
-                    print(f"Data vigência: {ini_vig}, {municipio}")
-                    
-                    #######################################################
-                    start.start_cadastro()
-                    start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
-                    tcs = start.ver_tcs(tc_a, tc_b, tc_c)
-                    start.localizacao(municipio)
-                    #######################################################
-                    valor_tp = start.trans_corren(tcs, tc_a, tc_b, tc_c, rel_exis, tp_a)
-                    #######################################################
-                    start.dados_medidor(rg, ult_calib, valor_tp, marca, modelo, firmware)
-                    start.modelo_med(porta)
-                    #######################################################
-                    # Se tudo deu certo, sai do loop para a próxima UC
-                    break
 
                 except Exception as e:
                     logging.error(f"Erro ao processar UC: {uc}. Detalhes: {e}")
@@ -825,5 +589,6 @@ def main(lista_ucs):
                     break  # Sai do loop em caso de erro crítico
 
 if __name__ == "__main__":
-    main(lista_ucs=[""])
+    main(lista_ucs=["103121838"])       
+
     

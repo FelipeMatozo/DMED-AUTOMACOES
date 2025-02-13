@@ -1,0 +1,113 @@
+10-02-2025 13:33:41 - Buscando relatório para UC: 123456789
+10-02-2025 14:33:42 - Buscando relatório para pm: 123456789
+10-02-2025 14:33:42 - Erro ao processar PM 123456789: 'int' object is not iterable
+10-02-2025 14:34:54 - Buscando relatório para pm: 123456789
+10-02-2025 14:38:57 - Buscando relatório para pm: PRRRPRENTR101
+10-02-2025 14:41:33 - Buscando relatório para pm: PRRRPRENTR101
+10-02-2025 14:43:11 - Buscando relatório para pm: PRAABEENTR101
+10-02-2025 14:43:53 - Buscando relatório para pm: PRAABEENTR101
+10-02-2025 15:09:56 - Erro ao processar PM PRAABEENTR101: ProcessadorPM.tela_inicio() missing 1 required positional argument: 'pm'
+10-02-2025 15:11:30 - Erro ao processar PM PRAABEENTR101: ProcessadorPM.tela_inicio() missing 1 required positional argument: 'pm'
+10-02-2025 15:12:20 - Erro ao processar PM PRAABEENTR101: ProcessadorPM.tela_inicio() missing 1 required positional argument: 'pm'
+10-02-2025 15:13:31 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:13:32 - Erro ao processar PM PRAABEENTR101: 'DataFrame' object has no attribute 'append'
+10-02-2025 15:14:00 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:14:00 - Erro ao processar PM PRAABEENTR101: 'DataFrame' object has no attribute 'append'
+10-02-2025 15:15:27 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:15:28 - Erro ao processar PM PRAABEENTR101: 'DataFrame' object has no attribute 'append'
+10-02-2025 15:16:57 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:16:57 - Erro ao processar PM PRAABEENTR101: 'DataFrame' object has no attribute 'append'
+10-02-2025 15:17:18 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:17:18 - Erro ao processar PM PRAABEENTR101: 'DataFrame' object has no attribute 'append'
+10-02-2025 15:18:04 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:18:24 - Erro ao processar PM PRAABEENTR101: 'DataFrame' object has no attribute 'append'
+10-02-2025 15:20:28 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:21:26 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:22:18 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:22:44 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:45:12 - Buscando dados para PM: PRAABEENTR101
+10-02-2025 15:59:33 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:01:02 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:02:35 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:02:37 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:02:37 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:04:43 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:04:45 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:04:45 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:06:16 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:06:18 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:06:18 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:06:49 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:06:51 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:06:51 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:07:07 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:07:09 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:07:09 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:08:57 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:08:59 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:08:59 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:09:36 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:09:39 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:09:39 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:11:22 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:11:24 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:11:24 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:14:19 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:14:23 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:14:23 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:17:01 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:17:05 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:17:05 - Erro ao processar PM PRTCPRENTR101: GerenciadorPlanilha.adicionar_dado() missing 3 required positional arguments: 'status', 'nome', and 'inicio_vigencia'
+10-02-2025 16:18:33 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:18:36 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:19:52 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:19:55 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:24:08 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:24:12 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:25:01 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:25:06 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:31:57 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:31:59 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:32:23 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:32:50 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:34:31 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:34:41 - Erro ao processar inf_pm: formato inesperado
+10-02-2025 16:37:37 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:48:15 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:49:30 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:51:21 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:52:17 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:53:31 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:56:16 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 16:57:06 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:01:30 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:08:36 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:08:40 - Erro ao processar PM PRTCPRENTR101: not enough values to unpack (expected 4, got 3)
+10-02-2025 17:10:08 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:10:12 - Erro ao processar PM PRTCPRENTR101: not enough values to unpack (expected 4, got 3)
+10-02-2025 17:12:39 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:13:29 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:18:46 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:25:45 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:29:52 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:32:18 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:37:56 - Buscando dados para PM: PRTCPRENTR101
+10-02-2025 17:39:11 - Buscando dados para PM: PRTCPRENTR101
+11-02-2025 11:44:21 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 11:46:25 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 11:51:20 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 11:52:16 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 11:52:42 - Buscando dados para PM: PRBRALHENT101
+11-02-2025 11:53:08 - Buscando dados para PM: PRTCPRENTR101
+11-02-2025 11:56:02 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 11:56:28 - Buscando dados para PM: PRBRALHENT101
+11-02-2025 11:56:54 - Buscando dados para PM: PRTCPRENTR101
+11-02-2025 12:00:34 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 12:01:01 - Buscando dados para PM: PRBRALHENT101
+11-02-2025 12:01:28 - Buscando dados para PM: PRTCPRENTR101
+11-02-2025 13:47:27 - 127.0.0.1 - - [11/Feb/2025 13:47:27] "POST /relatorio_ccee HTTP/1.1" 200 -
+11-02-2025 13:47:27 - 127.0.0.1 - - [11/Feb/2025 13:47:27] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+11-02-2025 13:47:27 - 127.0.0.1 - - [11/Feb/2025 13:47:27] "[36mGET /assets/images_ccee/imagem_relatorio.png HTTP/1.1[0m" 304 -
+11-02-2025 13:47:40 - Buscando dados para PM: PRTPIVENTR101
+11-02-2025 13:47:46 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\app.py', reloading
+11-02-2025 13:47:47 - Erro ao processar inf_pm: formato inesperado

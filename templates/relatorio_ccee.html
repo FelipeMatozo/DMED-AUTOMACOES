@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatorio CCEE </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+  <header class="container-fluid py-3 d-flex justify-content-center align-items-center position-relative">
+    <a href="/" class="back-arrow">
+      <i class="bi bi-arrow-left-circle" style="font-size: 2rem; color: white;"></i>
+    </a>
+    <span class="emoji">⚡️</span> <h1 class="text-white ms-3">Relatorio CCEE<span class="emoji"></span></h1>
+  </header>
+
+  <div class="container mt-3">
+    {% if mensagem_sucesso %}
+      <div class="alert alert-success" role="alert">
+        {{ mensagem_sucesso }}
+      </div>
+    {% endif %}
+
+    <script>
+        function formatNumbers() {
+          const inputString = document.getElementById('pm').textContent;
+          const numbers = inputString.split(' ');
+      
+          const pmsList = document.getElementById('pm');
+          ucsList.innerHTML = ''; // Clear existing content
+      
+          // Create and append list items to the container
+          numbers.forEach(number => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('pm-item'); // Add a class for styling
+            listItem.textContent = number;
+      
+            pmsList.appendChild(listItem);
+          });
+        }
+      
+        // Call the function on page load to initialize the formatting
+        formatNumbers();
+      </script>
+      
+
+
+      <style>
+        .ucs-list {
+          height: 200px; /* Set a fixed height for the container */
+          overflow-y: auto; /* Enable vertical scrolling */
+          border: 1px solid #ccc; /* Add a border */
+          padding: 5px; /* Add some padding */
+        }
+        header {
+          background-color: #162A3D;
+          margin-bottom: 1%;
+        }
+        .ucs-item {
+          list-style: none; /* Remove default list bullets */
+          padding: 5px; /* Add padding to each list item */
+          border-bottom: 1px solid #ccc; /* Add a bottom border */
+          text-align: center; /* Center the text */
+        }
+        .send {
+            background-color: #6b7a91;
+            color: white;
+            font-weight: bold;
+            border-color: #343a40;
+        }
+        body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url("{{ url_for('static', filename='images_ccee/imagem_relatorio.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .container {
+        max-width: 1200px; /* Reduz o tamanho do container */
+        width: auto; /* Permite ajuste ao conteúdo */
+        background-color: rgba(231, 215, 189, 1); /* Mantém a transparência */
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        margin: 20px auto; /* Mantém centralizado, mas sem ocupar toda a tela */
+        border-radius: 10px; /* Bordas arredondadas para melhor aparência */
+    } 
+    
+
+      </style>
+
+<div class="container">
+  <div class="row">
+      <div class="col">
+        <form method="post" action="/relatorio_ccee">
+          <div class="mb-3">
+              <label for="relatorio_ccee" class="form-label">Lista de códigos (insira a lista contendo os pontos de medição sem ";" ou "," uma abaixo da outra.)</label>
+              <textarea class="form-control" id="pm" name="pm" required></textarea>
+          </div>
+          <div class="mb-3">
+              <button type="submit" class="btn send">Enviar</button>
+          </div>
+          <div class="mb-3">
+
+          </div>
+          
+        </form>
+        
+      </div>
+      <div class="col">
+        <div class="row justify-content-center">
+            <div class="col-md-11">
+                <h1 class="text-center">Instruções de utilização</h1>
+                <ol class="list-unstyled">
+                    <li class="mb-3">
+                        <div class="d-flex align-items-start">
+                            <div>
+                                <p class="font-weight-bold mb-1" style="color: black; font-weight: bold;">Passo 1: Dados</p>
+                                <p>Primeiro, você precisa reunir todas codigos de pontos, a recomendação é copiar a lista 
+                                  diretamento do Excel, uma abaixo da outra e colar no campo ao lado.
+                                  
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+            
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1 "style="color: black; font-weight: bold;">Passo 3: Executar</p>
+                        <p>Após preenchido clicar em "Enviar" para iniciar o macro planejado.</p>
+                        <p style="color: red; font-size: 0.7rem;">PS: Recomendado deixar A interface na tela SECUNDARIA. junto com CMD para acompanhar os passos do macro.</p>
+
+                      </li>
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1 "style="color: black; font-weight: bold;">Passo 4: Monitorar</p>
+                        <p>Monitore o progresso e faça ajustes conforme necessário para manter tudo nos trilhos.</p>
+                    </li>
+                    <li class="mb-3">
+                        <p class="font-weight-bold mb-1" style="color: black; font-weight: bold;">Passo 5: Concluir</p>
+                        <p>Finalize o processo e faça uma revisão para garantir que todos os objetivos foram alcançados.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <footer class="container-fluid bg-dark text-white text-center py-3">
+    <div class="col" style="color: whitesmoke;">
+      Departamento de Medição.
+      <div class="row" style="color: #f06428; justify-content: center;">
+        COPEL DISTRIBUIÇÂO
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

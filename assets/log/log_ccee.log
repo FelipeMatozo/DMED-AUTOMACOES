@@ -1,0 +1,54 @@
+11-02-2025 14:48:45 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:49:33 - 127.0.0.1 - - [11/Feb/2025 14:49:33] "POST /cadastro_ccee HTTP/1.1" 200 -
+11-02-2025 14:49:33 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:49:33 - 127.0.0.1 - - [11/Feb/2025 14:49:33] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+11-02-2025 14:49:33 - 127.0.0.1 - - [11/Feb/2025 14:49:33] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+11-02-2025 14:50:05 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:52:17 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+11-02-2025 14:56:42 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:57:20 - 127.0.0.1 - - [11/Feb/2025 14:57:20] "POST /cadastro_ccee HTTP/1.1" 200 -
+11-02-2025 14:57:20 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:57:20 - 127.0.0.1 - - [11/Feb/2025 14:57:20] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+11-02-2025 14:57:20 - 127.0.0.1 - - [11/Feb/2025 14:57:20] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+11-02-2025 14:57:48 - 127.0.0.1 - - [11/Feb/2025 14:57:48] "POST /cadastro_ccee HTTP/1.1" 200 -
+11-02-2025 14:57:48 - 127.0.0.1 - - [11/Feb/2025 14:57:48] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+11-02-2025 14:57:48 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:57:48 - 127.0.0.1 - - [11/Feb/2025 14:57:48] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+11-02-2025 14:58:10 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+11-02-2025 14:58:18 - Iniciando lista de ucs: ['103121838']
+11-02-2025 14:59:35 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:03:02 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:03:34 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:04:36 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:08:30 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:14:34 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:14:46 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:19:11 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:20:21 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:37:21 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:48:27 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:49:44 - Iniciando lista de ucs: ['103121838']
+11-02-2025 15:54:36 - Iniciando lista de ucs: ['103121838']
+11-02-2025 16:35:25 - Iniciando lista de ucs: ['103121838']
+11-02-2025 16:36:05 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:07:07 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:09:10 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:09:18 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:09:52 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:11:58 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:12:05 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:14:54 - Execução retomada pelo usuário.
+13-02-2025 14:14:54 - 127.0.0.1 - - [13/Feb/2025 14:14:54] "POST /despausar HTTP/1.1" 200 -
+13-02-2025 14:15:30 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+13-02-2025 14:15:40 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:18:13 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:18:30 - Execução retomada pelo usuário.
+13-02-2025 14:18:30 - 127.0.0.1 - - [13/Feb/2025 14:18:30] "POST /despausar HTTP/1.1" 200 -
+13-02-2025 14:18:40 - Execução retomada pelo usuário.
+13-02-2025 14:18:40 - 127.0.0.1 - - [13/Feb/2025 14:18:40] "POST /despausar HTTP/1.1" 200 -
+13-02-2025 14:19:58 - Iniciando lista de ucs: ['103121838']
+13-02-2025 14:20:53 - Execução retomada pelo usuário.
+13-02-2025 14:20:53 - 127.0.0.1 - - [13/Feb/2025 14:20:53] "POST /despausar HTTP/1.1" 200 -
+13-02-2025 14:21:19 - Execução retomada pelo usuário.
+13-02-2025 14:21:19 - 127.0.0.1 - - [13/Feb/2025 14:21:19] "POST /despausar HTTP/1.1" 200 -
+13-02-2025 14:21:26 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
