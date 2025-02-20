@@ -1,54 +1,95 @@
-11-02-2025 14:48:45 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:49:33 - 127.0.0.1 - - [11/Feb/2025 14:49:33] "POST /cadastro_ccee HTTP/1.1" 200 -
-11-02-2025 14:49:33 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:49:33 - 127.0.0.1 - - [11/Feb/2025 14:49:33] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
-11-02-2025 14:49:33 - 127.0.0.1 - - [11/Feb/2025 14:49:33] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
-11-02-2025 14:50:05 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:52:17 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
-11-02-2025 14:56:42 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:57:20 - 127.0.0.1 - - [11/Feb/2025 14:57:20] "POST /cadastro_ccee HTTP/1.1" 200 -
-11-02-2025 14:57:20 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:57:20 - 127.0.0.1 - - [11/Feb/2025 14:57:20] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
-11-02-2025 14:57:20 - 127.0.0.1 - - [11/Feb/2025 14:57:20] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
-11-02-2025 14:57:48 - 127.0.0.1 - - [11/Feb/2025 14:57:48] "POST /cadastro_ccee HTTP/1.1" 200 -
-11-02-2025 14:57:48 - 127.0.0.1 - - [11/Feb/2025 14:57:48] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
-11-02-2025 14:57:48 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:57:48 - 127.0.0.1 - - [11/Feb/2025 14:57:48] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
-11-02-2025 14:58:10 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
-11-02-2025 14:58:18 - Iniciando lista de ucs: ['103121838']
-11-02-2025 14:59:35 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:03:02 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:03:34 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:04:36 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:08:30 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:14:34 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:14:46 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:19:11 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:20:21 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:37:21 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:48:27 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:49:44 - Iniciando lista de ucs: ['103121838']
-11-02-2025 15:54:36 - Iniciando lista de ucs: ['103121838']
-11-02-2025 16:35:25 - Iniciando lista de ucs: ['103121838']
-11-02-2025 16:36:05 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:07:07 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:09:10 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:09:18 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:09:52 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:11:58 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:12:05 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:14:54 - Execução retomada pelo usuário.
-13-02-2025 14:14:54 - 127.0.0.1 - - [13/Feb/2025 14:14:54] "POST /despausar HTTP/1.1" 200 -
-13-02-2025 14:15:30 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
-13-02-2025 14:15:40 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:18:13 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:18:30 - Execução retomada pelo usuário.
-13-02-2025 14:18:30 - 127.0.0.1 - - [13/Feb/2025 14:18:30] "POST /despausar HTTP/1.1" 200 -
-13-02-2025 14:18:40 - Execução retomada pelo usuário.
-13-02-2025 14:18:40 - 127.0.0.1 - - [13/Feb/2025 14:18:40] "POST /despausar HTTP/1.1" 200 -
-13-02-2025 14:19:58 - Iniciando lista de ucs: ['103121838']
-13-02-2025 14:20:53 - Execução retomada pelo usuário.
-13-02-2025 14:20:53 - 127.0.0.1 - - [13/Feb/2025 14:20:53] "POST /despausar HTTP/1.1" 200 -
-13-02-2025 14:21:19 - Execução retomada pelo usuário.
-13-02-2025 14:21:19 - 127.0.0.1 - - [13/Feb/2025 14:21:19] "POST /despausar HTTP/1.1" 200 -
-13-02-2025 14:21:26 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+17-02-2025 13:52:11 - Iniciando lista de ucs: ['112271898']
+17-02-2025 13:54:29 - Iniciando lista de ucs: ['112271898']
+17-02-2025 14:02:17 - Iniciando lista de ucs: ['112271898']
+17-02-2025 14:05:25 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\Teste.py', reloading
+20-02-2025 11:39:46 - Iniciando lista de ucs: ['112271898']
+20-02-2025 11:46:06 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:04:37 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:12:57 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:12:57 - 127.0.0.1 - - [20/Feb/2025 12:12:57] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "GET / HTTP/1.1" 200 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/interface.css HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/images/copel.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/images/moca_ml.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/images/T10.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/images/T11.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:09 - 127.0.0.1 - - [20/Feb/2025 12:13:09] "[36mGET /assets/images/T12.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:10 - 127.0.0.1 - - [20/Feb/2025 12:13:10] "GET /cadastro_ccee HTTP/1.1" 200 -
+20-02-2025 12:13:11 - 127.0.0.1 - - [20/Feb/2025 12:13:11] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+20-02-2025 12:13:11 - 127.0.0.1 - - [20/Feb/2025 12:13:11] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 12:13:58 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:13:58 - 127.0.0.1 - - [20/Feb/2025 12:13:58] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 12:14:44 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:16:42 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:17:33 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:19:31 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:19:49 - Execução retomada pelo usuário.
+20-02-2025 12:19:49 - 127.0.0.1 - - [20/Feb/2025 12:19:49] "POST /despausar HTTP/1.1" 200 -
+20-02-2025 12:21:21 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:22:00 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:22:45 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:23:56 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:24:35 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:26:37 - Iniciando lista de ucs: ['32223994', '43706576']
+20-02-2025 12:29:41 - Iniciando lista de ucs: ['43706576']
+20-02-2025 12:30:46 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:38:59 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:40:07 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:40:33 - Execução retomada pelo usuário.
+20-02-2025 12:40:33 - 127.0.0.1 - - [20/Feb/2025 12:40:33] "POST /despausar HTTP/1.1" 200 -
+20-02-2025 12:43:58 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+20-02-2025 12:46:13 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:57:19 - Iniciando lista de ucs: ['112271898']
+20-02-2025 12:57:19 - 127.0.0.1 - - [20/Feb/2025 12:57:19] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 12:59:38 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:00:52 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:07:26 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:09:12 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:12:06 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:15:16 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:15:58 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:29:25 - Iniciando lista de ucs: ['103121838']
+20-02-2025 13:29:38 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:29:38 - 127.0.0.1 - - [20/Feb/2025 13:29:38] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+20-02-2025 13:29:38 - 127.0.0.1 - - [20/Feb/2025 13:29:38] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 13:31:26 - Iniciando lista de ucs: ['112271898']
+20-02-2025 13:31:50 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+20-02-2025 14:35:44 - Iniciando lista de ucs: ['96916389']
+20-02-2025 14:37:05 - Iniciando lista de ucs: ['96916389']
+20-02-2025 14:40:07 - Iniciando lista de ucs: ['96916389']
+20-02-2025 14:42:36 - Iniciando lista de ucs: ['96916389']
+20-02-2025 14:42:36 - 127.0.0.1 - - [20/Feb/2025 14:42:36] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 14:44:05 - Iniciando lista de ucs: ['96916389']
+20-02-2025 14:44:05 - 127.0.0.1 - - [20/Feb/2025 14:44:05] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 14:50:27 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:23:31 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:25:11 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:25:11 - 127.0.0.1 - - [20/Feb/2025 15:25:11] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 15:28:21 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:31:29 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:32:35 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:33:04 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:33:28 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:33:57 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:35:35 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:39:09 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+20-02-2025 15:40:29 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:42:50 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:47:25 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:48:51 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:51:37 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:53:02 - Iniciando lista de ucs: ['96916389']
+20-02-2025 15:53:02 - 127.0.0.1 - - [20/Feb/2025 15:53:02] "[36mGET /assets/styles.css HTTP/1.1[0m" 304 -
+20-02-2025 15:53:02 - 127.0.0.1 - - [20/Feb/2025 15:53:02] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 16:03:36 - Iniciando lista de ucs: ['96916389']
+20-02-2025 16:05:53 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+20-02-2025 16:06:07 - Iniciando lista de ucs: ['96916389']
+20-02-2025 16:06:07 - 127.0.0.1 - - [20/Feb/2025 16:06:07] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 16:08:04 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+20-02-2025 16:08:55 - Iniciando lista de ucs: ['96916389']
+20-02-2025 16:08:55 - 127.0.0.1 - - [20/Feb/2025 16:08:55] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 16:09:50 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading
+20-02-2025 16:10:31 - Iniciando lista de ucs: ['96916389']
+20-02-2025 16:10:31 - 127.0.0.1 - - [20/Feb/2025 16:10:31] "[36mGET /assets/images/fundo_cadastro.png HTTP/1.1[0m" 304 -
+20-02-2025 16:14:40 -  * Detected change in 'c:\\Users\\L805958\\dmed\\SISTEMA_RPA_DMED\\IA\\CCEE\\cadastro.py', reloading

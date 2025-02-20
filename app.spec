@@ -11,6 +11,7 @@ a = Analysis(
         ('banco/', 'banco/'),
         ('templates/', 'templates/'),
         ('IA/', 'IA/'),
+        ('Tesseract-OCR/', 'Tesseract-OCR/'),
         ('copel_icon.ico', '.')  # Coloca o ícone diretamente na pasta raiz do executável
     ],
     hiddenimports=[],

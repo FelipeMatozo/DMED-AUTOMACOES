@@ -1,8 +1,5 @@
-from datetime import datetime
-import pyautogui as py
+from ReconhecimentoDeImagem import Reconhecimento
 
-agora = datetime.now()
-print(f"Data e hora: {agora}")
-# Formatar a data e hora no formato desejado
-formato = agora.strftime("%d%m%Y%H%M")
-print(formato)
+rec = Reconhecimento(numeroDeTentativasMax=5, delay=0.7)
+rec.localizar_palavra_rolando("0172", max_tentativas=20, scroll_pixels=-175)
+# rec.localiza("0172", 0.7)

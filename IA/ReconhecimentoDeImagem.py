@@ -1,35 +1,134 @@
 import pyautogui as py
-import os, sys
+import os
 import time
 from time import sleep
 import pytesseract
-from pytesseract import pytesseract,Output
-import pyautogui
-from PIL import Image
+from pytesseract import Output
+from PIL import Image, ImageOps
+from unidecode import unidecode
+from pathlib import Path
+import subprocess
+from PIL import ImageEnhance
+from PIL import Image, ImageEnhance, ImageOps, ImageFilter
+import unicodedata
+# Define o caminho dinâmico para o Tesseract
+base_path = Path(__file__).resolve().parent.parent
+pytesseract.pytesseract.tesseract_cmd = str(base_path / "Tesseract-OCR" / "tesseract.exe")
+os.environ['TESSDATA_PREFIX'] = str(base_path / "Tesseract-OCR" / "tessdata")
 
-from unidecode import unidecode  # Importando a biblioteca unidecode
-
-# Defina o caminho para a pasta onde o Tesseract foi instalado
-os.environ['TESSDATA_PREFIX'] = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR"
-
-# Defina o caminho para o executável do Tesseract
-pytesseract.tesseract_cmd = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR\tesseract.exe"
-
-
+# Verifica se o Tesseract existe e pode ser executado
+if not Path(pytesseract.pytesseract.tesseract_cmd).exists():
+    raise FileNotFoundError(f"Tesseract não encontrado no caminho: {pytesseract.pytesseract_cmd}")
+try:
+    resultado = subprocess.run([pytesseract.pytesseract.tesseract_cmd, "--version"], capture_output=True, text=True, check=True)
+    print(f"✅ Tesseract encontrado: {resultado.stdout}")
+except Exception as e:
+    raise RuntimeError(f"Erro ao executar o Tesseract: {e}")
 
 class Reconhecimento:
-    
     def __init__(self, numeroDeTentativasMax, delay):
-        """
-        A ideia dessa def do codigo é onde as variaveis das outras 
-        defs sao definidas, sao variaveis de uso da classe.
-        """
         self.numeroDeTentativasMax = numeroDeTentativasMax
         self.delay = float(delay)
         self.tentativasRealizadas = 0
         self.online = True
         self.diretorioLocal = os.path.dirname(__file__)
         self.raizDoProjeto = os.path.join(self.diretorioLocal, '..')
+
+    # def localizar_palavra_rolando(self, palavra, max_tentativas=10, scroll_pixels=-300, lang="por"):
+    #     palavra_sem_acento = unidecode(palavra.lower())
+    #     tentativa = 0
+    #     while tentativa < max_tentativas:
+    #         screenshot_path = 'tela.png'
+    #         py.screenshot(screenshot_path)
+    #         imagem = Image.open(screenshot_path)
+
+    #         # Aplica zoom, filtro de nitidez e ajuste de contraste
+    #         imagem_zoom = imagem.resize((imagem.width * 2, imagem.height * 2), Image.LANCZOS)
+    #         imagem_zoom = imagem_zoom.filter(ImageFilter.SHARPEN)
+    #         imagem_zoom = ImageEnhance.Contrast(imagem_zoom).enhance(3.0)
+    #         imagem_zoom = ImageOps.invert(imagem_zoom.convert('L'))
+
+    #         config = f"--tessdata-dir {os.environ['TESSDATA_PREFIX']} --psm 6 --oem 3 -c preserve_interword_spaces=1"
+    #         texto_detectado = pytesseract.image_to_string(imagem_zoom, lang=lang, config=config)
+
+    #         if palavra_sem_acento in unidecode(texto_detectado.lower()):
+    #             print(f'Texto completo "{palavra}" detectado.')
+    #             try:
+    #                 x, y = py.locateCenterOnScreen(screenshot_path, confidence=0.8)
+    #                 print(x, y)
+    #                 py.click(x, y)
+    #                 print(f'Texto completo "{palavra}" encontrado e clicado exatamente!')
+    #                 return True
+    #             except:
+    #                 print("Não foi possível localizar a palavra visualmente na tela, mas o OCR detectou.")
+
+    #         py.scroll(scroll_pixels)
+    #         tentativa += 1
+    #         time.sleep(1)
+    #         print(f"Tentativa {tentativa}: Buscando '{palavra}'")
+
+    #     print(f'Texto completo "{palavra}" não encontrado após {max_tentativas} tentativas.')
+
+    
+    def normalizar_texto(self, texto):
+        """Normaliza o texto para evitar problemas de acentuação, espaços e caracteres especiais."""
+        return unicodedata.normalize("NFKC", texto).lower().strip()
+
+    def localizar_palavra_rolando(self, palavra, max_tentativas=10, scroll_pixels=-300, lang="por"):
+        """Procura uma palavra ou frase na tela rolando até encontrá-la e clica no centro do conjunto."""
+        
+        palavra_normalizada = self.normalizar_texto(palavra)
+        palavras = palavra_normalizada.split()  # Divide a frase em palavras separadas
+
+        tentativa = 0
+        while tentativa < max_tentativas:
+            # Captura a tela atual
+            screenshot_path = 'tela.png'
+            py.screenshot(screenshot_path)
+            imagem = Image.open(screenshot_path)
+            imagem = imagem.resize((imagem.width * 2, imagem.height * 2), Image.LANCZOS)
+            imagem = imagem.filter(ImageFilter.SHARPEN)
+            imagem = ImageEnhance.Contrast(imagem).enhance(5.0)
+            # imagem = ImageOps.invert(imagem.convert('L'))
+
+            # Realiza OCR na imagem
+            resultados = pytesseract.image_to_data(
+                imagem,
+                lang=lang,
+                config=f"--tessdata-dir {os.environ['TESSDATA_PREFIX']} --psm 6 --oem 3 -c preserve_interword_spaces=1",
+                output_type=Output.DICT
+            )
+
+            num_palavras = len(palavras)
+            for i in range(len(resultados['text']) - num_palavras + 1):
+                # Normaliza as palavras detectadas pelo OCR para comparação
+                palavras_ocr = [self.normalizar_texto(resultados['text'][i + j]) for j in range(num_palavras)]
+
+                # Verifica se todas as palavras consecutivas aparecem na mesma linha
+                if palavras_ocr == palavras and all(resultados['top'][i + j] == resultados['top'][i] for j in range(num_palavras)):  
+                    # Calcula a média das posições das palavras encontradas
+                    x1 = resultados['left'][i]
+                    x2 = resultados['left'][i + num_palavras - 1] + resultados['width'][i + num_palavras - 1]
+                    y1 = resultados['top'][i]
+                    y2 = resultados['top'][i] + resultados['height'][i]
+
+                    centro_x = ((x1 + x2) // 2) // 2  # Ajuste da escala
+                    centro_y = ((y1 + y2) // 2) // 2  # Ajuste da escala
+
+                    # Move e clica na posição corrigida
+                    py.click(centro_x, centro_y)
+
+                    print(f'Frase "{palavra}" encontrada e clicada!')
+                    return True
+
+            # Se não encontrou, rola a tela e tenta novamente
+            py.scroll(scroll_pixels)
+            tentativa += 1
+            time.sleep(1)
+
+        print(f'Frase "{palavra}" não encontrada após {max_tentativas} tentativas.')
+        return False
+
 
     def localiza(self, image_path, precisao):
         """
@@ -305,46 +404,6 @@ class Reconhecimento:
                     self.online = False
                     break
     
-    def localizar_palavra_rolando(self, palavra, max_tentativas=10, scroll_pixels=-300, lang="por"):
-        """Procura uma palavra na tela rolando até encontrá-la e clica nela."""
-        # Remove os acentos da palavra passada como argumento
-        palavra_sem_acento = unidecode(palavra.lower())
-        
-        tentativa = 0
-        while tentativa < max_tentativas:
-            # Captura a tela atual
-            screenshot_path = 'tela.png'
-            pyautogui.screenshot(screenshot_path)
-            imagem = Image.open(screenshot_path)
-
-            # Realiza OCR na imagem com o caminho explícito do tessdata
-            resultados = pytesseract.image_to_data(
-                imagem,
-                lang=lang,
-                config="--tessdata-dir C:/Users/L805958/dmed/SISTEMA_RPA_DMED/Tesseract-OCR/tessdata --psm 6 --oem 1",
-                output_type=Output.DICT
-            )
-
-            # Procura pela palavra
-            for i, texto in enumerate(resultados['text']):
-                # Comparar o texto detectado sem modificar, mas a palavra passada será sem acento
-                if unidecode(texto.lower()) == palavra_sem_acento:  # Ignora acentos da palavra passada
-                    x, y, w, h = (resultados['left'][i], resultados['top'][i],
-                                resultados['width'][i], resultados['height'][i])
-                    centro_x = x + w // 2
-                    centro_y = y + h // 2
-
-                    # Move e clica na posição encontrada
-                    pyautogui.click(centro_x, centro_y)
-                    print(f'Palavra "{palavra}" encontrada e clicada!')
-                    return True
-
-            # Se não encontrou, rola a tela e tenta novamente
-            pyautogui.scroll(scroll_pixels)  # Scroll para cima (-) ou para baixo (+)
-            tentativa += 1
-            time.sleep(1)  # Pequena pausa para a rolagem ser processada
-            print(f"Palavra {palavra}")
-
-        print(f'Palavra "{palavra}" não encontrada após {max_tentativas} tentativas.')
+    
 
                 

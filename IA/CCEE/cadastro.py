@@ -67,7 +67,7 @@ class inserir_inf:
         return texto_encurtado
    
     def inserir_apelido(self):
-        self.ia.verifica('nome_completo.png', 0.7)
+        self.ia.verifica('nome_completo.png', 0.82)
         py.moveRel(0,+32)
         py.tripleClick()
         nome_completo = py.hotkey('ctrl','c')
@@ -78,6 +78,7 @@ class inserir_inf:
         self.ia.localiza('nome_apelido.png', 0.7)
         sleep(0.2)
         py.write(apelido)
+
         sleep(1)
 
     def inserir_dados_pnt_med(self, ini_vig, cap_ger, cap_con):
@@ -151,7 +152,7 @@ class inserir_inf:
         print(municipio)
         
         self.ia.localiza("cidade.png", 0.7)
-        py.moveRel(0,-70)
+        py.moveRel(0,-85)
         primeira_letra = municipio[0]
         py.write(primeira_letra)
         self.ia.localizar_palavra_rolando(municipio, max_tentativas=20, scroll_pixels=-175)
@@ -180,10 +181,10 @@ class inserir_inf:
         sleep(0.5)
         py.scroll(-1000)
         sleep(1)
-        self.ia.localiza("gravar.png", 0.8)
-        sleep(0.5)
-        py.click()
-        sleep(3)
+        # self.ia.localiza("gravar.png", 0.8)
+        # sleep(0.5)
+        # py.click()
+        # sleep(3)
          
     def trans_corren(self, q_tcs, tc_a,tc_b,tc_c, rel_exis, tp_a):
         quantidade_tcs = q_tcs
@@ -243,7 +244,7 @@ class inserir_inf:
         tc_c = int(tc_c)
         tc_c = str(tc_c)
 
-        self.ia.localiza("novo_tc.png", 0.7)
+        self.ia.localiza("novo_tc.png", 0.75)
         self.ia.localiza("numero_serie.png", 0.7)       
 
         py.doubleClick()        
@@ -274,9 +275,9 @@ class inserir_inf:
         py.hotkey("enter")
         n_tcs_rodados= 1
         while n_tcs_rodados<quantidade_tcs:
-            self.ia.localiza("novo_tc.png", 0.7)
-            self.ia.localiza("numero_serie.png", 0.7)
-            py.doubleClick()        
+            self.ia.localiza("novo_tc.png", 0.75)
+            py.moveRel(+480,0)
+            py.tripleClick()      
 
             py.hotkey("del")
             if n_tcs_rodados ==1:
@@ -318,9 +319,6 @@ class inserir_inf:
             print("Erro: A data fornecida está em um formato inválido.")
             return
 
-
-        
-            
         py.hotkey("enter")
         self.tabzon(1)
         py.write(ult_calib_ajustada)
@@ -334,7 +332,7 @@ class inserir_inf:
         else:
             self.ia.localizar_palavra_rolando(marca, max_tentativas=20, scroll_pixels=1)
 
-        self.ia.localiza("modelo_med.png", 0.6)
+        self.ia.localiza("modelo_med.png", 0.75)
         py.move(0,50)
         self.ia.localizar_palavra_rolando(modelo, max_tentativas=20, scroll_pixels=1)
         self.ia.localiza("versao_firm.png", 0.75)
@@ -359,19 +357,20 @@ class inserir_inf:
         self.tabzon(1)
         py.write(ip)
         self.tabzon(1)
+        print(porta)
         py.write(porta)
         py.scroll(-1000)
 
-        self.ia.localiza("atualizar.png", 0.7)
-        comentario = 'Cadastro de ponto de medição cliente livre'
-        py.write(comentario)
+        # self.ia.localiza("atualizar.png", 0.7)
+        # comentario = 'Cadastro de ponto de medição cliente livre'
+        # py.write(comentario)
         sleep(2)
-        py.hotkey("f5")
+        # py.hotkey("f5")
 
     def tela_inicio(self):
-        self.ia.verifica_ccee("tela_inicio.png", 0.65)
-        py.scroll(-1300)
-        self.ia.localiza_ccee("ponto_medicao.png", 0.65)
+        # self.ia.verifica_ccee("tela_inicio.png", 0.65)
+        # py.scroll(-1300)
+        # self.ia.localiza_ccee("ponto_medicao.png", 0.65)
         return True
     
     def tabzon(self, numerodetabs):
@@ -507,7 +506,7 @@ class inf_planilha:
                 tp_a = tratar_valor(linha['TP_A'])
                 marca = tratar_valor(linha['Marca'])
                 modelo = tratar_valor(linha['Modelo'])
-                firmware = tratar_valor(linha['Versao'])      
+                firmware = str(linha['Versao']).zfill(4)    
 
 
                 # Retorna todas as variáveis
@@ -544,44 +543,44 @@ def main(lista_ucs):
 
             while True:  # Loop para recomeçar a UC atual em caso de falha
                 try:
-                    print(f'Começando UC: {uc}')
-                    # Substituir por suas operações antes da verificação da imagem
-                    start.ia.localiza("acoes.png", 0.7)
-                    start.ia.localiza("novo_ponto.png", 0.7)
-                    sleep(2)
-                    if start.ia.localiza("ponto_mapeado.png", 0.8):
-                        py.write(cod_ponto)
-                        py.moveRel(0,45)
-                        py.click()
+                    # print(f'Começando UC: {uc}')
+                    # # Substituir por suas operações antes da verificação da imagem
+                    # start.ia.localiza("acoes.png", 0.7)
+                    # start.ia.localiza("novo_ponto.png", 0.7)
+                    # sleep(2)
+                    # if start.ia.localiza("ponto_mapeado.png", 0.8):
+                    #     py.write(cod_ponto)
+                    #     py.moveRel(0,45)
+                    #     py.click()
 
-                        # # Verificação para encontrar a imagem da tela
-                        if not start.ia.verifica("inicio_cadastro.png", 0.7):
-                            print(f"Tela 'inicio_cadastro.png' não encontrada. Recomeçando UC: {uc}")
-                            start.pausar_execucao()
-                            continue  # Reinicia o loop para a mesma UC
-                        
-                        print(f"Informações para UC {uc}:")
-                        print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
-                        print(f"Data vigência: {ini_vig}, {municipio}")
-                        
-                        # #######################################################
-                        start.start_cadastro()
-                        start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
-                        tcs = start.ver_tcs(tc_a, tc_b, tc_c)
-                        start.localizacao(municipio)
-                        # # #######################################################
+                    #     # # Verificação para encontrar a imagem da tela
+                    # if not start.ia.verifica("inicio_cadastro.png", 0.7):
+                    #     print(f"Tela 'inicio_cadastro.png' não encontrada. Recomeçando UC: {uc}")
+                    #     start.pausar_execucao()
+                    #     continue  # Reinicia o loop para a mesma UC
+                    
+                    # print(f"Informações para UC {uc}:")
+                    # print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
+                    # print(f"Data vigência: {ini_vig}, {municipio}")
+                    
+                    # # #######################################################
+                    # start.start_cadastro()
+                    # start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
+                    tcs = start.ver_tcs(tc_a, tc_b, tc_c)
+                    # start.localizacao(municipio)
+                    # # # #######################################################
 
-                        valor_tp = start.trans_corren(tcs, tc_a, tc_b, tc_c, rel_exis, tp_a)
-                        # #######################################################
+                    valor_tp = start.trans_corren(tcs, tc_a, tc_b, tc_c, rel_exis, tp_a)
+                    # #######################################################
 
 
-                        start.dados_medidor(rg, ult_calib, valor_tp, marca, modelo, firmware)
-                        start.modelo_med(porta)
-                        #######################################################
-                        # Se tudo deu certo, sai do loop para a próxima UC
-                        break
-                    else:
-                        start.pausar_execucao()
+                    start.dados_medidor(rg, ult_calib, valor_tp, marca, modelo, firmware)
+                    start.modelo_med(porta)
+                    #######################################################
+                    # Se tudo deu certo, sai do loop para a próxima UC
+                    break
+                    # else:
+                    #     start.pausar_execucao()
 
                 except Exception as e:
                     logging.error(f"Erro ao processar UC: {uc}. Detalhes: {e}")
@@ -590,5 +589,3 @@ def main(lista_ucs):
 
 if __name__ == "__main__":
     main(lista_ucs=["103121838"])       
-
-    

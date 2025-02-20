@@ -10,11 +10,6 @@ diretorio_base = os.path.dirname(os.path.abspath(__file__),)
 os.environ['TESSDATA_PREFIX'] = os.path.join(os.path.dirname(os.path.dirname(diretorio_base)), 'Tesseract-OCR')
         
 
-# # Defina o caminho para a pasta onde o Tesseract foi instalado
-# os.environ['TESSDATA_PREFIX'] = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR"
-
-# # Defina o caminho para o executável do Tesseract
-# pytesseract.tesseract_cmd = r"C:\Users\L805958\dmed\SISTEMA_RPA_DMED\Tesseract-OCR\tesseract.exe"
 pytesseract.tesseract_cmd = os.path.join(os.path.dirname(os.path.dirname(diretorio_base)), 'Tesseract-OCR','tesseract.exe')
         
 
@@ -27,11 +22,21 @@ def localizar_palavra_rolando(palavras, max_tentativas=10, scroll_pixels=-300, l
         pyautogui.screenshot(screenshot_path)
         imagem = Image.open(screenshot_path)
 
-        # Realiza OCR na imagem com o caminho explícito do tessdata
+        # Definindo o caminho base e o caminho do Tesseract dinamicamente
+        diretorio_base = os.path.dirname(os.path.abspath(__file__))
+        caminho_tesseract = os.path.join(os.path.dirname(os.path.dirname(diretorio_base)), "Tesseract-OCR")
+
+        # Montando a string de configuração com o caminho correto
+        config = f'--tessdata-dir "{os.path.join(caminho_tesseract, "tessdata")}" --psm 6 --oem 1'
+
+        # Definindo o caminho executável do Tesseract (necessário em alguns casos)
+        pytesseract.pytesseract.tesseract_cmd = os.path.join(caminho_tesseract, "tesseract.exe")
+
+        # Chamando o Tesseract com a configuração dinâmica
         resultados = pytesseract.image_to_data(
             imagem,
             lang=lang,
-            config="--tessdata-dir C:/Users/L805958/dmed/SISTEMA_RPA_DMED/Tesseract-OCR/tessdata --psm 6 --oem 1",
+            config=config,
             output_type=Output.DICT
         )
 

@@ -59,9 +59,6 @@ class ProcessadorPM:
         )
     
     def tela_inicio(self):
-        self.ia.verifica_ccee("tela_inicio.png", 0.65)
-        py.scroll(-1300)
-        self.ia.localiza_ccee("ponto_medicao.png", 0.65)
         return True
     
     def inf_cod(self):
@@ -132,7 +129,7 @@ class ProcessadorPM:
         py.hotkey("ctrl", "c")
         comentario = pyperclip.paste()
 
-        self.ia.localiza_ccee("voltar.png", 0.75)
+        self.ia.localiza_ccee("voltar.png", 0.70)
         sleep(1.5)
         py.hotkey("f5")
 

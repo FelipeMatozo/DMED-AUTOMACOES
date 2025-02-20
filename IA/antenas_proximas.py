@@ -122,7 +122,7 @@ class TratarPlanilha:
         df_resultados.to_excel(resultado_path, index=False)
         print(f"Resultados de antenas salvos em: {resultado_path}")
 
-    def merge_com_planilha_antenas(self, antennas_path, output_path='assets/excel/Final_sinal_op/Ucs_desconec - JAN.xlsx'):
+    def merge_com_planilha_antenas(self, antennas_path, output_path='assets/excel/Final_sinal_op/Ucs_desconec - FEV2025.xlsx'):
         # Carregar a planilha de antenas
         antennas_df = pd.read_excel(antennas_path)
 
@@ -149,7 +149,7 @@ class TratarPlanilha:
 
 
 if __name__ == "__main__":
-    tratar = TratarPlanilha("assets/excel/sem comunicacao - operadora.xlsx")
+    tratar = TratarPlanilha("assets/excel/UNIDADES SEM COMUNICACAO - MELHOR OPERADORA.xlsx")
     tratar.carregar_planilhas()
     tratar.salvar_planilha()
     # Caminho para a planilha de resultados de antenas

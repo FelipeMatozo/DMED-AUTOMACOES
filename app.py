@@ -20,6 +20,7 @@ import threading
 import keyboard
 from flask import Flask, request, redirect, url_for, flash, render_template
 
+
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
 if hasattr(sys, '_MEIPASS'):
