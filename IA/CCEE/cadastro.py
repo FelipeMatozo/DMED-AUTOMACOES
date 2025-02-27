@@ -215,8 +215,7 @@ class inserir_inf:
         q_tcs =str(q_tcs)
 
         if not self.ia.localiza("trans_corrente.png", 0.87):
-            self.pausar_execucao()
-            pass
+            sys.exit()  # Encerra apenas a thread atual
 
         sleep(2)
         self.ia.localiza("q_transform.png", 0.7)
@@ -530,7 +529,6 @@ def main(lista_ucs):
     planilha = inf_planilha(planilha_dados)
     # ccee = page_ccee("https://operacao.ccee.org.br/")
     start = inserir_inf()
-    # ccee.entrar_ccee(continuar_evento, usuario, senha)
     print(start.PAUSE_FILE)
     logging.basicConfig(filename=start.caminho_log, filemode='a', format='%(asctime)s - %(message)s', datefmt='%d-%m-%Y %H:%M:%S', level=logging.INFO)
     logging.info(f"Iniciando lista de ucs: {lista_ucs}")
@@ -543,31 +541,37 @@ def main(lista_ucs):
 
             while True:  # Loop para recomeçar a UC atual em caso de falha
                 try:
-                    # print(f'Começando UC: {uc}')
-                    # # Substituir por suas operações antes da verificação da imagem
-                    # start.ia.localiza("acoes.png", 0.7)
-                    # start.ia.localiza("novo_ponto.png", 0.7)
-                    # sleep(2)
-                    # if start.ia.localiza("ponto_mapeado.png", 0.8):
-                    #     py.write(cod_ponto)
-                    #     py.moveRel(0,45)
-                    #     py.click()
+                    print(f'Começando UC: {uc}')
+                    # Substituir por suas operações antes da verificação da imagem
+                    if not start.ia.localiza("acoes.png", 0.7):
+                        print("Erro ao encontrar ações! Encerrando o programa")
+                        sys.exit()  # Encerra apenas a thread atual
+                    if not start.ia.localiza("novo_ponto.png", 0.7):
+                        sys.exit()  # Encerra apenas a thread atual
 
-                    #     # # Verificação para encontrar a imagem da tela
-                    # if not start.ia.verifica("inicio_cadastro.png", 0.7):
-                    #     print(f"Tela 'inicio_cadastro.png' não encontrada. Recomeçando UC: {uc}")
-                    #     start.pausar_execucao()
-                    #     continue  # Reinicia o loop para a mesma UC
+                    sleep(2)
+                    if start.ia.localiza("ponto_mapeado.png", 0.8):
+                        py.write(cod_ponto)
+                        py.moveRel(0,45)
+                        py.click()
                     
-                    # print(f"Informações para UC {uc}:")
-                    # print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
-                    # print(f"Data vigência: {ini_vig}, {municipio}")
+                    else:
+                        sys.exit()  # Encerra apenas a thread atual
+
+                        # # Verificação para encontrar a imagem da tela
+                    if not start.ia.verifica("inicio_cadastro.png", 0.7):
+                        print(f"Tela 'inicio_cadastro.png' não encontrada. Encerrando execução da UC: {uc}")
+                        sys.exit()  # Encerra apenas a thread atual
+                    
+                    print(f"Informações para UC {uc}:")
+                    print(f"Cliente: {cliente} \nCódigo SCDE: {cod_ponto} \nMunicípio: {municipio}")
+                    print(f"Data vigência: {ini_vig}, {municipio}")
                     
                     # # #######################################################
-                    # start.start_cadastro()
-                    # start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
+                    start.start_cadastro()
+                    start.inserir_dados_pnt_med(ini_vig, cap_ger, cap_con)
                     tcs = start.ver_tcs(tc_a, tc_b, tc_c)
-                    # start.localizacao(municipio)
+                    start.localizacao(municipio)
                     # # # #######################################################
 
                     valor_tp = start.trans_corren(tcs, tc_a, tc_b, tc_c, rel_exis, tp_a)

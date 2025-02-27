@@ -16,14 +16,14 @@ base_path = Path(__file__).resolve().parent.parent
 pytesseract.pytesseract.tesseract_cmd = str(base_path / "Tesseract-OCR" / "tesseract.exe")
 os.environ['TESSDATA_PREFIX'] = str(base_path / "Tesseract-OCR" / "tessdata")
 
-# Verifica se o Tesseract existe e pode ser executado
-if not Path(pytesseract.pytesseract.tesseract_cmd).exists():
-    raise FileNotFoundError(f"Tesseract não encontrado no caminho: {pytesseract.pytesseract_cmd}")
-try:
-    resultado = subprocess.run([pytesseract.pytesseract.tesseract_cmd, "--version"], capture_output=True, text=True, check=True)
-    print(f"✅ Tesseract encontrado: {resultado.stdout}")
-except Exception as e:
-    raise RuntimeError(f"Erro ao executar o Tesseract: {e}")
+# # Verifica se o Tesseract existe e pode ser executado
+# if not Path(pytesseract.pytesseract.tesseract_cmd).exists():
+#     raise FileNotFoundError(f"Tesseract não encontrado no caminho: {pytesseract.pytesseract_cmd}")
+# try:
+#     resultado = subprocess.run([pytesseract.pytesseract.tesseract_cmd, "--version"], capture_output=True, text=True, check=True)
+#     print(f"✅ Tesseract encontrado: {resultado.stdout}")
+# except Exception as e:
+#     raise RuntimeError(f"Erro ao executar o Tesseract: {e}")
 
 class Reconhecimento:
     def __init__(self, numeroDeTentativasMax, delay):
