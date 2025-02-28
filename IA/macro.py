@@ -1,3 +1,10 @@
+# Resumo do Código
+# Este código automatiza o processo de interação com uma interface gráfica de usuário (GUI) 
+# para o gerenciamento de solicitações de serviços de unidades consumidoras. A automação 
+# é realizada com o auxílio de bibliotecas como pyautogui para controle de mouse e teclado 
+# e Reconhecimento de Imagem para localizar elementos específicos na tela. O fluxo envolve 
+# abrir telas, interagir com pop-ups, e preencher formulários com dados provenientes de um arquivo CSV.
+
 import csv
 import subprocess
 from time import sleep
@@ -7,6 +14,8 @@ import sys
 import os
 import logging
 
+
+
 class CriarT:
     def __init__(self):
         self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=0.8)
@@ -15,14 +24,14 @@ class CriarT:
     def abrir_tela_servicos(self, unidade_consumidora):
         self.ia.localiza('telaInicial.PNG', 0.5)
         py.hotkey('alt','l')
-        self.ia.localiza('uc.PNG', 0.7)   
+        self.ia.localiza('uc.PNG', 0.7)
         py.write(f'{unidade_consumidora}')
         py.press('enter')
 
     def popupservico(self):
         print('Procurando popup')
         self.ia.popup()
-        
+
     def popupservico2(self):
         self.ia.online = True
         self.ia.localiza("popup2.png", 0.6)
@@ -31,7 +40,7 @@ class CriarT:
 
     def inserir_reclama(self):
         self.ia.online = True
-        print('insirindo parametro')
+        print('Inserindo parâmetro')
         self.ia.localiza('reclama.PNG', 0.8)
         py.move(0,+30)
         py.tripleClick()
@@ -43,7 +52,7 @@ class CriarT:
 class ProgramasExecutaveis:
     def __init__(self):
         self.caminho_iris = r"C:\Program Files (x86)\Landis+Gyr\PLA-WIN\4.00.17\PadWin3.exe"
-        self.processo = None  # Armazena a referência ao processo
+        self.processo = None
         self.pid = ""
         self.dados_csv = []
 
@@ -53,7 +62,6 @@ class ProgramasExecutaveis:
         print(f"Iris Manager iniciado com PID {self.processo.pid}")
 
     def fechar(self):
-        # Fecha o processo verificando cada processo ativo e comparando o caminho executável
         py.click(1900, 5)
         sleep(0.2)
         py.click(1900, 5)
@@ -70,89 +78,88 @@ class ProgramasExecutaveis:
 class CadastroSolicitacao:
     def __init__(self, ucs, subtipo, motivo, resp, obs):
         self.ia = Reconhecimento(numeroDeTentativasMax=7, delay=0.2)
-        self.ucs= ucs
+        self.ucs = ucs
         self.subtipo = subtipo
         self.motivo = motivo
         self.resp = resp
         self.obs = obs
         self.email = 'sem-email@copel.com'
 
-    def bloqueio_fatura(self):
-        if self.ia.inf('bloqueio_de_faturas.png',0.7):
+    def bloquear_fatura(self):
+        if self.ia.inf('bloqueio_de_faturas.png', 0.7):
             sleep(0.8)
-            py.hotkey('alt','n')
+            py.hotkey('alt', 'n')
             sleep(0.3)
-    
+
     def operacao_med(self, unidade_consumidora, subtipo):
         if self.ia.inf('oper_med.png', 0.65):
-            py.hotkey('alt','o')
-            self.ia.localiza('confirmar_area.png',0.8)
-            py.hotkey('alt','s')
+            py.hotkey('alt', 'o')
+            self.ia.localiza('confirmar_area.png', 0.8)
+            py.hotkey('alt', 's')
             py.press('enter')
             sleep(1)
-        if self.ia.inf('ordem.png',0.8):
+        if self.ia.inf('ordem.png', 0.8):
             sleep(1)
-            py.hotkey('alt','o')        
-            logging.info(f"UC: {unidade_consumidora} finalizada! Servico: {subtipo} Macro: Geracao")
+            py.hotkey('alt', 'o')
+            logging.info(f"UC: {unidade_consumidora} finalizada! Serviço: {subtipo} Macro: Geração")
 
-        self.ia.localiza('sonda.png',0.6)
-        py.hotkey('alt','o')
+        self.ia.localiza('sonda.png', 0.6)
+        py.hotkey('alt', 'o')
         if self.ia.localiza('telaInicial.PNG', 0.6):
             pass
-        
+
     def tabzon(self, numerodetabs):
         for tabs in range(numerodetabs):
             py.hotkey('tab')
-    
+
     def voltar_inicio(self):
-        while self.ia.localiza_1x('telainicial.png', 0.5)== False:
+        while not self.ia.localiza_1x('telainicial.png', 0.5):
             sleep(1.5)
             self.ia.localiza_1x('portinha.png', 0.7)
             sleep(1.5)
-            if self.ia.localiza_1x('cancela_op.png', 0.7) == True:
-                print("Cancelando operacao")
-                py.hotkey('alt','s')
+            if self.ia.localiza_1x('cancela_op.png', 0.7):
+                print("Cancelando operação")
+                py.hotkey('alt', 's')
             sleep(1.5)
-            if self.ia.localiza_1x('sonda_cancelada.png', 0.7) == True:
+            if self.ia.localiza_1x('sonda_cancelada.png', 0.7):
                 print("Cancelando sonda")
-                py.hotkey('alt','o')
+                py.hotkey('alt', 'o')
 
     def inserir_email_T11(self):
-        if self.ia.verifica('email.png',0.7):
+        if self.ia.verifica('email.png', 0.7):
             print("alt f")
             sleep(1.5)
-            py.hotkey('alt','f')
+            py.hotkey('alt', 'f')
             self.bloqueio_fatura()
             print("alt f")
-            py.hotkey('alt','f')
+            py.hotkey('alt', 'f')
             self.bloqueio_fatura()
-            py.hotkey('alt','f')
+            py.hotkey('alt', 'f')
             sleep(1.5)
-            
-        
+
         if self.ia.inf('gerar_os.png', 0.7):
-            py.hotkey('alt','s')
+            py.hotkey('alt', 's')
 
     def inserir_obs(self):
         py.write(self.obs)
-        py.hotkey('alt','f')
+        py.hotkey('alt', 'f')
         sleep(1.5)
         self.bloqueio_fatura()
-    
-    def Interno(self): #INT
+
+    def Interno(self):  # INT
         self.ia.online = True
         self.tabzon(3)
         py.write(self.resp)
         self.tabzon(6)
         py.write(self.motivo)
         py.hotkey('tab')
-        py.hotkey('shift','tab')
+        py.hotkey('shift', 'tab')
         py.write(self.subtipo)
         self.tabzon(5)
         self.inserir_obs()
         self.operacao_med()
 
-    def Solicita(self,unidade_consumidora, subtipo): #SOL
+    def Solicita(self, unidade_consumidora, subtipo):  # SOL
         self.ia.online = True
         self.tabzon(3)
         py.write(self.resp)
@@ -167,10 +174,9 @@ class CadastroSolicitacao:
         self.inserir_obs()
         self.inserir_email_T11()
         self.operacao_med(unidade_consumidora, subtipo)
-        
 
 def main(ucs, subtipo, motivo, resp, obs):
-    # Remove espaços desnecessários e limpa a lista
+    # Limpeza de espaços desnecessários e remoção de UC de controle
     ucs = [uc.strip() for uc in ucs if uc.strip()]
     if ucs and ucs[-1] == '1':  # Remove UC de controle (opcional)
         ucs.pop()

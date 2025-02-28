@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify,send_from_directory, url_for, redirect, make_response
+from flask import Flask, render_template, request, jsonify,send_from_directory, url_for, redirect, make_response, abort
 import sys
 import os
 import pandas as pd
@@ -9,14 +9,18 @@ from IA import macro
 from IA.CCEE import cadastro
 from IA import concluir_T11
 from IA import concluir_T12
+from IA.CCEE import relatorio_CCEE
 from IA.portas_telemetrias import find_tm
 from IA.gerador_ucs_antenas import buscar
 from IA.banco_utils import exportar_para_excel
+from IA import antenas_proximas
 import plotly.graph_objs as go
 import numpy as np
 from time import sleep, time
 import threading
 import keyboard
+from flask import Flask, request, redirect, url_for, flash, render_template,send_file
+
 
 app = Flask(__name__, static_folder='assets', template_folder='templates')
 # Determine se estamos em um ambiente PyInstaller
@@ -40,6 +44,8 @@ diretorio_base = os.path.dirname(os.path.abspath(__file__))
 # Arquivo de controle de pausa/despaerweewrwe
 PAUSE_FILE = os.path.join(diretorio_base, 'assets', 'txt', 'pause.txt')
 
+caminho_relat = os.path.join(diretorio_base, 'assets', 'excel', 'planilha_relatorios')
+
 @app.route('/despausar', methods=['POST'])
 def despausar():
     """Despausa a execução alterando o arquivo pause.txt."""
@@ -54,49 +60,6 @@ def despausar():
 
 
 CAMINHO_EXCEL = os.path.join(app.static_folder, 'excel')
-
-
-# # Variável global de controle
-# paused = threading.Event()
-
-
-# # Função para monitorar a tecla 'Esc'
-# def monitorar_teclado():
-#     """
-#     Monitora o teclado globalmente para detectar quando 'Esc' é pressionado.
-#     Alterna entre pausar e retomar o programa, com controle de debouncing.
-#     """
-#     global paused
-#     ultima_interacao = 0  # Armazena o timestamp da última interação
-
-#     while True:
-#         if keyboard.is_pressed("esc"):
-#             agora = time()
-#             if agora - ultima_interacao > 1:  # Tempo mínimo entre alternâncias (1 segundo)
-#                 if paused.is_set():
-#                     paused.clear()  # Retomar execução
-#                     print("Execução retomada!")
-#                 else:
-#                     paused.set()  # Pausar execução
-#                     print("Execução pausada!")
-#                 ultima_interacao = agora
-#             sleep(0.1)  # Pequena espera para evitar múltiplos eventos
-
-
-# # Função de automação
-# def automacao():
-#     global paused
-#     while True:
-#         if paused.is_set():
-#             print("Automação pausada...")
-#             while paused.is_set():
-#                 sleep(0.5)  # Aguarda enquanto pausado
-#             print("Automação retomada!")
-        
-#         # Lógica da automação (exemplo)
-#         print("Automação em execução...")
-#         sleep(1)
-
 
 
 def read_log(log_file_path_1='_internal\\assets\\log\\log.log', log_file_path_2='assets\\log\\log.log'):
@@ -190,31 +153,14 @@ def cadastro_page():
         # Define o evento de pausa
         continuar_evento.clear()
         threading.Thread(target=cadastro.main, args=(ucs,)).start()
-
+        # Limpa a pasta onde a planilha foi salva
+        # limpar_pasta(caminho_padrao)
         # Cria uma resposta para configurar o cookie
         response = make_response(redirect(url_for('cadastro_page')))
     
 
     # Renderiza a página e preenche o nome de usuário se o cookie estiver presente
     return render_template('cadastro_ccee.html')
-
-
-
-# @app.route('/cadastro_ccee', methods=['GET', 'POST'])
-# def cadastro_page():
-#     if request.method == 'POST':
-#         ucs = request.form['cadastro_ccee']
-#         # Dividir ucs por quebras de linha e remover espaços em branco
-#         ucs = ucs.splitlines()
-#         ucs = [uc.replace('\r', '').replace('\n', '').strip() for uc in ucs if uc.replace('\r', '').replace('\n', '').strip()]
-
-        
-#         cadastro.main(ucs)
-    
-#         # Exibir mensagem de sucesso
-#         return render_template('cadastro_ccee.html', mensagem_sucesso="Sua solicitação foi enviada com sucesso!")
-#     return render_template('cadastro_ccee.html')
-
 
 @app.route('/concluir_t11', methods=['GET', 'POST'])
 def concluir_t11():
@@ -244,7 +190,6 @@ def gerar_t11():
         # Processar o POST se necessário
         pass
     return render_template('gerar_t11.html')
-
 
 @app.route('/concluir_t10', methods=['GET', 'POST'])
 def concluir_t10():
@@ -304,7 +249,6 @@ def menu_rpas_T12():
         # Processar o POST se necessário
         pass
     return render_template('menu_rpas_T12.html')
-
 
 # Função para criar a pasta, caso não exista
 def criar_pasta_excel():
@@ -374,12 +318,10 @@ def mapa_uc():
     
     return render_template('mapa.html')
 
-
 @app.route('/exibir_mapa')
 def exibir_mapa():
     # Renderiza o template com o mapa incluído
     return render_template('mapa.html')
-
 
 @app.route('/gerar_t10', methods=['GET', 'POST'])
 def gerar_t10():
@@ -437,12 +379,113 @@ def dashboard_data():
     graphJSON = fig.to_json()
     return jsonify(graphJSON)
 
+@app.route('/relatorio_ccee', methods=['GET', 'POST'])
+def relatorio_pm():
+    if request.method == 'POST':
+        print(request.form)  # Ver o que está sendo enviado
+
+        pms = request.form.get('pm', '')  # Evita erro se a chave não existir
+        pms = pms.splitlines()
+        pms = [pm.replace('\r', '').replace('\n', '').strip() for pm in pms if pm.strip()]
+
+        threading.Thread(target=relatorio_CCEE.start, args=(pms,)).start()
+
+    return render_template('relatorio_ccee.html')
+
+# Definir a chave secreta para permitir sessões
+app.secret_key = 'minha_chave_super_secreta'
+
+# Definir o caminho padrão para salvar a planilha
+caminho_padrao = os.path.join(os.path.expanduser("~"), "Documents", "CCEE_Planilha")
+
+# Criar o diretório caso não exista
+os.makedirs(caminho_padrao, exist_ok=True)
+
+@app.route('/upload_excel', methods=['POST'])
+def upload_excel():
+    if 'file' not in request.files:
+        return '', 204  # Retorna sem conteúdo (mantém a página)
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return '', 204  # Nenhuma ação se não houver arquivo
+
+    if file and file.filename.endswith(('.xlsx', '.xls')):
+        # Limpa a pasta onde a planilha foi salva
+        limpar_pasta(caminho_padrao)
+        file_path = os.path.join(caminho_padrao, 'consulta_pm.xlsx')  # Sempre salva como consulta_pm.xlsx
+        try:
+            file.save(file_path)
+        except Exception:
+            return '', 204  # Se houver erro, não altera a página
+
+    return '', 204  # Retorna sem atualizar nada
+
+def limpar_pasta(diretorio):
+    """Remove todos os arquivos da pasta especificada."""
+    try:
+        for arquivo in os.listdir(diretorio):
+            caminho_arquivo = os.path.join(diretorio, arquivo)
+            if os.path.isfile(caminho_arquivo):
+                os.remove(caminho_arquivo)
+        print(f"Pasta {diretorio} limpa com sucesso.")
+    except Exception as e:
+        print(f"Erro ao limpar a pasta {diretorio}: {e}")
+
+@app.route('/')
+def index():
+    return render_template('cadastro_ccee.html')
+
+
+@app.route('/upload_relatorio', methods=['POST'])
+def upload_relatorio():
+    limpar_pasta(caminho_relat)
+    if 'file' not in request.files:
+        return '', 204  # Retorna sem conteúdo (mantém a página)
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return '', 204  # Nenhuma ação se não houver arquivo
+
+    if file and file.filename.endswith(('.xlsx', '.xls')):
+        # Limpa a pasta onde a planilha foi salva
+        limpar_pasta(caminho_relat)
+        file_path = os.path.join(caminho_relat, 'relatorio_uc_ant.xlsx')  # Sempre salva como consulta_pm.xlsx
+        try:
+            file.save(file_path)
+        except Exception:
+            return '', 204  # Se houver erro, não altera a página
+
+    return '', 204  # Retorna sem atualizar nada
+   
+@app.route('/relatorio_ucs', methods=['GET'])
+def relatorio_ucs():
+    """ Renderiza a página do relatório. """
+    return render_template('relatorio_ucs.html')
+
+@app.route('/start_process', methods=['POST'])
+def start_process():
+    try:
+        # Inicie o processo em uma nova thread para não bloquear a aplicação
+        threading.Thread(target=antenas_proximas.start).start()
+        return jsonify({"message": "Processo iniciado com sucesso!"}), 200
+    except Exception as e:
+        return jsonify({"message": f"Erro ao iniciar o processo: {str(e)}"}), 500
+
+@app.route('/download_relatorio', methods=['GET'])
+def download_relatorio():
+    diretorio_base = os.path.dirname(os.path.abspath(__file__))
+    caminho_final = os.path.join(diretorio_base, 'assets', 'excel', 'Final_relatorios', 'MELHOR ANTENA.xlsx')
+    print("Caminho do arquivo:", caminho_final)
+
+    # Verifica se o arquivo existe
+    if not os.path.exists(caminho_final):
+        print("Arquivo não encontrado.")
+        abort(404)  # Retorna erro 404 se o arquivo não existir
+
+    return send_file(caminho_final, as_attachment=True)
+
 if __name__ == '__main__':
-    #  # Inicia o thread para monitorar o teclado
-    # teclado_thread = threading.Thread(target=monitorar_teclado, daemon=True)
-    # teclado_thread.start()
-     
-    # # Inicia o thread para executar a automação
-    # automacao_thread = threading.Thread(target=automacao, daemon=True)
-    # automacao_thread.start()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)

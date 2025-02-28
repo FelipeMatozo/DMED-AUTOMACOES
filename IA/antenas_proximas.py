@@ -3,9 +3,19 @@ import pandas as pd
 from unidecode import unidecode
 from geopy.distance import geodesic
 from heapq import nsmallest
-from banco_utils import buscar_dados, buscar_todos_dados, ver_exist
+from IA.banco_utils import buscar_dados, buscar_todos_dados, ver_exist
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment
+import glob
+
+# Diretório base do script atual
+diretorio_base = os.path.dirname(os.path.abspath(__file__))
+
+# Caminhos ajustados corretamente usando os.path.join()
+caminho_final = os.path.join(os.path.dirname(diretorio_base), 'assets', 'excel', 'Final_relatorios')
+unidades_desconectadas = os.path.join(os.path.dirname(diretorio_base), 'assets', 'excel', 'Unidades_desconectadas.xlsx')
+resultado_antenas = os.path.join(os.path.dirname(diretorio_base), 'assets', 'excel', 'resultados_antenas.xlsx')
+pasta_planilhas = os.path.join(os.path.dirname(diretorio_base), 'assets', 'excel', 'planilha_relatorios')
 
 class TratarPlanilha:
 
@@ -15,12 +25,12 @@ class TratarPlanilha:
         self.merged_df = None
 
     def carregar_planilhas(self):
-        # Carregar as planilhas em DataFrames
+        """Carregar as planilhas em DataFrames"""
         self.data_df = pd.read_excel(self.data_path)
         print("Planilhas carregadas com sucesso.")
 
     def normalizar_nomes_colunas(self, df):
-        # Normalizar os nomes das colunas removendo acentos e caracteres especiais
+        """Normalizar os nomes das colunas removendo acentos e caracteres especiais"""
         df.columns = [unidecode(col).strip() for col in df.columns]
         return df
 
@@ -29,39 +39,31 @@ class TratarPlanilha:
             df[coluna] = df[coluna].astype(str).str.strip().str.replace('.0', '', regex=False).replace('nan', '')
 
     def aplicar_estilos(self, path_planilha):
-        # Carregar a planilha com openpyxl
+        """Aplica estilos à planilha"""
         wb = load_workbook(path_planilha)
         ws = wb.active
         
-        # Aplicar estilos no cabeçalho
         header_fill = PatternFill(start_color="B7DEE8", end_color="B7DEE8", fill_type="solid")
         header_font = Font(bold=True, color="000000")
         
-        for cell in ws[1]:  # Primeira linha (cabeçalho)
+        for cell in ws[1]:
             cell.fill = header_fill
             cell.font = header_font
             cell.alignment = Alignment(horizontal="center", vertical="center")
         
-        # Aplicar alinhamento às colunas numéricas
         for row in ws.iter_rows(min_row=2, max_col=ws.max_column, max_row=ws.max_row):
             for cell in row:
-                if isinstance(cell.value, (int, float)):  # Alinhar números à direita
+                if isinstance(cell.value, (int, float)):
                     cell.alignment = Alignment(horizontal="right", vertical="center")
                 else:
                     cell.alignment = Alignment(horizontal="left", vertical="center")
 
-        # Salvar a planilha com as alterações
         wb.save(path_planilha)
         print(f"Estilos aplicados e planilha salva em: {path_planilha}")
       
-    def salvar_planilha(self, output_path='assets/excel/Unidades_desconectadas.xlsx'):
-        
-
+    def salvar_planilha(self, output_path=unidades_desconectadas):
         self.processar_antenas(output_path)
 
-       
-
-    
     def buscar_lat_lon(self, uc):
         resultado = buscar_dados("UC_LAT_LONG", "UC", uc, ["LATITUDE", "LONGITUDE"])
         
@@ -113,47 +115,73 @@ class TratarPlanilha:
             else:
                 print(f'A UC: {numero_uc} NÃO está presente no banco de dados!')
 
-        # Criar um DataFrame com os resultados das antenas
         colunas_resultados = ["UC", "Melhor antena", "Distância 1", "Segunda antena", "Distância 2", "Terceira antena", "Distância 3"]
         df_resultados = pd.DataFrame(resultados, columns=colunas_resultados)
 
-        # Salvar os resultados em uma nova planilha
         resultado_path = os.path.join(os.path.dirname(output_path), "resultados_antenas.xlsx")
         df_resultados.to_excel(resultado_path, index=False)
         print(f"Resultados de antenas salvos em: {resultado_path}")
 
-    def merge_com_planilha_antenas(self, antennas_path, output_path='assets/excel/Final_sinal_op/Ucs_desconec - JAN.xlsx'):
+    def limpar_pasta(self, diretorio):
+        """Remove todos os arquivos da pasta especificada."""
+        try:
+            for arquivo in os.listdir(diretorio):
+                caminho_arquivo = os.path.join(diretorio, arquivo)
+                if os.path.isfile(caminho_arquivo):
+                    os.remove(caminho_arquivo)
+            print(f"Pasta {diretorio} limpa com sucesso.")
+        except Exception as e:
+            print(f"Erro ao limpar a pasta {diretorio}: {e}")
+
+    def merge_com_planilha_antenas(self, antennas_path, output_path=os.path.join(caminho_final, 'MELHOR ANTENA.xlsx')):
         # Carregar a planilha de antenas
         antennas_df = pd.read_excel(antennas_path)
 
         # Realizar o merge com a planilha de antenas usando a coluna "UC"
-        resultado_final = pd.merge(self.data_df, antennas_df, on='UC', how='left')  # Usar 'left' para manter todas as linhas de merged_df
+        resultado_final = pd.merge(self.data_df, antennas_df, on='UC', how='left')
 
-        # Reorganizar as colunas na ordem desejada
+        # Definição correta das colunas desejadas
         colunas_desejadas = [
-            "UC","Cliente","RG","MUNICÍPIO","MED","Operadora","TM Hemera","Regional 1",
-            "Melhor antena", "Distância 1", "Segunda antena", "Distância 2","Terceira antena", 
+            "UC", "Cliente", "RG", "MUNICÍPIO", "MED", "Operadora", "TM Hemera", "Regional 1",
+            "Melhor antena", "Distância 1", "Segunda antena", "Distância 2", "Terceira antena", 
             "Distância 3"
-           
-
         ]
 
         # Manter apenas as colunas desejadas que estão presentes no DataFrame
         colunas_presentes = [col for col in colunas_desejadas if col in resultado_final.columns]
+
+        # Filtrar apenas as colunas disponíveis
         resultado_final = resultado_final[colunas_presentes]
         print("Colunas reorganizadas com sucesso.")
+
+        # Limpar pasta antes de salvar o novo arquivo
+        self.limpar_pasta(caminho_final)
+        print("Limpando Pasta final antes de inserir a nova planilha")
+
         # Salvar o resultado final
         resultado_final.to_excel(output_path, index=False, engine="openpyxl")
+
+        # Aplicar estilos na planilha
         self.aplicar_estilos(output_path)
+
         print(f"Planilha final salva em: {output_path}")
 
 
-if __name__ == "__main__":
-    tratar = TratarPlanilha("assets/excel/sem comunicacao - operadora.xlsx")
+def start():
+    arquivos_planilha = glob.glob(os.path.join(pasta_planilhas, "*.xlsx")) + glob.glob(os.path.join(pasta_planilhas, "*.xls"))
+
+    if len(arquivos_planilha) != 1:
+        raise FileNotFoundError("Erro: A pasta deve conter exatamente uma planilha para processamento.")
+
+    caminho_planilha = arquivos_planilha[0]
+
+    tratar = TratarPlanilha(caminho_planilha) 
     tratar.carregar_planilhas()
     tratar.salvar_planilha()
-    # Caminho para a planilha de resultados de antenas
-    resultados_antenas_path = "assets/excel/resultados_antenas.xlsx"
     
-    # Realizar o merge com a planilha de antenas
-    tratar.merge_com_planilha_antenas(resultados_antenas_path)
+    tratar.merge_com_planilha_antenas(resultado_antenas)
+    tratar.limpar_pasta(pasta_planilhas)
+    print("Limpando Pasta inicial")
+
+if __name__ == "__main__":
+    start()

@@ -1,3 +1,8 @@
+# Este script automatiza o processo de consulta e finalização de serviços utilizando um sistema de Reconhecimento de Imagem.
+# Ele interage com uma interface gráfica para realizar operações como abertura de tela de serviços, consulta de SS, 
+# preenchimento de informações e finalização de tarefas. Além disso, inclui funcionalidades para controlar o fluxo do programa, 
+# como pausa e retomada via teclado.
+
 import csv
 import subprocess
 from time import sleep
@@ -10,7 +15,8 @@ from datetime import datetime
 import keyboard
 
 class CriarT:
-    def __init__(self,SS, motivo, obs):
+    def __init__(self, SS, motivo, obs):
+        # Inicializa a classe com parâmetros específicos para o serviço
         self.ia = Reconhecimento(numeroDeTentativasMax=5, delay=0.9)
         self.arquivo = ''
         self.SS = SS
@@ -18,9 +24,10 @@ class CriarT:
         self.obs = obs
 
     def abrir_tela_servicos(self, Solicitacao):
-        self.ia.online=True
+        # Abre a tela de serviços e faz a navegação inicial
+        self.ia.online = True
         self.ia.localiza('telaInicial.PNG', 0.5)
-        py.hotkey('alt','l')
+        py.hotkey('alt', 'l')
         self.ia.localiza('SS.PNG', 0.85)
         py.write('01')
         py.hotkey('tab')
@@ -29,60 +36,61 @@ class CriarT:
         sleep(2)
 
     def finalizacao(self, SS):
-        py.hotkey('alt','a')
-        self.ia.verifica('comunicar_cliente.png',0.7)
-        py.hotkey('alt','s')
+        # Finaliza o serviço e registra informações de conclusão
+        py.hotkey('alt', 'a')
+        self.ia.verifica('comunicar_cliente.png', 0.7)
+        py.hotkey('alt', 's')
         sleep(1)
-        self.ia.verifica('comunicado_cliente.png',0.7)
+        self.ia.verifica('comunicado_cliente.png', 0.7)
         py.hotkey('space')
         sleep(0.5)
-        py.hotkey('alt','o')
+        py.hotkey('alt', 'o')
         sleep(1)
-        if self.ia.verifica('sonda_t11.png',0.65):
-            py.hotkey('alt','o')
+        if self.ia.verifica('sonda_t11.png', 0.65):
+            py.hotkey('alt', 'o')
             logging.info(f"SS: {SS} finalizada! Servico: T11 Macro: Conclusao")
         else:
             logging.info(f"Verificar SS: {SS} Servico: T11 Macro: Conclusao")
         sleep(1.5)
-        self.ia.localiza('portinha.png',0.7)
+        self.ia.localiza('portinha.png', 0.7)
         sleep(1.5)
         if self.ia.localiza('telaInicial.PNG', 0.5):
             pass
     
     def voltar_inicio(self):
+        # Retorna ao início da tela
         self.ia.online = True
-        while self.ia.localiza_1x('telainicial.png', 0.5)== False:
+        while self.ia.localiza_1x('telainicial.png', 0.5) == False:
             sleep(1.5)
             self.ia.localiza_1x('portinha.png', 0.7)
 
     def popupservico(self):
+        # Procura e lida com o popup de serviço
         print('Procurando popup')
         self.ia.popup()
         self.ia.online = True
             
-    
     def consulta_ss(self):
+        # Realiza a consulta do SS na interface
         print("tentando localizar Consulta SS")
         self.ia.localiza('Consulta_SS.PNG', 0.6)
         py.click()
         sleep(2)
         self.ia.localiza('Acompanhamento_SS.png', 0.7)
         sleep(0.3)
-        py.hotkey('alt','b')
+        py.hotkey('alt', 'b')
         sleep(2)
         self.ia.localiza('Visto_verde.png', 0.7)
     
-
     def data_e_hora(self):
-        # Obter a data e hora atual
+        # Insere a data e hora atual no formato desejado
         agora = datetime.now()
         print(f"Data e hora: {agora}")
-        # Formatar a data e hora no formato desejado
         formato = agora.strftime("%d%m%Y%H%M")
         py.write(formato)
 
-        
     def tabzon(self, numerodetabs):
+        # Realiza múltiplos pressionamentos da tecla Tab
         for tabs in range(numerodetabs):
             sleep(0.3)
             py.hotkey('tab')
@@ -90,7 +98,7 @@ class CriarT:
 class conclusao_ss:
     
     def tabzon(self, numerodetabs):
-
+        # Similar à função anterior, realiza múltiplos pressionamentos da tecla Tab
         for tabs in range(numerodetabs):
             py.hotkey('tab')
 
@@ -164,7 +172,6 @@ def main(SS, motivo, obs):
                     logging.warning(f"SS: {Solicitacao}. Retentando...")
                     cis.voltar_inicio()
                     continue
-
 
                 if ia.localiza('telaInicial.PNG', 0.5):
                     sucesso = True
