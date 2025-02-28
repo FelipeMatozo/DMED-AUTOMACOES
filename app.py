@@ -440,6 +440,7 @@ def index():
 
 @app.route('/upload_relatorio', methods=['POST'])
 def upload_relatorio():
+    limpar_pasta(caminho_relat)
     if 'file' not in request.files:
         return '', 204  # Retorna sem conteúdo (mantém a página)
 

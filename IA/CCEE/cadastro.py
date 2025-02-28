@@ -11,6 +11,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import pandas as pd
 import sys
 import os
+from unidecode import unidecode
+
 # Adicione o diretório base ao sys.path
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.insert(0, base_dir)
@@ -31,6 +33,7 @@ import logging
 from datetime import datetime, timedelta
 import keyboard
 from time import sleep
+import unicodedata
             
 class inserir_inf:
     def __init__(self):
@@ -86,19 +89,35 @@ class inserir_inf:
         self.tabzon(2)
         # Converter a data para o formato DD/MM/YYYY
         try:
-            # Parse a string de data e hora
-            data_original = datetime.strptime(ini_vig, "%Y-%m-%d %H:%M:%S")
+            # Tentamos diferentes formatos, pois a string pode vir sem horas, por exemplo
+            formatos_validos = ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%d/%m/%Y", "%d/%m/%Y %H:%M:%S"]
+            data_original = None
+
+            for formato in formatos_validos:
+                try:
+                    data_original = datetime.strptime(ini_vig.strip(), formato)
+                    break  # Se funcionar, paramos a verificação
+                except ValueError:
+                    continue  # Tenta o próximo formato se der erro
+
+            if data_original is None:
+                raise ValueError("Nenhum formato de data válido foi encontrado.")
+
             # Formatar para o formato desejado
             data_formatada = data_original.strftime("%d%m%Y")
-            print(data_formatada)
-        except ValueError:
-            print("Erro: Data no formato inválido. Use 'YYYY-MM-DD HH:MM:SS'.")
-            return  # Retorna se a data estiver em formato inválido
+            print(f"Data formatada corretamente: {data_formatada}")
         
+        except ValueError as e:
+            print(f"Erro ao converter data: {e}")
+            return  # Retorna se a data estiver em formato inválido
+
+        sleep(1)
         py.write(data_formatada)
         self.tabzon(1)
+        sleep(1)
         py.write(cap_ger)
         self.tabzon(1)
+        sleep(1)
         py.write(cap_con)
         sleep(1)
         
@@ -140,6 +159,7 @@ class inserir_inf:
 
 
     def localizacao(self, municipio):
+        sleep(1)
         py.hotkey('enter')
         py.write("P")
         x = 0
@@ -152,6 +172,7 @@ class inserir_inf:
         print(municipio)
         
         self.ia.localiza("cidade.png", 0.7)
+        sleep(1)
         py.moveRel(0,-85)
         primeira_letra = municipio[0]
         py.write(primeira_letra)
@@ -181,10 +202,10 @@ class inserir_inf:
         sleep(0.5)
         py.scroll(-1000)
         sleep(1)
-        # self.ia.localiza("gravar.png", 0.8)
-        # sleep(0.5)
-        # py.click()
-        # sleep(3)
+        self.ia.localiza("gravar.png", 0.8)
+        sleep(0.5)
+        py.click()
+        sleep(3)
          
     def trans_corren(self, q_tcs, tc_a,tc_b,tc_c, rel_exis, tp_a):
         quantidade_tcs = q_tcs
@@ -328,12 +349,20 @@ class inserir_inf:
         if marca == "LANDIS+GYR":
             py.write("l")
             py.hotkey("enter")
+
         else:
             self.ia.localizar_palavra_rolando(marca, max_tentativas=20, scroll_pixels=1)
 
         self.ia.localiza("modelo_med.png", 0.75)
         py.move(0,50)
-        self.ia.localizar_palavra_rolando(modelo, max_tentativas=20, scroll_pixels=1)
+        if modelo== "E750":
+            py.hotkey("E")
+            py.hotkey("enter")
+            print("Modelo igual a E750")
+        else:
+            print("Modelo não é igual a E750")
+            self.ia.localizar_palavra_rolando(modelo, max_tentativas=20, scroll_pixels=1)
+
         self.ia.localiza("versao_firm.png", 0.75)
         py.move(0,50)
         sleep(0.5)
@@ -357,14 +386,14 @@ class inserir_inf:
         py.write(ip)
         self.tabzon(1)
         print(porta)
-        py.write(porta)
+        
         py.scroll(-1000)
 
-        # self.ia.localiza("atualizar.png", 0.7)
+        self.ia.localiza("atualizar.png", 0.6)
         # comentario = 'Cadastro de ponto de medição cliente livre'
         # py.write(comentario)
         sleep(2)
-        # py.hotkey("f5")
+        py.hotkey("f5")
 
     def tela_inicio(self):
         # self.ia.verifica_ccee("tela_inicio.png", 0.65)
@@ -427,7 +456,11 @@ class inf_planilha:
         # Verifica se o arquivo existe
         if os.path.isfile(self.caminho_planilha):
             try:
-                self.dados = pd.read_excel(self.caminho_planilha)
+                self.dados = pd.read_excel(self.caminho_planilha, dtype=str)  # Lendo tudo como string
+
+                # Verifica como os dados foram carregados
+                print(self.dados[['Município']].head(10))
+
                 print(f"{self.caminho_planilha} - caminho da planilha")
                 print(self.dados)
 
@@ -481,16 +514,33 @@ class inf_planilha:
                 print(f"Marca: {linha['Marca']}, Modelo: {linha['Modelo']}, Versão: {linha['Versao']}")
 
 
-                def tratar_valor(valor):
-                   
+                def tratar_valor(valor, campo=None):
+                    """Trata valores da planilha, removendo acentos exceto quando for 'municipio'."""
+                    
                     if pd.isna(valor):  
                         return None
-                    return str(valor).strip()
+
+                    valor = str(valor).strip()
+
+                    # Se for o campo 'municipio', mantém os acentos
+                    if campo == "municipio":
+                        return valor
+
+                    # Se o valor contiver números e vírgula, assume que é um número decimal e mantém
+                    if any(char.isdigit() for char in valor) and "," in valor:
+                        return valor  # Retorna o número sem modificar
+
+                    # Remove acentos apenas de textos
+                    valor = ''.join(c for c in unicodedata.normalize("NFD", valor) if unicodedata.category(c) != 'Mn')
+
+                    return valor
 
                 cod_ponto = tratar_valor(linha['Codigo_SCDE'])
                 cliente = tratar_valor(linha['Cliente'])
                 rg = tratar_valor(linha['RG'])
-                municipio = tratar_valor(linha['Municipio'])
+                print(f"Municipio original: {linha['Municipio']}")
+                municipio = tratar_valor(linha['Municipio'], campo="municipio")
+                print(f"Municipio tratado: {municipio}")
                 regional = tratar_valor(linha['Regional'])
                 etapa = tratar_valor(linha['Etapa'])
                 ini_vig = tratar_valor(linha['Previsao_migracao'])
@@ -546,6 +596,7 @@ def main(lista_ucs):
                     if not start.ia.localiza("acoes.png", 0.7):
                         print("Erro ao encontrar ações! Encerrando o programa")
                         sys.exit()  # Encerra apenas a thread atual
+                    sleep(1)
                     if not start.ia.localiza("novo_ponto.png", 0.7):
                         sys.exit()  # Encerra apenas a thread atual
 

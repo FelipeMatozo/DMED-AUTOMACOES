@@ -156,6 +156,7 @@ class TratarPlanilha:
 
         # Limpar pasta antes de salvar o novo arquivo
         self.limpar_pasta(caminho_final)
+        print("Limpando Pasta final antes de inserir a nova planilha")
 
         # Salvar o resultado final
         resultado_final.to_excel(output_path, index=False, engine="openpyxl")
@@ -179,6 +180,8 @@ def start():
     tratar.salvar_planilha()
     
     tratar.merge_com_planilha_antenas(resultado_antenas)
+    tratar.limpar_pasta(pasta_planilhas)
+    print("Limpando Pasta inicial")
 
 if __name__ == "__main__":
     start()

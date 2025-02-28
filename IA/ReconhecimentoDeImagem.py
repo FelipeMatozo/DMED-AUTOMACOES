@@ -11,10 +11,26 @@ import subprocess
 from PIL import ImageEnhance
 from PIL import Image, ImageEnhance, ImageOps, ImageFilter
 import unicodedata
-# Define o caminho dinâmico para o Tesseract
+from unidecode import unidecode
+
+from pathlib import Path
+# Caminho base do projeto
 base_path = Path(__file__).resolve().parent.parent
-pytesseract.pytesseract.tesseract_cmd = str(base_path / "Tesseract-OCR" / "tesseract.exe")
-os.environ['TESSDATA_PREFIX'] = str(base_path / "Tesseract-OCR" / "tessdata")
+
+# Caminho dinâmico do Tesseract e tessdata
+tesseract_path = base_path / "Tesseract-OCR" / "tesseract.exe"
+tessdata_path = base_path / "Tesseract-OCR" / "tessdata"
+
+# Verifica se o executável do Tesseract existe antes de definir
+if not tesseract_path.exists():
+    raise FileNotFoundError(f"Erro: O Tesseract não foi encontrado no caminho esperado: {tesseract_path}")
+
+# Configura as variáveis de ambiente dinamicamente
+pytesseract.pytesseract.tesseract_cmd = str(tesseract_path)
+os.environ['TESSDATA_PREFIX'] = str(tessdata_path)
+
+print(f"Tesseract configurado corretamente: {tesseract_path}")
+print(f"Tessdata directory: {tessdata_path}")
 
 # # Verifica se o Tesseract existe e pode ser executado
 # if not Path(pytesseract.pytesseract.tesseract_cmd).exists():
@@ -71,8 +87,9 @@ class Reconhecimento:
 
     
     def normalizar_texto(self, texto):
-        """Normaliza o texto para evitar problemas de acentuação, espaços e caracteres especiais."""
-        return unicodedata.normalize("NFKC", texto).lower().strip()
+        """Remove espaços extras e converte para minúsculas sem modificar caracteres acentuados."""
+        return texto.lower().strip()
+
 
     def localizar_palavra_rolando(self, palavra, max_tentativas=10, scroll_pixels=-300, lang="por"):
         """Procura uma palavra ou frase na tela rolando até encontrá-la e clica no centro do conjunto."""
@@ -91,13 +108,14 @@ class Reconhecimento:
             imagem = ImageEnhance.Contrast(imagem).enhance(5.0)
             # imagem = ImageOps.invert(imagem.convert('L'))
 
-            # Realiza OCR na imagem
             resultados = pytesseract.image_to_data(
                 imagem,
                 lang=lang,
-                config=f"--tessdata-dir {os.environ['TESSDATA_PREFIX']} --psm 6 --oem 3 -c preserve_interword_spaces=1",
+                config="--psm 6 --oem 3 -c preserve_interword_spaces=1",
                 output_type=Output.DICT
             )
+
+
 
             num_palavras = len(palavras)
             for i in range(len(resultados['text']) - num_palavras + 1):

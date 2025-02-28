@@ -62,7 +62,7 @@ class ProcessadorPM:
         return True
     
     def inf_cod(self):
-        self.ia.localiza_ccee("parte_cod.png", 0.7)
+        self.ia.localiza_ccee("parte_cod.png", 0.65)
         py.moveRel(0,40)
         py.doubleClick()
         py.mouseDown()
@@ -86,7 +86,7 @@ class ProcessadorPM:
             return None, None, None
         
     def edit_pm(self):
-        self.ia.localiza_ccee("nome.png", 0.8)
+        self.ia.localiza_ccee("nome.png", 0.75)
 
         py.moveRel(0,30)
         sleep(0.5)
@@ -98,7 +98,7 @@ class ProcessadorPM:
         nome = pyperclip.paste()
 
         
-        self.ia.localiza_ccee("inicio_vigencia.png", 0.8)
+        self.ia.localiza_ccee("inicio_vigencia.png", 0.75)
 
         py.moveRel(0,30)
         sleep(0.5)
@@ -111,19 +111,19 @@ class ProcessadorPM:
 
         py.scroll(-1800)
 
-        self.ia.localiza_ccee("historico_cadastro.png", 0.75)
+        self.ia.localiza_ccee("historico_cadastro.png", 0.70)
         py.moveRel(-105,0)
         py.click()
 
         py.scroll(-400)
 
-        self.ia.localiza_ccee("data_status.png", 0.75)
+        self.ia.localiza_ccee("data_status.png", 0.70)
         py.moveRel(0,30)
         py.tripleClick()
         py.hotkey("ctrl", "c")
         data_status = pyperclip.paste()
 
-        self.ia.localiza_ccee("comentario.png", 0.75)
+        self.ia.localiza_ccee("comentario.png", 0.70)
         py.moveRel(0,30)
         py.tripleClick()
         py.hotkey("ctrl", "c")
@@ -137,7 +137,7 @@ class ProcessadorPM:
 
     def buscar_dados_pm(self, pm):
 
-        self.ia.localiza_ccee("tipo_agente.png", 0.65)
+        self.ia.localiza_ccee("tipo_agente.png", 0.60)
         py.hotkey("down")
         py.hotkey("enter")
         py.hotkey("tab")
@@ -147,7 +147,7 @@ class ProcessadorPM:
         sleep(2)
         py.moveRel(1350,50)
         py.click()
-        self.ia.localiza_ccee("pesquisar.png", 0.65)
+        self.ia.localiza_ccee("pesquisar.png", 0.60)
        
         logging.info(f"Buscando dados para PM: {pm}")
         inf_pm = self.inf_cod()

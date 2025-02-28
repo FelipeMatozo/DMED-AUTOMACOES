@@ -109,34 +109,34 @@ def add_subs_banco(nome_tabela, colunas, valores):
 
 def ver_exist(TABELA, COLUNA, DADO):
     """
-    Verifica a existência do dado na tabela.
-    
-    Parâmetros:
-    NOME_TABELA (str): O nome da tabela no banco de dados.
-    COLUNA: Nome da coluna a ser verificada.
-
-    Retorna:
-    Retorna True se o dado existir, False caso contrário.
+    Verifica a existência do dado na tabela e adiciona ao arquivo 'ucs_nao_encontradas.txt' se não existir.
     """
-    # Conectar ao banco de dados
     conexao = sqlite3.connect(CAMINHO_BANCO)
     cursor = conexao.cursor()
 
-    # Verificar se o dado existe na tabela
     cursor.execute(f"SELECT COUNT(*) FROM {TABELA} WHERE {COLUNA} = ?", (DADO,))
     resultado = cursor.fetchone()[0]
 
-    # Fechar a conexão com o banco de dados
     conexao.close()
 
-    # Se o dado não for encontrado, adicionar ao arquivo de texto
     if resultado == 0:
-        caminho_txt = os.path.join('assets\\txt\\ucs_nao_encontradas.txt')
-        with open(caminho_txt, 'a') as arquivo:
-            arquivo.write(f"{DADO}\n")
-    
-    # Retornar True se o dado existir, False caso contrário
+        caminho_txt = os.path.join(os.getcwd(), 'assets', 'txt', 'ucs_nao_encontradas.txt')
+
+        try:
+            # Criar diretório se não existir
+            os.makedirs(os.path.dirname(caminho_txt), exist_ok=True)
+
+            # Abrir e adicionar o dado ao arquivo
+            with open(caminho_txt, 'a') as arquivo:
+                arquivo.write(f"{DADO}\n")
+            
+            print(f"Adicionado '{DADO}' ao arquivo {caminho_txt}")
+
+        except Exception as e:
+            print(f"Erro ao gravar no arquivo {caminho_txt}: {e}")
+
     return resultado > 0
+
 
 def buscar_dados(nome_tabela, coluna_filtro, valor_filtro, colunas_retorno):
     """
